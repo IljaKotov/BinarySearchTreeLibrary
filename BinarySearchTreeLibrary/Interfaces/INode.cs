@@ -14,5 +14,6 @@ internal interface INode<T>
 	bool IsBalanced { get; }
 	bool Insert(T data);
 	INode<T>? FindChild(int key);
+	void UpdateBalanceFactor();
 	
 }

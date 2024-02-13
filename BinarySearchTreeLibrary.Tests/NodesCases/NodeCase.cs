@@ -2,5 +2,5 @@
 
 public record NodeCase
 {
-	public required object[] InputData { get; set; }
+	public required object[] InputData { get; init; }
 }

@@ -14,12 +14,13 @@ internal class Node<T> : INode<T>
 	public bool IsLeaf => Left is null && Right is null;
 	public bool HasBothChildren => Left is not null && Right is not null;
 
-	public bool IsBalanced { get; set; }
+	public bool IsBalanced { get; private set; }
 
 	public Node(T data)
 	{
 		ArgumentNullException.ThrowIfNull(data);
 		Data = data;
+		IsBalanced = true;
 	}
 
 	public bool Insert(T data)
@@ -37,6 +38,7 @@ internal class Node<T> : INode<T>
 			CreateChild(data, compareKeyResult);
 
 		UpdateHeight();
+		UpdateBalanceFactor();
 
 		return true;
 	}
@@ -72,7 +74,7 @@ internal class Node<T> : INode<T>
 		else
 			RemoveNodeWithTwoChildren(node);
 		
-		UpdateHeightUpwards(node);
+		UpdateHeightBalanceFactorUpwards(node);
 	}
 
 	private static void RemoveLeafNode(INode<T> node)
@@ -86,6 +88,10 @@ internal class Node<T> : INode<T>
 	private static void RemoveNodeWithSingleChild(INode<T> node)
 	{
 		var child = node.Left ?? node.Right;
+
+		if (child is null)
+			return;
+		
 		child.Parent = node.Parent;
 
 		if (node.Parent is not null)
@@ -102,7 +108,7 @@ internal class Node<T> : INode<T>
 
 	private static void ReplaceNode(INode<T> nodeToReplace, INode<T>? newNode)
 	{
-		if (nodeToReplace.Parent.Left == nodeToReplace)
+		if (nodeToReplace.Parent!.Left == nodeToReplace)
 			nodeToReplace.Parent.Left = newNode;
 		else
 			nodeToReplace.Parent.Right = newNode;
@@ -110,11 +116,10 @@ internal class Node<T> : INode<T>
 
 	private void RemoveNodeWithTwoChildren(INode<T> node)
 	{
-		var successor = FindMin(node.Right);
+		var successor = FindMin(node.Right!);
 		node.Data = successor.Data;
 		RemoveNode(successor);
-		
-		UpdateHeightUpwards(node.Parent);
+		UpdateHeightBalanceFactorUpwards(node.Parent);
 	}
 
 	private static INode<T> FindMin(INode<T> node)
@@ -138,17 +143,32 @@ internal class Node<T> : INode<T>
 		Right = new Node<T>(data);
 		Right.Parent = this;
 	}
+
 	private void UpdateHeight()
 	{
 		Height = 1 + Math.Max(Left?.Height ?? -1, Right?.Height ?? -1);
 	}
-	
-	private void UpdateHeightUpwards(INode<T>? node)
+
+	private void UpdateHeightBalanceFactorUpwards(INode<T>? node)
 	{
 		while (node is not null)
 		{
 			UpdateHeight();
+			node.UpdateBalanceFactor();
 			node = node.Parent;
 		}
+	}
+	
+	public void UpdateBalanceFactor()
+	{
+		var leftHeight = Left?.Height ?? -1;
+		var rightHeight = Right?.Height ?? -1;
+		
+		var balanceFactor = Math.Abs(leftHeight - rightHeight) ;
+		
+		var leftBalance=Left?.IsBalanced ?? true;
+		var rightBalance=Right?.IsBalanced ?? true;
+		
+		IsBalanced = balanceFactor <= 1 && leftBalance && rightBalance;
 	}
 }

@@ -8,37 +8,40 @@ public static class UpdateHeightAfterRemoveTests
 {
 	private static object[] _input = Array.Empty<object>();
 
-	[Theory(DisplayName = "Update property Height after remove tests. Should correct update root's height after remove single child")]
+	[Theory(DisplayName =
+		"Update property Height after remove tests. Should correct update root's height after remove single child")]
 	[MemberData(nameof(JustTwoNodesCaseGenerator.GetTwoNodesCases),
 		MemberType = typeof(JustTwoNodesCaseGenerator))]
 	public static void Should_CorrectlyUpdateHeight_RootsWithSingleChild(NodeCase testCase)
 	{
 		_input = testCase.InputData;
 		var root = new Node<object>(_input[0]);
-		
+
 		root.Insert(_input[1]);
 		root.Remove(_input[1].GetHashCode());
 
 		root.Data.Should().Be(_input[0]);
 		root.Height.Should().Be(0);
 	}
-	
-	[Theory(DisplayName = "Update property Height after remove tests. Should correct update height after remove root with single child")]
+
+	[Theory(DisplayName =
+		"Update property Height after remove tests. Should correct update height after remove root with single child")]
 	[MemberData(nameof(JustTwoNodesCaseGenerator.GetTwoNodesCases),
 		MemberType = typeof(JustTwoNodesCaseGenerator))]
 	public static void Should_CorrectlyUpdateHeight_RootWithSingleChild(NodeCase testCase)
 	{
 		_input = testCase.InputData;
 		var root = new Node<object>(_input[0]);
-		
+
 		root.Insert(_input[1]);
 		root.Remove(_input[0].GetHashCode());
 
 		root.Data.Should().Be(_input[1]);
 		root.Height.Should().Be(0);
 	}
-	
-	[Theory(DisplayName = "Update property Height after remove tests. Should correct update height of sub-tree after remove root in deep tree.")]
+
+	[Theory(DisplayName =
+		"Update property Height after remove tests. Should correct update height of sub-tree after remove root in deep tree.")]
 	[MemberData(nameof(NodesFourLevelTreeCaseGenerator.GetNodesFourLevelTreeCases),
 		MemberType = typeof(NodesFourLevelTreeCaseGenerator))]
 	public static void Should_CorrectlyUpdateHeight_RootWithBothChildNodes(NodeCase testCase)
@@ -59,8 +62,9 @@ public static class UpdateHeightAfterRemoveTests
 		root.Right?.Right?.Height.Should().Be(1);
 		root.Right?.Right?.Left?.Height.Should().Be(0);
 	}
-	
-	[Theory(DisplayName = "Update property Height after remove tests. Should correct update height of sub-tree after remove leaf in deep tree.")]
+
+	[Theory(DisplayName =
+		"Update property Height after remove tests. Should correct update height of sub-tree after remove leaf in deep tree.")]
 	[MemberData(nameof(NodesFourLevelTreeCaseGenerator.GetNodesFourLevelTreeCases),
 		MemberType = typeof(NodesFourLevelTreeCaseGenerator))]
 	public static void Should_CorrectlyUpdateHeight_Leaf(NodeCase testCase)
@@ -81,8 +85,9 @@ public static class UpdateHeightAfterRemoveTests
 		root.Left?.Left?.Left?.Height.Should().Be(0);
 		root.Right?.Height.Should().Be(2);
 	}
-	
-	[Theory(DisplayName = "Update property Height after remove tests. Should correct update height of sub-tree after remove node with one child inside deep tree.")]
+
+	[Theory(DisplayName =
+		"Update property Height after remove tests. Should correct update height of sub-tree after remove node with one child inside deep tree.")]
 	[MemberData(nameof(NodesFourLevelTreeCaseGenerator.GetNodesFourLevelTreeCases),
 		MemberType = typeof(NodesFourLevelTreeCaseGenerator))]
 	public static void Should_CorrectlyUpdateHeight_NodeWithOneChild(NodeCase testCase)
@@ -107,8 +112,9 @@ public static class UpdateHeightAfterRemoveTests
 		root.Right?.Right?.Height.Should().Be(1);
 		root.Right?.Right?.Left?.Height.Should().Be(0);
 	}
-	
-	[Theory(DisplayName = "Update property Height after remove tests. Should correct update height of sub-tree after remove node with one sub-tree inside deep tree.")]
+
+	[Theory(DisplayName =
+		"Update property Height after remove tests. Should correct update height of sub-tree after remove node with one sub-tree inside deep tree.")]
 	[MemberData(nameof(NodesFourLevelTreeCaseGenerator.GetNodesFourLevelTreeCases),
 		MemberType = typeof(NodesFourLevelTreeCaseGenerator))]
 	public static void Should_CorrectlyUpdateHeight_NodeWithOneSubTree(NodeCase testCase)
@@ -134,8 +140,9 @@ public static class UpdateHeightAfterRemoveTests
 		root.Right?.Height.Should().Be(1);
 		root.Right?.Right?.Height.Should().Be(0);
 	}
-	
-	[Theory(DisplayName = "Update property Height after remove tests. Should correct update height of sub-tree after remove node with both sub-tree inside deep tree.")]
+
+	[Theory(DisplayName =
+		"Update property Height after remove tests. Should correct update height of sub-tree after remove node with both sub-tree inside deep tree.")]
 	[MemberData(nameof(NodesFourLevelTreeCaseGenerator.GetNodesFourLevelTreeCases),
 		MemberType = typeof(NodesFourLevelTreeCaseGenerator))]
 	public static void Should_CorrectlyUpdateHeight_NodeWithBothSubTrees(NodeCase testCase)
@@ -160,11 +167,11 @@ public static class UpdateHeightAfterRemoveTests
 	/*    Visual representation of the test four-level tree (INDEXES of the test-case's input array)
 	*                     0
 	*                   /   \
-	*  		   	   /      \
-	* 				 1          3
-	* 			  /   \       /  \
-	* 			7     2      5    4
-	*		  / \	 /       \   / \
-	*		8	9	10		12	6  11
+	*  		   	      /      \
+	* 				 1        3
+	* 			  /   \      /  \
+	* 			7     2     5    4
+	*		  / \	 /      \   / \
+	*		8	9	10  	12	6  11
 	*/
 }
