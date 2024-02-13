@@ -14,7 +14,7 @@ public static class RemoveChildTests
 	public static void Should_CorrectlyRemove_SingleNode(NodeCase testCase)
 	{
 		var node = new Node<object>(testCase.InputData[0]);
-		node.Remove(testCase.InputData[0]);
+		node.Remove(testCase.InputData[0].GetHashCode());
 		
 		node.Data.Should().BeNull();
 		node.Left.Should().BeNull();
@@ -32,7 +32,7 @@ public static class RemoveChildTests
 		var root = new Node<object>(_input[0]);
 		
 		root.Insert(_input[1]);
-		root.Remove(_input[1]);
+		root.Remove(_input[1].GetHashCode());
 
 		root.Data.Should().Be(_input[0]);
 		root.Parent.Should().BeNull();
@@ -50,7 +50,7 @@ public static class RemoveChildTests
 		var root = new Node<object>(_input[0]);
 		
 		root.Insert(_input[1]);
-		root.Remove(_input[0]);
+		root.Remove(_input[0].GetHashCode());
 
 		root.Data.Should().Be(_input[1]);
 		root.Parent.Should().BeNull();
@@ -70,7 +70,7 @@ public static class RemoveChildTests
 		for (var i = 1; i < _input.Length; i++)
 			root.Insert(_input[i]);
 
-		root.Remove(_input[0]);
+		root.Remove(_input[0].GetHashCode());
 
 		root.Data.Should().Be(_input[5]);
 		root.Parent.Should().BeNull();
@@ -97,7 +97,7 @@ public static class RemoveChildTests
 		for (var i = 1; i < _input.Length; i++)
 			root.Insert(_input[i]);
 
-		root.Remove(_input[9]);
+		root.Remove(_input[9].GetHashCode());
 
 		root.Data.Should().Be(_input[0]);
 		root.Parent.Should().BeNull();
@@ -126,8 +126,8 @@ public static class RemoveChildTests
 		for (var i = 1; i < _input.Length; i++)
 			root.Insert(_input[i]);
 
-		root.Remove(_input[2]);
-		root.Remove(_input[5]);
+		root.Remove(_input[2].GetHashCode());
+		root.Remove(_input[5].GetHashCode());
 
 		root.Data.Should().Be(_input[0]);
 		root.Parent.Should().BeNull();
@@ -156,13 +156,13 @@ public static class RemoveChildTests
 		for (var i = 1; i < _input.Length; i++)
 			root.Insert(_input[i]);
 
-		root.Remove(_input[2]); //removed 4 nodes for creating 2 node with single depth sub-tree (left and right)
-		root.Remove(_input[10]);
-		root.Remove(_input[5]);
-		root.Remove(_input[12]);
+		root.Remove(_input[2].GetHashCode()); //removed 4 nodes for creating 2 node with single depth sub-tree (left and right)
+		root.Remove(_input[10].GetHashCode());
+		root.Remove(_input[5].GetHashCode());
+		root.Remove(_input[12].GetHashCode());
 
-		root.Remove(_input[1]);
-		root.Remove(_input[3]);
+		root.Remove(_input[1].GetHashCode());
+		root.Remove(_input[3].GetHashCode());
 
 		root.Data.Should().Be(_input[0]);
 		root.Parent.Should().BeNull();
@@ -194,7 +194,7 @@ public static class RemoveChildTests
 		for (var i = 1; i < _input.Length; i++)
 			root.Insert(_input[i]);
 
-		root.Remove(_input[3]);
+		root.Remove(_input[3].GetHashCode());
 
 		root.Data.Should().Be(_input[0]);
 		root.Parent.Should().BeNull();

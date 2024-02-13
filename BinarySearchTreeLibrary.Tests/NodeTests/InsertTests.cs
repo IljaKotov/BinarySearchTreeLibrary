@@ -105,4 +105,14 @@ public static class InsertTests
 		root.Right?.Right?.Left?.Data.Should().Be(input[6]);
 		root.Right?.Right?.Right?.Data.Should().Be(input[11]);
 	}
+	/*    Visual representation of the test four-level tree (INDEXES of the test-case's input array)
+	*                     0
+	*                   /   \
+	*  		   	   /      \
+	* 				 1          3
+	* 			  /   \       /  \
+	* 			7     2      5    4
+	*		  / \	 /       \   / \
+	*		8	9	10		12	6  11
+	*/
 }

@@ -19,7 +19,7 @@ public static class JustTwoNodesCaseGenerator
 		var inputs = new object[2];
 
 		for (var i = 0; i < 2; i++)
-			inputs[i] = faker.Random.Int(-100, 100);
+			inputs[i] = faker.Random.Int();
 
 		return new NodeCase
 		{

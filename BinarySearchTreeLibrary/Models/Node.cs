@@ -6,7 +6,7 @@ namespace BinarySearchTreeLibrary.Models;
 internal class Node<T> : INode<T>
 {
 	public T Data { get; set; }
-	public int Key => Data != null ? Data.GetHashCode() : 0;
+	public int Key => Data is not null ? Data.GetHashCode() : 0;
 	public INode<T>? Left { get; set; }
 	public INode<T>? Right { get; set; }
 	public INode<T>? Parent { get; set; }
@@ -29,28 +29,12 @@ internal class Node<T> : INode<T>
 
 		var compareKeyResult = data.GetHashCode().CompareTo(Key);
 
-		if (compareKeyResult < 0)
-		{
-			if (Left is not null)
-			{
-				Left.Insert(data);
-			}
-			else
-			{
-				CreateLeftChild(data);
-			}
-		}
-		else if (compareKeyResult > 0)
-		{
-			if (Right is not null)
-			{
-				Right.Insert(data);
-			}
-			else
-			{
-				CreateRightChild(data);
-			}
-		}
+		var direction = compareKeyResult < 0 ? Left : Right;
+
+		if (direction is not null)
+			direction.Insert(data);
+		else
+			CreateChild(data, compareKeyResult);
 
 		UpdateHeight();
 
@@ -62,40 +46,21 @@ internal class Node<T> : INode<T>
 		var compareKeyResult = key.CompareTo(Key);
 
 		if (compareKeyResult < 0)
-		{
 			return Left?.FindChild(key);
-		}
 
 		return compareKeyResult > 0 ? Right?.FindChild(key) : this;
 	}
-	
-	public bool Remove(T data)
-	{
-		var nodeToRemove = FindChild(data.GetHashCode());
 
-		if (nodeToRemove == null)
+	public bool Remove(int key)
+	{
+		var nodeToRemove = FindChild(key);
+
+		if (nodeToRemove is null)
 			return false;
 
 		RemoveNode(nodeToRemove);
 
 		return true;
-	}
-
-	private void UpdateHeight()
-	{
-		Height = 1 + Math.Max(Left?.Height ?? -1, Right?.Height ?? -1);
-	}
-
-	private void CreateLeftChild(T data)
-	{
-		Left = new Node<T>(data);
-		Left.Parent = this;
-	}
-
-	private void CreateRightChild(T data)
-	{
-		Right = new Node<T>(data);
-		Right.Parent = this;
 	}
 
 	private void RemoveNode(INode<T> node)
@@ -106,56 +71,84 @@ internal class Node<T> : INode<T>
 			RemoveNodeWithSingleChild(node);
 		else
 			RemoveNodeWithTwoChildren(node);
+		
+		UpdateHeightUpwards(node);
 	}
 
-	private void RemoveLeafNode(INode<T> node)
+	private static void RemoveLeafNode(INode<T> node)
 	{
-		if (node.Parent == null)
+		if (node.Parent is null)
 			node.Data = default!;
-		else if (node.Parent.Left == node)
-			node.Parent.Left = null;
 		else
-			node.Parent.Right = null;
+			ReplaceNode(node, null);
 	}
 
-	private void RemoveNodeWithSingleChild(INode<T> node)
+	private static void RemoveNodeWithSingleChild(INode<T> node)
 	{
 		var child = node.Left ?? node.Right;
 		child.Parent = node.Parent;
 
-		if (node.Parent == null)
+		if (node.Parent is not null)
 		{
-			node.Data = child.Data;
-			node.Left = child.Left;
-			node.Right = child.Right;
+			ReplaceNode(node, child);
+			
+			return;
 		}
-		else if (node.Parent.Left == node)
-		{
-			node.Parent.Left = child;
-		}
+
+		node.Data = child.Data;
+		node.Left = child.Left;
+		node.Right = child.Right;
+	}
+
+	private static void ReplaceNode(INode<T> nodeToReplace, INode<T>? newNode)
+	{
+		if (nodeToReplace.Parent.Left == nodeToReplace)
+			nodeToReplace.Parent.Left = newNode;
 		else
-		{
-			node.Parent.Right = child;
-		}
+			nodeToReplace.Parent.Right = newNode;
 	}
 
 	private void RemoveNodeWithTwoChildren(INode<T> node)
 	{
-		var successor = GetSuccessor(node);
+		var successor = FindMin(node.Right);
 		node.Data = successor.Data;
 		RemoveNode(successor);
+		
+		UpdateHeightUpwards(node.Parent);
 	}
 
-	private INode<T> GetSuccessor(INode<T> node)
+	private static INode<T> FindMin(INode<T> node)
 	{
-		return FindMin(node.Right);
-	}
-
-	private INode<T> FindMin(INode<T> node)
-	{
-		while (node.Left != null)
+		while (node.Left is not null)
 			node = node.Left;
 
 		return node;
+	}
+
+	private void CreateChild(T data, int direction)
+	{
+		if (direction < 0)
+		{
+			Left = new Node<T>(data);
+			Left.Parent = this;
+
+			return;
+		}
+
+		Right = new Node<T>(data);
+		Right.Parent = this;
+	}
+	private void UpdateHeight()
+	{
+		Height = 1 + Math.Max(Left?.Height ?? -1, Right?.Height ?? -1);
+	}
+	
+	private void UpdateHeightUpwards(INode<T>? node)
+	{
+		while (node is not null)
+		{
+			UpdateHeight();
+			node = node.Parent;
+		}
 	}
 }

@@ -31,4 +31,14 @@ public static class ParentalPropertiesTests
 		leaf?.Parent?.HasBothChildren.Should().BeFalse();
 		leaf?.Parent?.IsLeaf.Should().BeFalse();
 	}
+	/*    Visual representation of the test four-level tree (INDEXES of the test-case's input array)
+	*                     0
+	*                   /   \
+	*  		   	   /      \
+	* 				 1          3
+	* 			  /   \       /  \
+	* 			7     2      5    4
+	*		  / \	 /       \   / \
+	*		8	9	10		12	6  11
+	*/
 }
