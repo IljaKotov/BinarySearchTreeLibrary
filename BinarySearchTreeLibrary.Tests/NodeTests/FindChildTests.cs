@@ -1,0 +1,76 @@
+﻿using BinarySearchTreeLibrary.Interfaces;
+using BinarySearchTreeLibrary.Models;
+using BinarySearchTreeLibrary.Tests.NodesCases;
+using Bogus;
+using FluentAssertions;
+
+namespace BinarySearchTreeLibrary.Tests.NodeTests;
+
+public static class FindChildTests
+{
+	private static object[] _input = Array.Empty<object>();
+	
+	[Theory(DisplayName = "Should correctly find child for single node")]
+	[MemberData(nameof(SingleNodeCaseGenerator.GetSingleNodeCases), MemberType = typeof(SingleNodeCaseGenerator))]
+	public static void Should_CorrectlyFindChild_ForSingleNode(NodeCase testCase)
+	{
+		_input = testCase.InputData;
+		var node = new Node<object>(_input[0]);
+
+		var faker = new Faker();
+		var mistakeKey = faker.Random.Int(int.MinValue, _input[0].GetHashCode() - 1);
+
+		var child = node.FindChild(_input[0].GetHashCode());
+		var mistakeChild = node.FindChild(mistakeKey);
+
+		child.Should().Be(node);
+		mistakeChild.Should().BeNull();
+	}
+
+	[Theory(DisplayName = "Should correctly find child for Root and just one child-node")]
+	[MemberData(nameof(JustTwoNodesCaseGenerator.GetTwoNodesCases), MemberType = typeof(JustTwoNodesCaseGenerator))]
+	public static void Should_CorrectlyFindChild_ForRootAndJustOneChildNode(NodeCase testCase)
+	{
+		_input = testCase.InputData;
+		var root = new Node<object>(_input[0]);
+		root.Insert(_input[1]);
+
+		var rootSearching = root.FindChild(_input[0].GetHashCode());
+		var childSearching = root.FindChild(_input[1].GetHashCode());
+
+		rootSearching?.Data.Should().Be(_input[0]);
+		childSearching?.Data.Should().Be(_input[1]);
+	}
+
+	[Theory(DisplayName = "Should correctly find child for four-level tree nodes")]
+	[MemberData(nameof(NodesFourLevelTreeCaseGenerator.GetNodesFourLevelTreeCases),
+		MemberType = typeof(NodesFourLevelTreeCaseGenerator))]
+	public static void Should_CorrectlyFindChild_ForFourLevelTreeNodes(NodeCase testCase)
+	{
+		var root = new Node<object>(testCase.InputData[0]);
+
+		for (var i = 1; i < testCase.InputData.Length; i++)
+			root.Insert(testCase.InputData[i]);
+
+		foreach (var data in testCase.InputData)
+		{
+			var child = root.FindChild(data.GetHashCode());
+			child.Should().NotBeNull();
+			child?.Data.Should().Be(data);
+		}
+
+		FindNonExistentChild_ExpectedReturnNull(testCase, root);
+	}
+
+	private static void FindNonExistentChild_ExpectedReturnNull(NodeCase testCase, INode<object> root)
+	{
+		var faker = new Faker();
+		var nonExistentKey = faker.Random.Int();
+
+		while (testCase.InputData.Contains(nonExistentKey.GetHashCode()))
+			nonExistentKey = faker.Random.Int();
+
+		var nonExistentChild = root.FindChild(nonExistentKey);
+		nonExistentChild.Should().BeNull();
+	}
+}

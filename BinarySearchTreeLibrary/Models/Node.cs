@@ -6,81 +6,28 @@ namespace BinarySearchTreeLibrary.Models;
 internal class Node<T> : INode<T>
 {
 	public T Data { get; set; }
-	public int Key { get; set; }
+	public int Key => Data != null ? Data.GetHashCode() : 0;
 	public INode<T>? Left { get; set; }
 	public INode<T>? Right { get; set; }
 	public INode<T>? Parent { get; set; }
 	public int Height { get; set; }
 	public bool IsLeaf => Left is null && Right is null;
-	//public bool IsLeftChild => Parent is not null && Parent.Left == this;
-	//public bool IsRightChild => Parent is not null && Parent.Right == this;
-	//public bool IsRoot => Parent is null;
 	public bool HasBothChildren => Left is not null && Right is not null;
-	//public bool HasLeftChild => Left is not null;
-	//public bool HasRightChild => Right is not null;
-	//public bool HasParent => Parent is not null;
 
-	public bool IsBalanced => throw
-
-		// Implement balance check logic here
-		new NotImplementedException();
+	public bool IsBalanced { get; set; }
 
 	public Node(T data)
 	{
 		ArgumentNullException.ThrowIfNull(data);
-
 		Data = data;
-		Key = data.GetHashCode();
-	}
-
-	public INode<T>? FindChild(int key)
-	{
-		var compareKeyResult = key.CompareTo(Key);
-
-		if (compareKeyResult < 0)
-		{
-			return Left?.FindChild(key);
-		}
-
-		return compareKeyResult > 0 ? Right?.FindChild(key) : this;
-	}
-
-	public void ReplaceData(T newData)
-	{
-		throw new NotImplementedException();
-	}
-
-	public void ReplaceNode(INode<T> newNode, bool isRoot)
-	{
-		Data = newNode.Data;
-		Key = newNode.Data.GetHashCode();
-
-		if (isRoot)
-		{
-			Left = newNode.Left;
-			Right = newNode.Right;
-		}
-	}
-
-	public void ReplaceChild(INode<T> existingChild, INode<T>? newChild)
-	{
-		if (Left == existingChild)
-		{
-			Left = newChild;
-		}
-		else if (Right == existingChild)
-		{
-			Right = newChild;
-		}
 	}
 
 	public bool Insert(T data)
 	{
 		ArgumentNullException.ThrowIfNull(data);
+		DuplicateKeyException.ThrowIfEqual(Key, data.GetHashCode());
 
 		var compareKeyResult = data.GetHashCode().CompareTo(Key);
-
-		DuplicateKeyException.ThrowIfEqual(Key, data.GetHashCode());
 
 		if (compareKeyResult < 0)
 		{
@@ -110,57 +57,33 @@ internal class Node<T> : INode<T>
 		return true;
 	}
 
-	public bool RemoveChild(int key)
+	public INode<T>? FindChild(int key)
 	{
-		var nodeToDelete = FindChild(key);
+		var compareKeyResult = key.CompareTo(Key);
 
-		if (nodeToDelete is null)
+		if (compareKeyResult < 0)
 		{
+			return Left?.FindChild(key);
+		}
+
+		return compareKeyResult > 0 ? Right?.FindChild(key) : this;
+	}
+	
+	public bool Remove(T data)
+	{
+		var nodeToRemove = FindChild(data.GetHashCode());
+
+		if (nodeToRemove == null)
 			return false;
-		}
 
-		if (!nodeToDelete.IsLeaf)
-		{
-			if (nodeToDelete.HasBothChildren)
-			{
-				var replacementNode = nodeToDelete.Right?.Minimum();
-				nodeToDelete.ReplaceNode(replacementNode, false);
-				nodeToDelete = replacementNode;
-			}
-			else
-			{
-				var child = nodeToDelete.Left ?? nodeToDelete.Right;
-
-				if (nodeToDelete.Parent is null)
-				{
-					nodeToDelete.ReplaceNode(child, isRoot:true);
-				}
-				else
-				{
-					nodeToDelete.Parent!.ReplaceChild(nodeToDelete, child);
-				}
-			}
-		}
-
-		if (nodeToDelete!.IsLeaf)
-		{
-			nodeToDelete.Parent?.ReplaceChild(nodeToDelete, null);
-		}
+		RemoveNode(nodeToRemove);
 
 		return true;
 	}
 
-	public INode<T> Minimum()
+	private void UpdateHeight()
 	{
-		INode<T> current = this;
-
-		while (current.Left != null)
-		{
-			current.Height--;
-			current = current.Left;
-		}
-
-		return current;
+		Height = 1 + Math.Max(Left?.Height ?? -1, Right?.Height ?? -1);
 	}
 
 	private void CreateLeftChild(T data)
@@ -175,8 +98,64 @@ internal class Node<T> : INode<T>
 		Right.Parent = this;
 	}
 
-	private void UpdateHeight()
+	private void RemoveNode(INode<T> node)
 	{
-		Height = 1 + Math.Max(Left?.Height ?? -1, Right?.Height ?? -1);
+		if (node.IsLeaf)
+			RemoveLeafNode(node);
+		else if (!node.HasBothChildren)
+			RemoveNodeWithSingleChild(node);
+		else
+			RemoveNodeWithTwoChildren(node);
+	}
+
+	private void RemoveLeafNode(INode<T> node)
+	{
+		if (node.Parent == null)
+			node.Data = default!;
+		else if (node.Parent.Left == node)
+			node.Parent.Left = null;
+		else
+			node.Parent.Right = null;
+	}
+
+	private void RemoveNodeWithSingleChild(INode<T> node)
+	{
+		var child = node.Left ?? node.Right;
+		child.Parent = node.Parent;
+
+		if (node.Parent == null)
+		{
+			node.Data = child.Data;
+			node.Left = child.Left;
+			node.Right = child.Right;
+		}
+		else if (node.Parent.Left == node)
+		{
+			node.Parent.Left = child;
+		}
+		else
+		{
+			node.Parent.Right = child;
+		}
+	}
+
+	private void RemoveNodeWithTwoChildren(INode<T> node)
+	{
+		var successor = GetSuccessor(node);
+		node.Data = successor.Data;
+		RemoveNode(successor);
+	}
+
+	private INode<T> GetSuccessor(INode<T> node)
+	{
+		return FindMin(node.Right);
+	}
+
+	private INode<T> FindMin(INode<T> node)
+	{
+		while (node.Left != null)
+			node = node.Left;
+
+		return node;
 	}
 }
