@@ -15,5 +15,6 @@ internal interface INode<T>
 	bool Insert(T data);
 	INode<T>? FindChild(int key);
 	void UpdateBalanceFactor();
+	void UpdateHeight();
 	
 }

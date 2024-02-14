@@ -5,16 +5,16 @@ namespace BinarySearchTreeLibrary.Models;
 public class BinarySearchTree<T> : IBinarySearchTree<T>
 {
 	private Node<T>? _root;
-
 	public int Size { get; private set; }
 	public int Height { get; private set; }
-	public int RootBalanceFactor { get; private set; }
-
+	public int RootBalanceFactor => _root is not null ? Math.Abs((_root.Left?.Height ?? -1) - (_root.Right?.Height ?? -1)) : 0;
+	public object?  Root => _root is not null ? _root.Data : null;
+	
 	public BinarySearchTree()
 	{
 		Size = 0;
 		Height = -1;
-		RootBalanceFactor = 0;
+		//RootBalanceFactor = 0;
 		_root = null;
 	}
 
@@ -38,9 +38,11 @@ public class BinarySearchTree<T> : IBinarySearchTree<T>
 		}
 
 		Size++;
-		var newHeight = Math.Max(_root.Left?.Height ?? -1, _root.Right?.Height ?? -1) + 1;
+		/*var newHeight = Math.Max(_root.Left?.Height ?? -1, _root.Right?.Height ?? -1) + 1;
 		if (newHeight > Height)
-			Height = newHeight;
+			Height = newHeight;*/
+		Height=_root.Height;
+		//RootBalanceFactor = Math.Abs(_root.Left?.Height ?? -1 - _root.Right?.Height ?? -1);
 		return success;
 	}
 
@@ -58,8 +60,21 @@ public class BinarySearchTree<T> : IBinarySearchTree<T>
 			return false;
 
 		var success = _root.Remove(data.GetHashCode());
+
 		if (success)
+		{
 			Size--;
+			/*ar newHeight = Math.Max(_root.Left?.Height ?? -1, _root.Right?.Height ?? -1) + 1;
+
+			if (newHeight > Height)
+				Height = newHeight;*/
+			Height=_root.Height;
+		}
+
+		if (Root is null)
+		{
+			Height = -1;
+		}
 
 		return success;
 	}
@@ -79,7 +94,7 @@ public class BinarySearchTree<T> : IBinarySearchTree<T>
 
 	public bool IsBinarySearchTree()
 	{
-		throw new NotImplementedException();
+		return IsBinarySearchTree(_root, default, default);
 	}
 
 	public bool Clear()
@@ -87,7 +102,24 @@ public class BinarySearchTree<T> : IBinarySearchTree<T>
 		_root = null;
 		Size = 0;
 		Height = -1;
-		RootBalanceFactor = 0;
+		//RootBalanceFactor = 0;
 		return true;
+	}
+	
+	private bool IsBinarySearchTree(INode<T>? node, T? minValue, T? maxValue)
+	{
+		if (node == null)
+			return true;
+
+		// Перевіряємо, чи вузол задовольняє умову BST
+		if ((minValue != null && Comparer<T>.Default.Compare(node.Data, minValue) <= 0) ||
+			(maxValue != null && Comparer<T>.Default.Compare(node.Data, maxValue) >= 0))
+		{
+			return false;
+		}
+
+		// Рекурсивно перевіряємо ліве та праве піддерева
+		return IsBinarySearchTree(node.Left, minValue, node.Data) &&
+			IsBinarySearchTree(node.Right, node.Data, maxValue);
 	}
 }

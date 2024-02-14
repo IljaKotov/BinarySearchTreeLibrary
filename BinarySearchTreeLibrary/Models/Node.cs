@@ -144,16 +144,16 @@ internal class Node<T> : INode<T>
 		Right.Parent = this;
 	}
 
-	private void UpdateHeight()
+	public void UpdateHeight()
 	{
 		Height = 1 + Math.Max(Left?.Height ?? -1, Right?.Height ?? -1);
 	}
 
-	private void UpdateHeightBalanceFactorUpwards(INode<T>? node)
+	private static void UpdateHeightBalanceFactorUpwards(INode<T>? node)
 	{
 		while (node is not null)
 		{
-			UpdateHeight();
+			node.UpdateHeight();
 			node.UpdateBalanceFactor();
 			node = node.Parent;
 		}

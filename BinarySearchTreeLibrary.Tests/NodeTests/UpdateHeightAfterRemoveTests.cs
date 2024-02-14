@@ -164,6 +164,30 @@ public static class UpdateHeightAfterRemoveTests
 		root.Right?.Right?.Right?.Height.Should().Be(0);
 		root.Right?.Left?.Right?.Height.Should().Be(0);
 	}
+	
+	[Theory(DisplayName = "Update property Height after remove tests. Should correct update height after remove all levels of tree")]
+	[MemberData(nameof(NodesFourLevelTreeCaseGenerator.GetNodesFourLevelTreeCases),
+		MemberType = typeof(NodesFourLevelTreeCaseGenerator))]
+	
+	public static void Should_CorrectlyUpdateHeight_AfterRemoveAllLevelsOfTree(NodeCase testCase)
+	{
+		var root = new BinarySearchTree<object>();
+		_input = testCase.InputData;
+
+		foreach (var data in _input)
+			root.Insert(data);
+
+		root.Height.Should().Be(3);
+		
+		root.Remove(_input[8].GetHashCode());
+		root.Remove(_input[9].GetHashCode());
+		root.Remove(_input[10].GetHashCode());
+		root.Remove(_input[12].GetHashCode());
+		root.Remove(_input[6].GetHashCode());
+		root.Remove(_input[11].GetHashCode());
+		
+		root.Height.Should().Be(2);
+	}
 	/*    Visual representation of the test four-level tree (INDEXES of the test-case's input array)
 	*                     0
 	*                   /   \
