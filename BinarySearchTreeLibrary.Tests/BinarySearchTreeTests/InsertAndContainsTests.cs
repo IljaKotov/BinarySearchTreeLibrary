@@ -1,4 +1,6 @@
-﻿using BinarySearchTreeLibrary.Models;
+﻿using BinarySearchTreeLibrary.Exceptions;
+using BinarySearchTreeLibrary.Interfaces;
+using BinarySearchTreeLibrary.Models;
 using BinarySearchTreeLibrary.Tests.NodesCases;
 using FluentAssertions;
 
@@ -16,16 +18,25 @@ public static class InsertAndContainsTests
 
 		Assert.Throws<ArgumentNullException>(() => root.Insert(null));
 	}
-	
+
 	[Fact(DisplayName = "Contains method should throw ArgumentNullException when inserting null data")]
-	
+
 	public static void Contains_NullData_ShouldThrowArgumentNullException()
 	{
 		var tree = new BinarySearchTree<object?>();
-		
+
 		Assert.Throws<ArgumentNullException>(() => tree.Contains(null));
 	}
-	
+
+	[Fact(DisplayName = "Contains method should throw EmptyTreeException when searching in empty tree")]
+
+	public static void Contains_EmptyTree_ShouldThrowEmptyTreeException()
+	{
+		var tree = new BinarySearchTree<object>();
+
+		Assert.Throws<EmptyTreeException>(() => tree.Contains(10));
+	}
+
 	[Theory(DisplayName = "Should correctly insert and contains data, and set properties' values")]
 	[MemberData(nameof(NodesFourLevelTreeCaseGenerator.GetNodesFourLevelTreeCases),
 		MemberType = typeof(NodesFourLevelTreeCaseGenerator))]
@@ -74,14 +85,14 @@ public static class InsertAndContainsTests
 
 		tree.Contains(35).Should().BeFalse();
 	}
-	/*    Visual representation of the test four-level tree (INDEXES of the test-case's input array)
-	*                     0
-	*                   /   \
-	*  		   	      /      \
-	* 				 1        3
-	* 			  /   \      /  \
-	* 			7     2     5    4
-	*		  / \	 /      \   / \
-	*		8	9	10  	12	6  11
-	*/
+/*    Visual representation of the test four-level tree (INDEXES of the test-case's input array)
+*                     0
+*                   /   \
+*  		   	      /      \
+* 				 1        3
+* 			  /   \      /  \
+* 			7     2     5    4
+*		  / \	 /      \   / \
+*		8	9	10  	12	6  11
+*/
 }

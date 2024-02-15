@@ -33,9 +33,13 @@ internal class Node<T> : INode<T>
 		var direction = compareKeyResult < 0 ? Left : Right;
 
 		if (direction is not null)
+		{
 			direction.Insert(data);
+		}
 		else
+		{
 			CreateChild(data, compareKeyResult);
+		}
 
 		UpdateHeight();
 		UpdateBalanceFactor();
@@ -48,9 +52,29 @@ internal class Node<T> : INode<T>
 		var compareKeyResult = key.CompareTo(Key);
 
 		if (compareKeyResult < 0)
+		{
 			return Left?.FindChild(key);
+		}
 
 		return compareKeyResult > 0 ? Right?.FindChild(key) : this;
+	}
+
+	public void UpdateHeight()
+	{
+		Height = 1 + Math.Max(Left?.Height ?? -1, Right?.Height ?? -1);
+	}
+
+	public void UpdateBalanceFactor()
+	{
+		var leftHeight = Left?.Height ?? -1;
+		var rightHeight = Right?.Height ?? -1;
+
+		var balanceFactor = Math.Abs(leftHeight - rightHeight);
+
+		var leftBalance = Left?.IsBalanced ?? true;
+		var rightBalance = Right?.IsBalanced ?? true;
+
+		IsBalanced = balanceFactor <= 1 && leftBalance && rightBalance;
 	}
 
 	public bool Remove(int key)
@@ -58,7 +82,9 @@ internal class Node<T> : INode<T>
 		var nodeToRemove = FindChild(key);
 
 		if (nodeToRemove is null)
+		{
 			return false;
+		}
 
 		RemoveNode(nodeToRemove);
 
@@ -68,21 +94,31 @@ internal class Node<T> : INode<T>
 	private void RemoveNode(INode<T> node)
 	{
 		if (node.IsLeaf)
+		{
 			RemoveLeafNode(node);
+		}
 		else if (!node.HasBothChildren)
+		{
 			RemoveNodeWithSingleChild(node);
+		}
 		else
+		{
 			RemoveNodeWithTwoChildren(node);
-		
+		}
+
 		UpdateHeightBalanceFactorUpwards(node);
 	}
 
 	private static void RemoveLeafNode(INode<T> node)
 	{
 		if (node.Parent is null)
+		{
 			node.Data = default!;
+		}
 		else
+		{
 			ReplaceNode(node, null);
+		}
 	}
 
 	private static void RemoveNodeWithSingleChild(INode<T> node)
@@ -90,14 +126,16 @@ internal class Node<T> : INode<T>
 		var child = node.Left ?? node.Right;
 
 		if (child is null)
+		{
 			return;
-		
+		}
+
 		child.Parent = node.Parent;
 
 		if (node.Parent is not null)
 		{
 			ReplaceNode(node, child);
-			
+
 			return;
 		}
 
@@ -109,9 +147,13 @@ internal class Node<T> : INode<T>
 	private static void ReplaceNode(INode<T> nodeToReplace, INode<T>? newNode)
 	{
 		if (nodeToReplace.Parent!.Left == nodeToReplace)
+		{
 			nodeToReplace.Parent.Left = newNode;
+		}
 		else
+		{
 			nodeToReplace.Parent.Right = newNode;
+		}
 	}
 
 	private void RemoveNodeWithTwoChildren(INode<T> node)
@@ -144,11 +186,6 @@ internal class Node<T> : INode<T>
 		Right.Parent = this;
 	}
 
-	public void UpdateHeight()
-	{
-		Height = 1 + Math.Max(Left?.Height ?? -1, Right?.Height ?? -1);
-	}
-
 	private static void UpdateHeightBalanceFactorUpwards(INode<T>? node)
 	{
 		while (node is not null)
@@ -159,16 +196,82 @@ internal class Node<T> : INode<T>
 		}
 	}
 	
-	public void UpdateBalanceFactor()
+	public void Balance()
 	{
-		var leftHeight = Left?.Height ?? -1;
-		var rightHeight = Right?.Height ?? -1;
+		// Код для балансування дерева
+
+		BalanceRecursive(this); // Рекурсивний виклик балансування
+	}
+
+	private INode<T>? BalanceRecursive(INode<T>? node)
+	{
+		if (node is null)
+		{
+			return null;
+		}
 		
-		var balanceFactor = Math.Abs(leftHeight - rightHeight) ;
+		node.Left = BalanceRecursive(node.Left);
+		node.Right = BalanceRecursive(node.Right);
+
+		int balanceFactor = node.GetBalanceFactor();
+
+		if (balanceFactor>1)
+		{
+			if (node.Left is not null && node.Left.GetBalanceFactor() < 0)
+			{
+				node.Left=node.Left.RotateLeft();
+			}
+			return node.RotateRight();
+		}
+		if (balanceFactor<-1)
+		{
+			if (node.Right is not null && node.Right.GetBalanceFactor() > 0)
+			{
+				node.Right=node.Right.RotateRight();
+			}
+			return node.RotateLeft();
+		}
+		node.UpdateHeight();
+		node.UpdateBalanceFactor();
+		return node;
 		
-		var leftBalance=Left?.IsBalanced ?? true;
-		var rightBalance=Right?.IsBalanced ?? true;
+	}
+
+	public INode<T> RotateRight()
+	{
+		if (Left is null)
+		{
+			return this;
+		}
+		var newRoot = Left;
 		
-		IsBalanced = balanceFactor <= 1 && leftBalance && rightBalance;
+		var temp = newRoot.Right;
+		newRoot.Right = this;
+		Left = temp;
+		
+		UpdateHeight();
+		UpdateBalanceFactor();
+		return newRoot;
+	}
+
+	public INode<T> RotateLeft()
+	{
+		if (Right is null)
+		{
+			return this;
+		}
+		var newRoot = Right;
+		
+		var temp = newRoot.Left;
+		newRoot.Left = this;
+		Right = temp;
+		UpdateHeight();
+		UpdateBalanceFactor();
+		return newRoot;
+	}
+
+	public int GetBalanceFactor()
+	{
+		return (Left?.Height ?? -1) - (Right?.Height ?? -1);
 	}
 }

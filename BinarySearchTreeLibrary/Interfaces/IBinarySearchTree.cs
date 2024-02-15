@@ -12,5 +12,4 @@ public interface IBinarySearchTree<T>
 	bool Balance();
 	bool IsBalanced();
 	bool IsBinarySearchTree();
-	bool Clear();
 }

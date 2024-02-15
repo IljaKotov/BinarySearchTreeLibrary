@@ -1,4 +1,5 @@
-﻿using BinarySearchTreeLibrary.Interfaces;
+﻿using BinarySearchTreeLibrary.Exceptions;
+using BinarySearchTreeLibrary.Interfaces;
 
 namespace BinarySearchTreeLibrary.Models;
 
@@ -6,75 +7,55 @@ public class BinarySearchTree<T> : IBinarySearchTree<T>
 {
 	private Node<T>? _root;
 	public int Size { get; private set; }
-	public int Height { get; private set; }
+	public int Height => Root is not null ? _root!.Height : -1;
 	public int RootBalanceFactor => _root is not null ? Math.Abs((_root.Left?.Height ?? -1) - (_root.Right?.Height ?? -1)) : 0;
 	public object?  Root => _root is not null ? _root.Data : null;
-	
-	public BinarySearchTree()
-	{
-		Size = 0;
-		Height = -1;
-		//RootBalanceFactor = 0;
-		_root = null;
-	}
 
+	public BinarySearchTree() { }
+	
+	internal BinarySearchTree(T rootData, T leftData=default(T), T rightData=default(T))
+	{
+		_root = new Node<T>(rootData)
+		{
+			Left = new Node<T>(leftData),
+			Right = new Node<T>(rightData)
+		};
+	}
+	
 	public bool Insert(T data)
 	{
 		ArgumentNullException.ThrowIfNull(data);
+		bool success;
 		
 		if (_root is null)
 		{
 			_root = new Node<T>(data);
-			Size++;
-			Height++;
-			return true;
+			success = true;
 		}
+		else
+			success = _root.Insert(data);
 
-		var success = _root.Insert(data);
-
-		if (!success)
-		{
-			return success;
-		}
-
-		Size++;
-		/*var newHeight = Math.Max(_root.Left?.Height ?? -1, _root.Right?.Height ?? -1) + 1;
-		if (newHeight > Height)
-			Height = newHeight;*/
-		Height=_root.Height;
-		//RootBalanceFactor = Math.Abs(_root.Left?.Height ?? -1 - _root.Right?.Height ?? -1);
+		UpdateSize(success, 1);
+		
 		return success;
 	}
 
-	public bool Contains(T data)
+	public bool Contains(T? data)
 	{
 		ArgumentNullException.ThrowIfNull(data);
+		EmptyTreeException.ThrowIfEmptyTree((IBinarySearchTree<object>) this);
+		
 		return _root?.FindChild(data.GetHashCode()) is not null;
 	}
 
 	public bool Remove(T data)
 	{
 		ArgumentNullException.ThrowIfNull(data);
-		
-		if (_root is null)
-			return false;
+		EmptyTreeException.ThrowIfEmptyTree((IBinarySearchTree<object>) this);
 
-		var success = _root.Remove(data.GetHashCode());
+		var success = _root!.Remove(data.GetHashCode());
 
-		if (success)
-		{
-			Size--;
-			/*ar newHeight = Math.Max(_root.Left?.Height ?? -1, _root.Right?.Height ?? -1) + 1;
-
-			if (newHeight > Height)
-				Height = newHeight;*/
-			Height=_root.Height;
-		}
-
-		if (Root is null)
-		{
-			Height = -1;
-		}
+		UpdateSize(success, -1);
 
 		return success;
 	}
@@ -86,40 +67,47 @@ public class BinarySearchTree<T> : IBinarySearchTree<T>
 
 	public bool IsBalanced()
 	{
-		if (_root == null)
-			return true;
-
-		return _root.IsBalanced;
+		return _root is null || _root.IsBalanced;
 	}
 
 	public bool IsBinarySearchTree()
 	{
-		return IsBinarySearchTree(_root, default, default);
-	}
-
-	public bool Clear()
-	{
-		_root = null;
-		Size = 0;
-		Height = -1;
-		//RootBalanceFactor = 0;
-		return true;
+		if (_root is null)
+			throw new EmptyTreeException("Tree is empty");
+		
+		return IsSubtreeLessThan(_root, false) && IsSubtreeGreaterThan(_root, false);
 	}
 	
-	private bool IsBinarySearchTree(INode<T>? node, T? minValue, T? maxValue)
+	private bool IsSubtreeLessThan(INode<T>? node, bool inclusive)
 	{
 		if (node == null)
 			return true;
 
-		// Перевіряємо, чи вузол задовольняє умову BST
-		if ((minValue != null && Comparer<T>.Default.Compare(node.Data, minValue) <= 0) ||
-			(maxValue != null && Comparer<T>.Default.Compare(node.Data, maxValue) >= 0))
-		{
+		if (node.Left != null && (node.Left.Key >= node.Key || (inclusive && node.Left.Key == node.Key)))
 			return false;
-		}
 
-		// Рекурсивно перевіряємо ліве та праве піддерева
-		return IsBinarySearchTree(node.Left, minValue, node.Data) &&
-			IsBinarySearchTree(node.Right, node.Data, maxValue);
+		if (node.Right != null && node.Right.Key <= node.Key)
+			return false;
+
+		return IsSubtreeLessThan(node.Left, inclusive) && IsSubtreeLessThan(node.Right, inclusive);
+	}
+
+	private bool IsSubtreeGreaterThan(INode<T>? node, bool inclusive)
+	{
+		if (node == null)
+			return true;
+
+		if (node.Left != null && node.Left.Key >= node.Key)
+			return false;
+
+		if (node.Right != null && (node.Right.Key <= node.Key || (inclusive && node.Right.Key == node.Key)))
+			return false;
+
+		return IsSubtreeGreaterThan(node.Left, inclusive) && IsSubtreeGreaterThan(node.Right, inclusive);
+	}
+	
+	private void UpdateSize(bool success, int value)
+	{
+		Size = success ? Size + value : Size;
 	}
 }

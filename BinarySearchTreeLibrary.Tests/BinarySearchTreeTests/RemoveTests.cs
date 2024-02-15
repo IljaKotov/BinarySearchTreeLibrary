@@ -1,4 +1,5 @@
-﻿using BinarySearchTreeLibrary.Models;
+﻿using BinarySearchTreeLibrary.Exceptions;
+using BinarySearchTreeLibrary.Models;
 using BinarySearchTreeLibrary.Tests.NodesCases;
 using FluentAssertions;
 
@@ -7,6 +8,15 @@ namespace BinarySearchTreeLibrary.Tests.BinarySearchTreeTests;
 public static class RemoveTests
 {
 	private static object[] _input = Array.Empty<object>();
+	
+	[Fact(DisplayName = "Remove method should throw EmptyTreeException when removing from empty tree")]
+	
+	public static void Remove_EmptyTree_ShouldThrowEmptyTreeException()
+	{
+		var tree = new BinarySearchTree<object>();
+		
+		Assert.Throws<EmptyTreeException>(() => tree.Remove(10));
+	}
 
 	[Fact(DisplayName = "Remove method should throw ArgumentNullException when inserting null data")]
 
@@ -39,7 +49,6 @@ public static class RemoveTests
 			tree.Remove(data).Should().BeTrue();
 
 		tree.Root.Should().BeNull();
-		tree.Contains(_input[0]).Should().BeFalse();
 		tree.Height.Should().Be(-1);
 	}
 	
