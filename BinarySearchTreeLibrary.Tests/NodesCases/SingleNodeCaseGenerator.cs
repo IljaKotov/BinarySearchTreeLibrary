@@ -39,7 +39,7 @@ public static class SingleNodeCaseGenerator
 		{
 			InputData = new object[]
 			{
-				new FakerClass()
+				new FakeClass()
 			}
 		};
 	}

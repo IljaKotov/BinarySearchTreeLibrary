@@ -171,11 +171,12 @@ public static class UpdateHeightAfterRemoveTests
 	
 	public static void Should_CorrectlyUpdateHeight_AfterRemoveAllLevelsOfTree(NodeCase testCase)
 	{
-		var root = new BinarySearchTree<object>();
+		
 		_input = testCase.InputData;
-
-		foreach (var data in _input)
-			root.Insert(data);
+		var root = new Node<object>(_input[0]);
+		
+		for (var i = 1; i < _input.Length; i++)
+			root.Insert(_input[i]);
 
 		root.Height.Should().Be(3);
 		

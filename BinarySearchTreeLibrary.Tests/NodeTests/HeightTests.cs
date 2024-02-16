@@ -25,7 +25,7 @@ public static class HeightTests
 
 		root.Height.Should().Be(1);
 
-		if (root.Left is not null)
+		if (root.Left is not NullNode<object>)
 			root.Left.Height.Should().Be(0);
 		else
 			root.Right?.Height.Should().Be(0);

@@ -8,6 +8,7 @@ namespace BinarySearchTreeLibrary.Tests.NodeTests;
 public static class InsertTests
 {
 	private static object[] _input = Array.Empty<object>();
+	private static readonly NullNode<object> _nullNode = new();
 	
 	[Fact(DisplayName = "Insert method should throw ArgumentNullException when inserting null data")]
 	public static void Insert_NullData_ShouldThrowArgumentNullException()
@@ -26,8 +27,8 @@ public static class InsertTests
 		var node = new Node<object>(_input[0]);
 
 		node.Data.Should().Be(testCase.InputData[0]);
-		node.Left.Should().BeNull();
-		node.Right.Should().BeNull();
+		node.Left.Should().BeEquivalentTo(_nullNode);
+		node.Right.Should().BeEquivalentTo(_nullNode);
 		node.Parent.Should().BeNull();
 		node.Key.Should().Be(testCase.InputData[0].GetHashCode());
 	}
@@ -50,19 +51,19 @@ public static class InsertTests
 		if (_input[1].GetHashCode() > _input[0].GetHashCode())
 		{
 			child = root.Right;
-			root.Left.Should().BeNull();
+			root.Left.Should().BeEquivalentTo(_nullNode);
 		}
 		else
 		{
 			child = root.Left;
-			root.Right.Should().BeNull();
+			root.Right.Should().BeEquivalentTo(_nullNode);
 		}
 
 		child?.Data.Should().Be(_input[1]);
 		child?.Parent.Should().Be(root);
 		child?.Key.Should().Be(_input[1].GetHashCode());
-		child?.Left.Should().BeNull();
-		child?.Right.Should().BeNull();
+		child?.Left.Should().BeEquivalentTo(_nullNode);
+		child?.Right.Should().BeEquivalentTo(_nullNode);
 	}
 
 	[Theory(DisplayName = "Should correctly insert and set properties' values for four-level trees' nodes")]
@@ -92,7 +93,7 @@ public static class InsertTests
 		root.Left?.Left?.Left?.Data.Should().Be(input[8]);
 		root.Left?.Left?.Right?.Data.Should().Be(input[9]);
 		root.Left?.Right?.Left?.Data.Should().Be(input[10]);
-		root.Left?.Right?.Right?.Data.Should().BeNull();
+		root.Left?.Right?.Right?.Should().BeEquivalentTo(_nullNode);
 	}
 
 	private static void Validate_CorrectlyInsert_RightSubTree(INode<object> root, IReadOnlyList<object> input)
@@ -100,7 +101,7 @@ public static class InsertTests
 		root.Right?.Data.Should().Be(input[3]);
 		root.Right?.Left?.Data.Should().Be(input[5]);
 		root.Right?.Right?.Data.Should().Be(input[4]);
-		root.Right?.Left?.Left?.Data.Should().BeNull();
+		root.Right?.Left?.Left?.Should().BeEquivalentTo(_nullNode);
 		root.Right?.Left?.Right?.Data.Should().Be(input[12]);
 		root.Right?.Right?.Left?.Data.Should().Be(input[6]);
 		root.Right?.Right?.Right?.Data.Should().Be(input[11]);

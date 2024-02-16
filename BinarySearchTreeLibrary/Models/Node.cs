@@ -3,25 +3,19 @@ using BinarySearchTreeLibrary.Interfaces;
 
 namespace BinarySearchTreeLibrary.Models;
 
-internal class Node<T> : INode<T>
+internal class Node<T>(T data) : INode<T>
 {
-	public T Data { get; set; }
+	private Balancer<T> _balancer = new();
+	public T Data { get; set; } = data ?? default!;
 	public int Key => Data is not null ? Data.GetHashCode() : 0;
-	public INode<T>? Left { get; set; }
-	public INode<T>? Right { get; set; }
+	public INode<T>? Left { get; set; }= new NullNode<T>();
+	public INode<T>? Right { get; set; }= new NullNode<T>();
 	public INode<T>? Parent { get; set; }
 	public int Height { get; set; }
-	public bool IsLeaf => Left is null && Right is null;
-	public bool HasBothChildren => Left is not null && Right is not null;
+	public bool IsLeaf => Left is NullNode<T> && Right is NullNode<T>;
+	public bool HasBothChildren => Left is not NullNode<T> && Right is not NullNode<T>;
 
-	public bool IsBalanced { get; private set; }
-
-	public Node(T data)
-	{
-		ArgumentNullException.ThrowIfNull(data);
-		Data = data;
-		IsBalanced = true;
-	}
+	public bool IsBalanced { get; private set; } = true;
 
 	public bool Insert(T data)
 	{
@@ -29,20 +23,18 @@ internal class Node<T> : INode<T>
 		DuplicateKeyException.ThrowIfEqual(Key, data.GetHashCode());
 
 		var compareKeyResult = data.GetHashCode().CompareTo(Key);
+		var child = compareKeyResult < 0 ? Left : Right;
 
-		var direction = compareKeyResult < 0 ? Left : Right;
-
-		if (direction is not null)
+		if (child is not NullNode<T>)
 		{
-			direction.Insert(data);
+			child?.Insert(data);
 		}
 		else
 		{
 			CreateChild(data, compareKeyResult);
 		}
 
-		UpdateHeight();
-		UpdateBalanceFactor();
+		UpdateHeightProps(this);
 
 		return true;
 	}
@@ -61,34 +53,96 @@ internal class Node<T> : INode<T>
 
 	public void UpdateHeight()
 	{
-		Height = 1 + Math.Max(Left?.Height ?? -1, Right?.Height ?? -1);
+		Height = 1 + Math.Max(Left.Height, Right.Height);
+	}
+
+	public int GetBalanceFactor()
+	{
+		return Left.Height - Right.Height;
 	}
 
 	public void UpdateBalanceFactor()
 	{
-		var leftHeight = Left?.Height ?? -1;
-		var rightHeight = Right?.Height ?? -1;
+		var balanceFactor = GetBalanceFactor();
+		var leftBalance = Left.IsBalanced;
+		var rightBalance = Right.IsBalanced;
 
-		var balanceFactor = Math.Abs(leftHeight - rightHeight);
-
-		var leftBalance = Left?.IsBalanced ?? true;
-		var rightBalance = Right?.IsBalanced ?? true;
-
-		IsBalanced = balanceFactor <= 1 && leftBalance && rightBalance;
+		IsBalanced = Math.Abs(balanceFactor) <= 1 && leftBalance && rightBalance;
 	}
 
-	public bool Remove(int key)
+	public INode<T>? Rotate(bool isRight)
+	{
+		var newRoot = isRight ? Left : Right;
+
+		if (newRoot is NullNode<T>)
+		{
+			return null;
+		}
+
+		ReplaceNode(this, newRoot);
+
+		if (isRight)
+		{
+			Left = newRoot.Right;
+
+			if (Left is not NullNode<T>)
+			{
+				Left.Parent = this;
+			}
+
+			newRoot.Right = this;
+		}
+		else
+		{
+			Right = newRoot.Left;
+
+			if (Right is not NullNode<T>)
+			{
+				Right.Parent = this;
+			}
+
+			newRoot.Left = this;
+		}
+
+		Parent = newRoot;
+		newRoot.Parent = null;
+
+		return newRoot;
+	}
+
+	public INode<T>? RotateLeft()
+	{
+		return Rotate(false);
+	}
+
+	public INode<T>? RotateRight()
+	{
+		return Rotate(true);
+	}
+
+	public INode<T> Balance()
+	{
+		/*INode<T> newRoot = this;
+
+		while (newRoot is not NullNode<T> && newRoot.IsBalanced==false) //Math.Abs(newRoot.GetBalanceFactor()) > 1)
+			newRoot = BalanceNodeRecursive(newRoot) ?? this;
+
+		return newRoot;*/
+		return _balancer.Balance(this);
+	}
+
+	public INode<T> Remove(int key)
 	{
 		var nodeToRemove = FindChild(key);
 
-		if (nodeToRemove is null)
+		if (nodeToRemove is  NullNode<T>)
 		{
-			return false;
+			return this;
 		}
 
 		RemoveNode(nodeToRemove);
-
-		return true;
+		
+		return this;
 	}
 
 	private void RemoveNode(INode<T> node)
@@ -106,26 +160,26 @@ internal class Node<T> : INode<T>
 			RemoveNodeWithTwoChildren(node);
 		}
 
-		UpdateHeightBalanceFactorUpwards(node);
+		UpdateHeightPropsUpwards(node);
 	}
 
 	private static void RemoveLeafNode(INode<T> node)
 	{
-		if (node.Parent is null)
+		if (node.Parent is  null)
 		{
 			node.Data = default!;
 		}
 		else
 		{
-			ReplaceNode(node, null);
+			ReplaceNode(node, new NullNode<T>());
 		}
 	}
 
 	private static void RemoveNodeWithSingleChild(INode<T> node)
 	{
-		var child = node.Left ?? node.Right;
+		var child = node.Left is not NullNode<T> ? node.Left : node.Right;
 
-		if (child is null)
+		if (child is NullNode<T>)
 		{
 			return;
 		}
@@ -146,7 +200,12 @@ internal class Node<T> : INode<T>
 
 	private static void ReplaceNode(INode<T> nodeToReplace, INode<T>? newNode)
 	{
-		if (nodeToReplace.Parent!.Left == nodeToReplace)
+		if (nodeToReplace.Parent is  null)
+		{
+			return;
+		}
+
+		if (nodeToReplace.Parent.Left == nodeToReplace)
 		{
 			nodeToReplace.Parent.Left = newNode;
 		}
@@ -158,15 +217,16 @@ internal class Node<T> : INode<T>
 
 	private void RemoveNodeWithTwoChildren(INode<T> node)
 	{
-		var successor = FindMin(node.Right!);
+		var successor = FindMinInRight(node.Right!);
 		node.Data = successor.Data;
+
 		RemoveNode(successor);
-		UpdateHeightBalanceFactorUpwards(node.Parent);
+		UpdateHeightPropsUpwards(node.Parent);
 	}
 
-	private static INode<T> FindMin(INode<T> node)
+	private static INode<T> FindMinInRight(INode<T> node)
 	{
-		while (node.Left is not null)
+		while (node.Left is not NullNode<T>)
 			node = node.Left;
 
 		return node;
@@ -186,92 +246,73 @@ internal class Node<T> : INode<T>
 		Right.Parent = this;
 	}
 
-	private static void UpdateHeightBalanceFactorUpwards(INode<T>? node)
+	private static void UpdateHeightPropsUpwards(INode<T>? node)
 	{
-		while (node is not null)
+		while (node is not NullNode<T> && node is not null)
 		{
-			node.UpdateHeight();
-			node.UpdateBalanceFactor();
+			UpdateHeightProps(node);
 			node = node.Parent;
 		}
 	}
-	
-	public void Balance()
-	{
-		// Код для балансування дерева
 
-		BalanceRecursive(this); // Рекурсивний виклик балансування
+	private static void UpdateHeightProps(INode<T>? node)
+	{
+		if (node is NullNode<T> || node is null)
+			return;
+
+		node.UpdateHeight();
+		node.UpdateBalanceFactor();
 	}
 
-	private INode<T>? BalanceRecursive(INode<T>? node)
+	/*private static INode<T>? BalanceNodeRecursive(INode<T>? node)
 	{
 		if (node is null)
 		{
 			return null;
 		}
-		
-		node.Left = BalanceRecursive(node.Left);
-		node.Right = BalanceRecursive(node.Right);
 
-		int balanceFactor = node.GetBalanceFactor();
+		node = RotateNode(node);
+		BalanceChildNodes(node);
 
-		if (balanceFactor>1)
-		{
-			if (node.Left is not null && node.Left.GetBalanceFactor() < 0)
-			{
-				node.Left=node.Left.RotateLeft();
-			}
-			return node.RotateRight();
-		}
-		if (balanceFactor<-1)
-		{
-			if (node.Right is not null && node.Right.GetBalanceFactor() > 0)
-			{
-				node.Right=node.Right.RotateRight();
-			}
-			return node.RotateLeft();
-		}
-		node.UpdateHeight();
-		node.UpdateBalanceFactor();
+		UpdateHeightProps(node);
+
 		return node;
-		
 	}
 
-	public INode<T> RotateRight()
+	private static INode<T>? RotateNode(INode<T>? node)
 	{
-		if (Left is null)
+		if (node.GetBalanceFactor() > 1)
 		{
-			return this;
-		}
-		var newRoot = Left;
-		
-		var temp = newRoot.Right;
-		newRoot.Right = this;
-		Left = temp;
-		
-		UpdateHeight();
-		UpdateBalanceFactor();
-		return newRoot;
-	}
+			if (node.Left is not NullNode<T> && node.Left.GetBalanceFactor() < 0)
+			{
+				node.Left = node.Left.RotateLeft();
+			}
 
-	public INode<T> RotateLeft()
-	{
-		if (Right is null)
+			node = node.RotateRight();
+		}
+		else if (node.GetBalanceFactor() < -1)
 		{
-			return this;
+			if (node.Right is not NullNode<T> && node.Right.GetBalanceFactor() > 0)
+			{
+				node.Right = node.Right.RotateRight();
+			}
+
+			node = node.RotateLeft();
 		}
-		var newRoot = Right;
-		
-		var temp = newRoot.Left;
-		newRoot.Left = this;
-		Right = temp;
-		UpdateHeight();
-		UpdateBalanceFactor();
-		return newRoot;
+
+		return node;
 	}
 
-	public int GetBalanceFactor()
+	private static void BalanceChildNodes(INode<T> node)
 	{
-		return (Left?.Height ?? -1) - (Right?.Height ?? -1);
-	}
+		if (node.Left is not NullNode<T>)
+		{
+			node.Left = BalanceNodeRecursive(node.Left);
+		}
+
+		if (node.Right is not NullNode<T>)
+		{
+			node.Right = BalanceNodeRecursive(node.Right);
+		}
+	}*/
 }

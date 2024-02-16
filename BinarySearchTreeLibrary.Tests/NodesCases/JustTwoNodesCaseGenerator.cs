@@ -17,9 +17,15 @@ public static class JustTwoNodesCaseGenerator
 	{
 		var faker = new Faker();
 		var inputs = new object[2];
+		
+		inputs[0] = faker.Random.Int();
 
-		for (var i = 0; i < 2; i++)
-			inputs[i] = faker.Random.Int();
+		while (true)
+		{
+			inputs[1] = faker.Random.Int();
+			if (inputs[0] != inputs[1])
+				break;
+		}
 
 		return new NodeCase
 		{
@@ -31,9 +37,15 @@ public static class JustTwoNodesCaseGenerator
 	{
 		var faker = new Faker();
 		var inputs = new object[2];
+		
+		inputs[0] = faker.Random.String();
 
-		for (var i = 0; i < 2; i++)
-			inputs[i] = faker.Random.String();
+		while (true)
+		{
+			inputs[1] = faker.Random.String();
+			if (inputs[0].GetHashCode() != inputs[1].GetHashCode())
+				break;
+		}
 
 		return new NodeCase
 		{
@@ -45,8 +57,14 @@ public static class JustTwoNodesCaseGenerator
 	{
 		var inputs = new object[2];
 
-		for (var i = 0; i < 2; i++)
-			inputs[i] = new FakerClass();
+		inputs[0] = new FakeClass();
+
+		while (true)
+		{
+			inputs[1] = new FakeClass();
+			if (inputs[0].GetHashCode() != inputs[1].GetHashCode())
+				break;
+		}
 
 		return new NodeCase
 		{

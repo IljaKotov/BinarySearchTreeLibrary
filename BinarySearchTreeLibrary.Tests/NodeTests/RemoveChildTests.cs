@@ -1,4 +1,5 @@
-﻿using BinarySearchTreeLibrary.Models;
+﻿using BinarySearchTreeLibrary.Interfaces;
+using BinarySearchTreeLibrary.Models;
 using BinarySearchTreeLibrary.Tests.NodesCases;
 using FluentAssertions;
 
@@ -7,6 +8,7 @@ namespace BinarySearchTreeLibrary.Tests.NodeTests;
 public static class RemoveChildTests
 {
 	private static object[] _input = Array.Empty<object>();
+	private static readonly NullNode<object> _nullNode = new();
 
 	[Theory(DisplayName = "RemoveChild method tests. Should remove correct single node")]
 	[MemberData(nameof(SingleNodeCaseGenerator.GetSingleNodeCases),
@@ -15,10 +17,10 @@ public static class RemoveChildTests
 	{
 		var node = new Node<object>(testCase.InputData[0]);
 		node.Remove(testCase.InputData[0].GetHashCode());
-		
+
 		node.Data.Should().BeNull();
-		node.Left.Should().BeNull();
-		node.Right.Should().BeNull();
+		node.Left.Should().BeEquivalentTo(_nullNode);
+		node.Right.Should().BeEquivalentTo(_nullNode);
 		node.Parent.Should().BeNull();
 		node.Key.Should().Be(0);
 	}
@@ -37,8 +39,9 @@ public static class RemoveChildTests
 		root.Data.Should().Be(_input[0]);
 		root.Parent.Should().BeNull();
 		root.Key.Should().Be(_input[0].GetHashCode());
-		root.Right.Should().BeNull();
-		root.Left.Should().BeNull();
+		root.Right.Should().BeEquivalentTo(_nullNode);
+		root.Left.Should().BeEquivalentTo(_nullNode);
+		root.Left?.Left.Should().BeNull();
 	}
 
 	[Theory(DisplayName = "RemoveChild method tests. Should correct remove root with single child node")]
@@ -55,8 +58,8 @@ public static class RemoveChildTests
 		root.Data.Should().Be(_input[1]);
 		root.Parent.Should().BeNull();
 		root.Key.Should().Be(_input[1].GetHashCode());
-		root.Right.Should().BeNull();
-		root.Left.Should().BeNull();
+		root.Right.Should().BeEquivalentTo(_nullNode);
+		root.Left.Should().BeEquivalentTo(_nullNode);
 	}
 
 	[Theory(DisplayName = "RemoveChild method tests. Should correct remove root with both child nodes")]
@@ -80,10 +83,10 @@ public static class RemoveChildTests
 		root.Right?.Right?.Data.Should().Be(_input[4]);
 		root.Right?.Right?.Right?.Data.Should().Be(_input[11]);
 		root.Right?.Right?.Left?.Data.Should().Be(_input[6]);
-		root.Right?.Left?.Right.Should().BeNull();
-		root.Right?.Left?.Left.Should().BeNull();
+		root.Right?.Left?.Right.Should().BeEquivalentTo(_nullNode);
+		root.Right?.Left?.Left.Should().BeEquivalentTo(_nullNode);
 
-		root.FindChild(_input[0].GetHashCode()).Should().BeNull();
+		root.FindChild(_input[0].GetHashCode()).Should().BeEquivalentTo(_nullNode);
 	}
 
 	[Theory(DisplayName = "RemoveChild method tests. Should correct remove leaf node")]
@@ -108,11 +111,11 @@ public static class RemoveChildTests
 		root.Left?.Left?.Data.Should().Be(_input[7]);
 		root.Left?.Right?.Data.Should().Be(_input[2]);
 		root.Left?.Left?.Left?.Data.Should().Be(_input[8]);
-		root.Left?.Left?.Right.Should().BeNull();
+		root.Left?.Left?.Right.Should().BeEquivalentTo(_nullNode);
 		root.Left?.Right?.Left?.Data.Should().Be(_input[10]);
-		root.Left?.Right?.Right.Should().BeNull();
+		root.Left?.Right?.Right.Should().BeEquivalentTo(_nullNode);
 
-		root.FindChild(_input[9].GetHashCode()).Should().BeNull();
+		root.FindChild(_input[9].GetHashCode()).Should().BeEquivalentTo(_nullNode);
 	}
 
 	[Theory(DisplayName = "RemoveChild method tests. Should correct remove node with one left/right child")]
@@ -134,15 +137,15 @@ public static class RemoveChildTests
 		root.Right?.Data.Should().Be(_input[3]);
 		root.Right?.Left?.Data.Should().Be(_input[12]);
 		root.Right?.Right?.Data.Should().Be(_input[4]);
-		root.Right?.Left?.Right?.Should().BeNull();
-		root.Right?.Left?.Left.Should().BeNull();
+		root.Right?.Left?.Right?.Should().BeEquivalentTo(_nullNode);
+		root.Right?.Left?.Left.Should().BeEquivalentTo(_nullNode);
 		root.Left?.Data.Should().Be(_input[1]);
 		root.Left?.Left?.Data.Should().Be(_input[7]);
 		root.Left?.Right?.Data.Should().Be(_input[10]);
-		root.Left?.Right?.Right.Should().BeNull();
+		root.Left?.Right?.Right.Should().BeEquivalentTo(_nullNode);
 
-		root.FindChild(_input[2].GetHashCode()).Should().BeNull();
-		root.FindChild(_input[5].GetHashCode()).Should().BeNull();
+		root.FindChild(_input[2].GetHashCode()).Should().BeEquivalentTo(_nullNode);
+		root.FindChild(_input[5].GetHashCode()).Should().BeEquivalentTo(_nullNode);
 	}
 
 	[Theory(DisplayName = "RemoveChild method tests. Should correct remove node with one left/right sub-tree")]
@@ -168,19 +171,19 @@ public static class RemoveChildTests
 		root.Parent.Should().BeNull();
 		root.Right?.Data.Should().Be(_input[4]);
 		root.Right?.Right?.Data.Should().Be(_input[11]);
-		root.Right?.Right?.Right?.Should().BeNull();
+		root.Right?.Right?.Right?.Should().BeEquivalentTo(_nullNode);
 		root.Right?.Left?.Data.Should().Be(_input[6]);
 		root.Left?.Data.Should().Be(_input[7]);
 		root.Left?.Left?.Data.Should().Be(_input[8]);
 		root.Left?.Right?.Data.Should().Be(_input[9]);
-		root.Left?.Left?.Left.Should().BeNull();
+		root.Left?.Left?.Left.Should().BeEquivalentTo(_nullNode);
 
-		root.FindChild(_input[2].GetHashCode()).Should().BeNull();
-		root.FindChild(_input[10].GetHashCode()).Should().BeNull();
-		root.FindChild(_input[5].GetHashCode()).Should().BeNull();
-		root.FindChild(_input[12].GetHashCode()).Should().BeNull();
-		root.FindChild(_input[1].GetHashCode()).Should().BeNull();
-		root.FindChild(_input[3].GetHashCode()).Should().BeNull();
+		root.FindChild(_input[2].GetHashCode()).Should().BeEquivalentTo(_nullNode);
+		root.FindChild(_input[10].GetHashCode()).Should().BeEquivalentTo(_nullNode);
+		root.FindChild(_input[5].GetHashCode()).Should().BeEquivalentTo(_nullNode);
+		root.FindChild(_input[12].GetHashCode()).Should().BeEquivalentTo(_nullNode);
+		root.FindChild(_input[1].GetHashCode()).Should().BeEquivalentTo(_nullNode);
+		root.FindChild(_input[3].GetHashCode()).Should().BeEquivalentTo(_nullNode);
 	}
 
 	[Theory(DisplayName = "RemoveChild method tests. Should correct remove node with both sub-trees")]
@@ -201,12 +204,12 @@ public static class RemoveChildTests
 		root.Right?.Data.Should().Be(_input[6]);
 		root.Right?.Right?.Data.Should().Be(_input[4]);
 		root.Right?.Right?.Right?.Data.Should().Be(_input[11]);
-		root.Right?.Right?.Left.Should().BeNull();
+		root.Right?.Right?.Left.Should().BeEquivalentTo(_nullNode);
 		root.Right?.Left?.Data.Should().Be(_input[5]);
 		root.Right?.Left?.Right?.Data.Should().Be(_input[12]);
 		root.Left?.Data.Should().Be(_input[1]);
 
-		root.FindChild(_input[3].GetHashCode()).Should().BeNull();
+		root.FindChild(_input[3].GetHashCode()).Should().BeEquivalentTo(_nullNode);
 	}
 	/*    Visual representation of the test four-level tree (INDEXES of the test-case's input array)
 	 *                     0

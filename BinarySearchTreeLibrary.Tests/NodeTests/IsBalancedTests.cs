@@ -8,6 +8,7 @@ namespace BinarySearchTreeLibrary.Tests.NodeTests;
 public static class IsBalancedTests
 {
 	private static object[] _input = Array.Empty<object>();
+	private static readonly NullNode<object> _nullNode = new();
 	
 	[Theory(DisplayName = "IsBalanced property tests. Should return true for single node")]
 	[MemberData(nameof(SingleNodeCaseGenerator.GetSingleNodeCases),

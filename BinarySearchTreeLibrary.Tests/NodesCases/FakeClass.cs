@@ -2,13 +2,13 @@
 
 namespace BinarySearchTreeLibrary.Tests.NodesCases;
 
-public class FakerClass : Faker
+public class FakeClass : Faker
 {
 	private int FakeInt { get; set; }
 	private string FakeString { get; set; }
 	private char[] FakeArray { get; }
 
-	public FakerClass()
+	public FakeClass()
 	{
 		FakeInt = Random.Int();
 		FakeString = Random.String();

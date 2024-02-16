@@ -7,11 +7,6 @@ namespace BinarySearchTreeLibrary.Tests.NodeTests;
 
 public static class ConstructorTests
 {
-	[Fact(DisplayName = "Node Data should throw exception when null data provided")]
-	public static void Node_ShouldThrowException_WhenNullDataProvided()
-	{
-		Assert.Throws<ArgumentNullException>(() => new Node<string?>(null));
-	}
 
 	[Theory(DisplayName = "Node Data and Key should be set to valid value")]
 	[InlineData(new[] {1, 2, 3}, typeof(int[]))]
@@ -45,8 +40,8 @@ public static class ConstructorTests
 	[Fact(DisplayName = "Node Key should set valid value for custom class")]
 	public static void Node_Key_ShouldSetValidValueForCustomClass()
 	{
-		var fakerClass = new FakerClass();
-		var node = new Node<FakerClass>(fakerClass);
+		var fakerClass = new FakeClass();
+		var node = new Node<FakeClass>(fakerClass);
 
 		node.Key.Should().Be(fakerClass.GetHashCode());
 		node.Data.Should().Be(fakerClass);

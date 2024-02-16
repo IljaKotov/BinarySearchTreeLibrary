@@ -30,7 +30,7 @@ public static class InsertAndContainsTests
 
 	[Fact(DisplayName = "Contains method should throw EmptyTreeException when searching in empty tree")]
 
-	public static void Contains_EmptyTree_ShouldThrowEmptyTreeException()
+	public static void Contains_InEmptyTree_ShouldThrowEmptyTreeException()
 	{
 		var tree = new BinarySearchTree<object>();
 
@@ -61,6 +61,7 @@ public static class InsertAndContainsTests
 	[Fact(DisplayName = "Should correctly insert and contains data, and set properties' values ")]
 	public static void Should_CorrectlyInsertAndContainsSomeData_AndSetPropertiesValues()
 	{
+		var nullNode = new NullNode<object>();
 		var tree = new BinarySearchTree<object>();
 		tree.Insert(10);
 		tree.Insert(5);

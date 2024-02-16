@@ -9,6 +9,7 @@ namespace BinarySearchTreeLibrary.Tests.NodeTests;
 public static class FindChildTests
 {
 	private static object[] _input = Array.Empty<object>();
+	private static readonly NullNode<object> _nullNode = new();
 	
 	[Theory(DisplayName = "Should correctly find child for single node")]
 	[MemberData(nameof(SingleNodeCaseGenerator.GetSingleNodeCases), MemberType = typeof(SingleNodeCaseGenerator))]
@@ -24,7 +25,7 @@ public static class FindChildTests
 		var mistakeChild = node.FindChild(mistakeKey);
 
 		child.Should().Be(node);
-		mistakeChild.Should().BeNull();
+		mistakeChild.Should().BeEquivalentTo(_nullNode);
 	}
 
 	[Theory(DisplayName = "Should correctly find child for Root and just one child-node")]
@@ -55,7 +56,7 @@ public static class FindChildTests
 		foreach (var data in testCase.InputData)
 		{
 			var child = root.FindChild(data.GetHashCode());
-			child.Should().NotBeNull();
+			child.Should().NotBeEquivalentTo(_nullNode);
 			child?.Data.Should().Be(data);
 		}
 
@@ -71,6 +72,6 @@ public static class FindChildTests
 			nonExistentKey = faker.Random.Int();
 
 		var nonExistentChild = root.FindChild(nonExistentKey);
-		nonExistentChild.Should().BeNull();
+		nonExistentChild.Should().BeEquivalentTo(_nullNode);
 	}
 }

@@ -5,21 +5,116 @@ namespace BinarySearchTreeLibrary.Tests.NodeTests;
 
 public static class BalanceTests
 {
-	[Fact]
+	private static readonly NullNode<int> _nullNode = new();
 	
-	public static void Should_Balance_The_Tree()
+	[Theory(DisplayName = "Should balance the degenerate tree")]
+	[InlineData(new[] {0, 1, 2, 3, 4, 5, 6},0 )]
+	[InlineData(new[] {0, 1, 2, 3, 4, 5, 6},6 )]
+
+	public static void Should_Balance_TheDegenerateTree1(int[] inputs, int startNode)
 	{
-		// Arrange
-		var root = new Node<int>(8);
-		root.Insert(10);
-		root.Insert(5);
-		root.Insert(15);
-		root.Insert(3);
-		root.Insert(4);
-		root.Insert(18);
-		// Act
-		root.Balance();
+		var root = new Node<int>(startNode);
 		
-		root.Height.Should().Be(2);
+		if (startNode == 0)
+		{
+			for (var i = 1; i < inputs.Length; i++)
+				root.Insert(inputs[i]);
+		}
+		else
+		{
+			for (var i = inputs.Length - 2; i >= 0; i--)
+				root.Insert(inputs[i]);
+		}
+
+		var result = root.Balance();
+		
+		result.Data.Should().Be(inputs[3]);
+		result.Left?.Data.Should().Be(inputs[1]);
+		result.Right?.Data.Should().Be(inputs[5]);
+		result.Left?.Right?.Data.Should().Be(inputs[2]);
+		result.Left?.Left?.Data.Should().Be(inputs[0]);
+		result.Right?.Right?.Data.Should().Be(inputs[6]);
+		result.Right?.Left?.Data.Should().Be(inputs[4]);
+		result.Right?.Right?.Right.Should().BeEquivalentTo(_nullNode);
+		result.Right?.Right?.Left.Should().BeEquivalentTo(_nullNode);
+		result.Right?.Left?.Right.Should().BeEquivalentTo(_nullNode);
+		result.Right?.Left?.Left.Should().BeEquivalentTo(_nullNode);
+		result.Parent.Should().BeNull();
+
+		result.Height.Should().Be(2);
+		result.Right?.Height.Should().Be(1);
+		result.Left?.Height.Should().Be(1);
+		result.Left?.Left?.Height.Should().Be(0);
+		result.Left?.Right?.Height.Should().Be(0);
+		result.Right?.Left?.Height.Should().Be(0);
+		result.Right?.Right?.Height.Should().Be(0);
+		
+		result.IsBalanced.Should().BeTrue();
+		result.Right?.IsBalanced.Should().BeTrue();
+		result.Left?.IsBalanced.Should().BeTrue();
+		result.Left?.Left?.IsBalanced.Should().BeTrue();
+		result.Left?.Right?.IsBalanced.Should().BeTrue();
+		result.Right?.Left?.IsBalanced.Should().BeTrue();
+		result.Right?.Right?.IsBalanced.Should().BeTrue();
 	}
+
+	[Fact(DisplayName = "Should balance the  tree")]
+
+	public static void Should_Balance_TheTree()
+	{
+		var root = new Node<int>(100);
+
+		var inputs = new[]
+		{
+			50, 150, 80, 70, 180, 190, 160
+		};
+
+		foreach (var data in inputs)
+			root.Insert(data);
+		
+		root.IsBalanced.Should().BeFalse();
+		root.Height.Should().Be(3);
+
+		var result = root.Balance();
+
+		result.Data.Should().Be(100);
+		result.Left?.Data.Should().Be(70);
+		result.Right?.Data.Should().Be(180);
+		result.Left?.Left?.Data.Should().Be(50);
+		result.Left?.Right?.Data.Should().Be(80);
+		result.Right?.Left?.Data.Should().Be(150);
+		result.Right?.Right?.Data.Should().Be(190);
+		result.Right?.Left?.Right?.Data.Should().Be(160);
+		result.Right?.Right?.Right.Should().BeEquivalentTo(_nullNode);
+		
+		result.Height.Should().Be(3);
+		result.IsBalanced.Should().BeTrue();
+		result.Right?.Height.Should().Be(2);
+		result.Left?.Height.Should().Be(1);
+	}
+	/* Visual representation of the tree before and after balancing
+	 *    UNBALANCED TREE --> BALANCED TREE
+	 *       100                  100
+	 *      /   \               /     \
+	 *     50   150           70     180
+	 *       \    \          /  \    /  \
+	 *       80   180       50  80  150 190
+	 *      /    /   \                \
+	 *     70  160  190 	    	  160
+	 *
+	 *   DEGENERATE-LEFT TREE --> BALANCED TREE  <--- DEGENERATE-RIGHT TREE
+	 *           0                     3                      6
+	 * 		      \                  /   \                   /
+	 * 			   1                1     5                 5
+	 * 			    \              / \   / \               /
+	 * 			     2           0    2 4   6             4
+	 * 			      \                                  /
+	 * 			       3                                3
+	 *                  \							   /
+	 * 		    		 4                            2
+	 *                    \ 						 /
+	 * 		       		   5                        1
+	 * 				     	\                      /
+	 * 			        	 6                    0
+	 */
 }

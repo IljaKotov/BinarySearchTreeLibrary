@@ -4,7 +4,6 @@ internal interface INode<T>
 {
 	T Data { get; set; }
 	int Key => Data != null ? Data.GetHashCode() : 0;
-
 	INode<T>? Left { get; set; }
 	INode<T>? Right { get; set; }
 	INode<T>? Parent { get; set; }
@@ -14,10 +13,12 @@ internal interface INode<T>
 	bool IsBalanced { get; }
 	bool Insert(T data);
 	INode<T>? FindChild(int key);
-	void Balance();
-	INode<T> RotateLeft();
-	int GetBalanceFactor();
-	INode<T> RotateRight();
+	INode<T> Remove(int key);
+	INode<T>? Balance();
+	INode<T>? RotateLeft();
+	INode<T>? RotateRight();
+	INode<T>? Rotate(bool isRight);
 	void UpdateBalanceFactor();
 	void UpdateHeight();
+	int GetBalanceFactor();
 }
