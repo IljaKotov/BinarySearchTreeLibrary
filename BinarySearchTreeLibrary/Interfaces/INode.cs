@@ -20,5 +20,4 @@ internal interface INode<T>
 	INode<T>? Rotate(bool isRight);
 	void UpdateBalanceFactor();
 	void UpdateHeight();
-	int GetBalanceFactor();
 }

@@ -5,7 +5,7 @@ namespace BinarySearchTreeLibrary.Models;
 
 internal class Node<T>(T data) : INode<T>
 {
-	private Balancer<T> _balancer = new();
+	private readonly IBalancer<T> _balancer = new Balancer<T>();
 	public T Data { get; set; } = data ?? default!;
 	public int Key => Data is not null ? Data.GetHashCode() : 0;
 	public INode<T>? Left { get; set; }= new NullNode<T>();
@@ -34,7 +34,7 @@ internal class Node<T>(T data) : INode<T>
 			CreateChild(data, compareKeyResult);
 		}
 
-		UpdateHeightProps(this);
+		NodeUtils<T>.UpdateHeightProps(this);
 
 		return true;
 	}
@@ -56,18 +56,9 @@ internal class Node<T>(T data) : INode<T>
 		Height = 1 + Math.Max(Left.Height, Right.Height);
 	}
 
-	public int GetBalanceFactor()
-	{
-		return Left.Height - Right.Height;
-	}
-
 	public void UpdateBalanceFactor()
 	{
-		var balanceFactor = GetBalanceFactor();
-		var leftBalance = Left.IsBalanced;
-		var rightBalance = Right.IsBalanced;
-
-		IsBalanced = Math.Abs(balanceFactor) <= 1 && leftBalance && rightBalance;
+		IsBalanced = NodeUtils<T>.UpdateBalanceFactor(this);
 	}
 
 	public INode<T>? Rotate(bool isRight)
@@ -122,12 +113,6 @@ internal class Node<T>(T data) : INode<T>
 
 	public INode<T> Balance()
 	{
-		/*INode<T> newRoot = this;
-
-		while (newRoot is not NullNode<T> && newRoot.IsBalanced==false) //Math.Abs(newRoot.GetBalanceFactor()) > 1)
-			newRoot = BalanceNodeRecursive(newRoot) ?? this;
-
-		return newRoot;*/
 		return _balancer.Balance(this);
 	}
 
@@ -160,7 +145,7 @@ internal class Node<T>(T data) : INode<T>
 			RemoveNodeWithTwoChildren(node);
 		}
 
-		UpdateHeightPropsUpwards(node);
+		NodeUtils<T>.UpdateHeightPropsUpwards(node);
 	}
 
 	private static void RemoveLeafNode(INode<T> node)
@@ -221,7 +206,7 @@ internal class Node<T>(T data) : INode<T>
 		node.Data = successor.Data;
 
 		RemoveNode(successor);
-		UpdateHeightPropsUpwards(node.Parent);
+		NodeUtils<T>.UpdateHeightPropsUpwards(node.Parent);
 	}
 
 	private static INode<T> FindMinInRight(INode<T> node)
@@ -245,74 +230,27 @@ internal class Node<T>(T data) : INode<T>
 		Right = new Node<T>(data);
 		Right.Parent = this;
 	}
-
-	private static void UpdateHeightPropsUpwards(INode<T>? node)
+	
+	public CompareResult Compare(INode<T> other)
 	{
-		while (node is not NullNode<T> && node is not null)
+		return Key.CompareTo(other.Key) switch
 		{
-			UpdateHeightProps(node);
-			node = node.Parent;
-		}
+			> 0 => CompareResult.GreaterThan,
+			< 0 => CompareResult.LessThan,
+			_ => CompareResult.EqualTo
+		};
 	}
+	/*var result = Compare(value1, value2);
 
-	private static void UpdateHeightProps(INode<T>? node)
-	{
-		if (node is NullNode<T> || node is null)
-			return;
-
-		node.UpdateHeight();
-		node.UpdateBalanceFactor();
-	}
-
-	/*private static INode<T>? BalanceNodeRecursive(INode<T>? node)
-	{
-		if (node is null)
-		{
-			return null;
-		}
-
-		node = RotateNode(node);
-		BalanceChildNodes(node);
-
-		UpdateHeightProps(node);
-
-		return node;
-	}
-
-	private static INode<T>? RotateNode(INode<T>? node)
-	{
-		if (node.GetBalanceFactor() > 1)
-		{
-			if (node.Left is not NullNode<T> && node.Left.GetBalanceFactor() < 0)
-			{
-				node.Left = node.Left.RotateLeft();
-			}
-
-			node = node.RotateRight();
-		}
-		else if (node.GetBalanceFactor() < -1)
-		{
-			if (node.Right is not NullNode<T> && node.Right.GetBalanceFactor() > 0)
-			{
-				node.Right = node.Right.RotateRight();
-			}
-
-			node = node.RotateLeft();
-		}
-
-		return node;
-	}
-
-	private static void BalanceChildNodes(INode<T> node)
-	{
-		if (node.Left is not NullNode<T>)
-		{
-			node.Left = BalanceNodeRecursive(node.Left);
-		}
-
-		if (node.Right is not NullNode<T>)
-		{
-			node.Right = BalanceNodeRecursive(node.Right);
-		}
-	}*/
+switch (result)
+{
+    case ComparisonResult.LessThan:
+        // Handle the case where value1 is less than value2
+        break;
+    case ComparisonResult.EqualTo:
+        // Handle the case where value1 is equal to value2
+        break;
+    case ComparisonResult.GreaterThan:
+        // Handle the case where value1 is greater than value2
+        break*/
 }

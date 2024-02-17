@@ -4,7 +4,7 @@ namespace BinarySearchTreeLibrary.Models;
 
 internal class NullNode<T> : INode<T>
 {
-	public T Data { get; set; }
+	public T Data { get; set; } = default!;
 	public int Key => 0;
 	public INode<T>? Left { get; set; }
 	public INode<T>? Right { get; set; }
@@ -12,13 +12,7 @@ internal class NullNode<T> : INode<T>
 	public int Height { get; set; }=-1;
 	public bool IsLeaf => true;
 	public bool HasBothChildren => false;
-	public bool IsBalanced { get; private set; }
-
-	public NullNode()
-	{
-		IsBalanced = true;
-		Data = default!;
-	}
+	public bool IsBalanced { get; private set; } = true;
 
 	public bool Insert(T data)
 	{

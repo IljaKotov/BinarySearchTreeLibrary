@@ -2,37 +2,19 @@
 
 namespace BinarySearchTreeLibrary.Models;
 
-internal class Balancer<T>
+internal class Balancer<T> : IBalancer<T> 
 {
 	public INode<T> Balance(INode<T> node)
 	{
 		INode<T> newRoot = node;
 
-		while (newRoot is not NullNode<T> && newRoot.IsBalanced==false) //Math.Abs(newRoot.GetBalanceFactor()) > 1)
+		while (newRoot is not NullNode<T> && newRoot.IsBalanced==false)
 			newRoot = BalanceNodeRecursive(newRoot) ?? node;
 
 		return newRoot;
 	}
-	
-	public static void UpdateHeightPropsUpwards(INode<T>? node)
-	{
-		while (node is not NullNode<T> && node is not null)
-		{
-			UpdateHeightProps(node);
-			node = node.Parent;
-		}
-	}
 
-	public static void UpdateHeightProps(INode<T>? node)
-	{
-		if (node is NullNode<T> || node is null)
-			return;
-
-		node.UpdateHeight();
-		node.UpdateBalanceFactor();
-	}
-
-	public static INode<T>? BalanceNodeRecursive(INode<T>? node)
+	private static INode<T>? BalanceNodeRecursive(INode<T>? node)
 	{
 		if (node is null)
 		{
@@ -42,25 +24,25 @@ internal class Balancer<T>
 		node = RotateNode(node);
 		BalanceChildNodes(node);
 
-		UpdateHeightProps(node);
+		NodeUtils<T>.UpdateHeightProps(node); 
 
 		return node;
 	}
 
-	public static INode<T>? RotateNode(INode<T>? node)
+	private static INode<T>? RotateNode(INode<T>? node)
 	{
-		if (node.GetBalanceFactor() > 1)
+		if (NodeUtils<T>.GetBalanceFactor(node)>1) //node.GetBalanceFactor() > 1)
 		{
-			if (node.Left is not NullNode<T> && node.Left.GetBalanceFactor() < 0)
+			if (node.Left is not NullNode<T> && NodeUtils<T>.GetBalanceFactor(node.Left)<0)//node.Left.GetBalanceFactor() < 0)
 			{
 				node.Left = node.Left.RotateLeft();
 			}
 
 			node = node.RotateRight();
 		}
-		else if (node.GetBalanceFactor() < -1)
+		else if (NodeUtils<T>.GetBalanceFactor(node)<-1) //node.GetBalanceFactor() < -1)
 		{
-			if (node.Right is not NullNode<T> && node.Right.GetBalanceFactor() > 0)
+			if (node.Right is not NullNode<T> && NodeUtils<T>.GetBalanceFactor(node.Right)>0)//node.Right.GetBalanceFactor() > 0)
 			{
 				node.Right = node.Right.RotateRight();
 			}
@@ -71,7 +53,7 @@ internal class Balancer<T>
 		return node;
 	}
 
-	public static void BalanceChildNodes(INode<T> node)
+	private static void BalanceChildNodes(INode<T> node)
 	{
 		if (node.Left is not NullNode<T>)
 		{
