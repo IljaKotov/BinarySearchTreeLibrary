@@ -1,5 +1,6 @@
 ﻿using BinarySearchTreeLibrary.Models;
 using BinarySearchTreeLibrary.Tests.NodesCases;
+using BinarySearchTreeLibrary.Tests.NodesCases.CaseGenerators;
 using FluentAssertions;
 
 namespace BinarySearchTreeLibrary.Tests.NodeTests;
@@ -9,8 +10,8 @@ public static class ParentalPropertiesTests
 	private static object[] _input = Array.Empty<object>();
 
 	[Theory(DisplayName = "Should correctly set parental properties inside binary tree")]
-	[MemberData(nameof(NodesFourLevelTreeCaseGenerator.GetNodesFourLevelTreeCases),
-		MemberType = typeof(NodesFourLevelTreeCaseGenerator))]
+	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
+		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
 	public static void Should_CorrectlySetParentalProperties_ForFourLevelTreeNodes(NodeCase testCase)
 	{
 		_input = testCase.InputData;

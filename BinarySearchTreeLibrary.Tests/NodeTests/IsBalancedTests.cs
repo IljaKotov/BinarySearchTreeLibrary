@@ -1,5 +1,6 @@
 ﻿using BinarySearchTreeLibrary.Models;
 using BinarySearchTreeLibrary.Tests.NodesCases;
+using BinarySearchTreeLibrary.Tests.NodesCases.CaseGenerators;
 using Bogus;
 using FluentAssertions;
 
@@ -37,8 +38,8 @@ public static class IsBalancedTests
 	}
 	
 	[Theory(DisplayName = "IsBalanced property tests. Expected return true result for all nodes")]
-	[MemberData(nameof(NodesFourLevelTreeCaseGenerator.GetNodesFourLevelTreeCases),
-		MemberType = typeof(NodesFourLevelTreeCaseGenerator))]
+	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
+		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
 	public static void Should_CorrectlyUpdateBalanceFactor_DuringInsertNodes(NodeCase testCase)
 	{
 		_input = testCase.InputData;
@@ -57,8 +58,8 @@ public static class IsBalancedTests
 	}
 	
 	[Theory(DisplayName = "IsBalanced property tests. Expected return correct result after remove nodes")]
-	[MemberData(nameof(NodesFourLevelTreeCaseGenerator.GetNodesFourLevelTreeCases),
-		MemberType = typeof(NodesFourLevelTreeCaseGenerator))]
+	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
+		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
 	public static void Should_CorrectlyUpdateBalanceFactor_DuringRemoveNodes(NodeCase testCase)
 	{
 		_input = testCase.InputData;

@@ -2,7 +2,7 @@
 
 namespace BinarySearchTreeLibrary.Models;
 
-internal class Balancer<T> : IBalancer<T> 
+internal class TreeBalancer<T> : ITreeBalancer<T> 
 {
 	public INode<T> Balance(INode<T> node)
 	{

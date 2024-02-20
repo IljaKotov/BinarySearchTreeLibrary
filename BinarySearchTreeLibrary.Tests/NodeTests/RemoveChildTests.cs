@@ -1,6 +1,6 @@
-﻿using BinarySearchTreeLibrary.Interfaces;
-using BinarySearchTreeLibrary.Models;
+﻿using BinarySearchTreeLibrary.Models;
 using BinarySearchTreeLibrary.Tests.NodesCases;
+using BinarySearchTreeLibrary.Tests.NodesCases.CaseGenerators;
 using FluentAssertions;
 
 namespace BinarySearchTreeLibrary.Tests.NodeTests;
@@ -26,8 +26,8 @@ public static class RemoveChildTests
 	}
 
 	[Theory(DisplayName = "RemoveChild method tests. Should correct remove root's single child node")]
-	[MemberData(nameof(JustTwoNodesCaseGenerator.GetTwoNodesCases),
-		MemberType = typeof(JustTwoNodesCaseGenerator))]
+	[MemberData(nameof(TwoNodesCaseGenerator.GetTwoNodesCases),
+		MemberType = typeof(TwoNodesCaseGenerator))]
 	public static void Should_CorrectlyRemove_RootsSingleChild(NodeCase testCase)
 	{
 		_input = testCase.InputData;
@@ -45,8 +45,8 @@ public static class RemoveChildTests
 	}
 
 	[Theory(DisplayName = "RemoveChild method tests. Should correct remove root with single child node")]
-	[MemberData(nameof(JustTwoNodesCaseGenerator.GetTwoNodesCases),
-		MemberType = typeof(JustTwoNodesCaseGenerator))]
+	[MemberData(nameof(TwoNodesCaseGenerator.GetTwoNodesCases),
+		MemberType = typeof(TwoNodesCaseGenerator))]
 	public static void Should_CorrectlyRemove_RootWithSingleChild(NodeCase testCase)
 	{
 		_input = testCase.InputData;
@@ -63,8 +63,8 @@ public static class RemoveChildTests
 	}
 
 	[Theory(DisplayName = "RemoveChild method tests. Should correct remove root with both child nodes")]
-	[MemberData(nameof(NodesFourLevelTreeCaseGenerator.GetNodesFourLevelTreeCases),
-		MemberType = typeof(NodesFourLevelTreeCaseGenerator))]
+	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
+		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
 	public static void Should_CorrectlyRemove_RootWithBothChildNodes(NodeCase testCase)
 	{
 		_input = testCase.InputData;
@@ -90,8 +90,8 @@ public static class RemoveChildTests
 	}
 
 	[Theory(DisplayName = "RemoveChild method tests. Should correct remove leaf node")]
-	[MemberData(nameof(NodesFourLevelTreeCaseGenerator.GetNodesFourLevelTreeCases),
-		MemberType = typeof(NodesFourLevelTreeCaseGenerator))]
+	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
+		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
 	public static void Should_CorrectlyRemove_Leaf(NodeCase testCase)
 	{
 		_input = testCase.InputData;
@@ -119,8 +119,8 @@ public static class RemoveChildTests
 	}
 
 	[Theory(DisplayName = "RemoveChild method tests. Should correct remove node with one left/right child")]
-	[MemberData(nameof(NodesFourLevelTreeCaseGenerator.GetNodesFourLevelTreeCases),
-		MemberType = typeof(NodesFourLevelTreeCaseGenerator))]
+	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
+		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
 	public static void Should_CorrectlyRemove_NodeWithOneChild(NodeCase testCase)
 	{
 		_input = testCase.InputData;
@@ -149,8 +149,8 @@ public static class RemoveChildTests
 	}
 
 	[Theory(DisplayName = "RemoveChild method tests. Should correct remove node with one left/right sub-tree")]
-	[MemberData(nameof(NodesFourLevelTreeCaseGenerator.GetNodesFourLevelTreeCases),
-		MemberType = typeof(NodesFourLevelTreeCaseGenerator))]
+	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
+		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
 	public static void Should_CorrectlyRemove_NodeWithOneSubTree(NodeCase testCase)
 	{
 		_input = testCase.InputData;
@@ -187,8 +187,8 @@ public static class RemoveChildTests
 	}
 
 	[Theory(DisplayName = "RemoveChild method tests. Should correct remove node with both sub-trees")]
-	[MemberData(nameof(NodesFourLevelTreeCaseGenerator.GetNodesFourLevelTreeCases),
-		MemberType = typeof(NodesFourLevelTreeCaseGenerator))]
+	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
+		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
 	public static void Should_CorrectlyRemove_NodeWithBothSubTrees(NodeCase testCase)
 	{
 		_input = testCase.InputData;

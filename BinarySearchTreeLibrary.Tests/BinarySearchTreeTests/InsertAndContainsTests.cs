@@ -2,6 +2,7 @@
 using BinarySearchTreeLibrary.Interfaces;
 using BinarySearchTreeLibrary.Models;
 using BinarySearchTreeLibrary.Tests.NodesCases;
+using BinarySearchTreeLibrary.Tests.NodesCases.CaseGenerators;
 using FluentAssertions;
 
 namespace BinarySearchTreeLibrary.Tests.BinarySearchTreeTests;
@@ -38,8 +39,8 @@ public static class InsertAndContainsTests
 	}
 
 	[Theory(DisplayName = "Should correctly insert and contains data, and set properties' values")]
-	[MemberData(nameof(NodesFourLevelTreeCaseGenerator.GetNodesFourLevelTreeCases),
-		MemberType = typeof(NodesFourLevelTreeCaseGenerator))]
+	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
+		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
 	public static void Should_CorrectlyInsertAndContainsAllData_AndSetPropertiesValues(NodeCase testCase)
 	{
 		_input = testCase.InputData;

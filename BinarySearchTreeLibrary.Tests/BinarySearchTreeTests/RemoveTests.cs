@@ -1,6 +1,7 @@
 ﻿using BinarySearchTreeLibrary.Exceptions;
 using BinarySearchTreeLibrary.Models;
 using BinarySearchTreeLibrary.Tests.NodesCases;
+using BinarySearchTreeLibrary.Tests.NodesCases.CaseGenerators;
 using FluentAssertions;
 
 namespace BinarySearchTreeLibrary.Tests.BinarySearchTreeTests;
@@ -30,8 +31,8 @@ public static class RemoveTests
 
 	[Theory(DisplayName =
 		"Should correctly Remove all nodes and Update Height.")]
-	[MemberData(nameof(NodesFourLevelTreeCaseGenerator.GetNodesFourLevelTreeCases),
-		MemberType = typeof(NodesFourLevelTreeCaseGenerator))]
+	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
+		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
 
 	public static void Should_CorrectlyRemove_WorkWithAllNodes(NodeCase testCase)
 	{
@@ -53,8 +54,8 @@ public static class RemoveTests
 	}
 	
 	[Theory(DisplayName = "Should correctly Remove and replace Root.")]
-	[MemberData(nameof(NodesFourLevelTreeCaseGenerator.GetNodesFourLevelTreeCases),
-		MemberType = typeof(NodesFourLevelTreeCaseGenerator))]
+	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
+		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
 	
 	public static void Should_CorrectlyRemove_AndReplaceRoot(NodeCase testCase)
 	{
@@ -78,8 +79,8 @@ public static class RemoveTests
 	}
 	
 	[Theory(DisplayName = "Should correctly remove nodes with update balancing value")]
-	[MemberData(nameof(NodesFourLevelTreeCaseGenerator.GetNodesFourLevelTreeCases),
-		MemberType = typeof(NodesFourLevelTreeCaseGenerator))]
+	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
+		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
 	
 	public static void Should_CorrectlyRemove_AndUpdateBalancingValue(NodeCase testCase)
 	{
@@ -104,8 +105,8 @@ public static class RemoveTests
 	}
 	
 	[Theory(DisplayName = "Should correctly remove last level of nodes and update Height, IsBalanced properties")]
-	[MemberData(nameof(NodesFourLevelTreeCaseGenerator.GetNodesFourLevelTreeCases),
-		MemberType = typeof(NodesFourLevelTreeCaseGenerator))]
+	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
+		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
 	
 	public static void Should_CorrectlyRemove_LastLevelOfNodes_AndUpdateHeightAndIsBalancedProperties(NodeCase testCase)
 	{
@@ -129,8 +130,8 @@ public static class RemoveTests
 	
 	[Theory(DisplayName =
 		"It's complexly test of Insert, Contains and Remove methods work. Should correctly functionality and Update Height, IsBalanced properties during work")]
-	[MemberData(nameof(NodesFourLevelTreeCaseGenerator.GetNodesFourLevelTreeCases),
-		MemberType = typeof(NodesFourLevelTreeCaseGenerator))]
+	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
+		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
 
 	public static void Should_CorrectlyFunctionality_WorkWithSomeNodes(NodeCase testCase)
 	{

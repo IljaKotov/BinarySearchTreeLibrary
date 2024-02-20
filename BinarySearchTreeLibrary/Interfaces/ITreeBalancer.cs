@@ -1,6 +1,6 @@
 ﻿namespace BinarySearchTreeLibrary.Interfaces;
 
-internal interface IBalancer<T>
+internal interface ITreeBalancer<T>
 {
 	INode<T> Balance(INode<T> node);
 }

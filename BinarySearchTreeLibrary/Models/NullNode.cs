@@ -33,11 +33,6 @@ internal class NullNode<T> : INode<T>
 	{
 	}
 
-	public int GetBalanceFactor()
-	{
-		return 0;
-	}
-
 	public void UpdateBalanceFactor()
 	{
 	}

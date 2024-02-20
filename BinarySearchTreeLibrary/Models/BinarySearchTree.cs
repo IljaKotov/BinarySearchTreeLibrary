@@ -43,7 +43,7 @@ public class BinarySearchTree<T> : IBinarySearchTree<T>
 	public bool Contains(T? data)
 	{
 		ArgumentNullException.ThrowIfNull(data);
-		EmptyTreeException.ThrowIfEmptyTree((IBinarySearchTree<object>) this);
+		EmptyTreeException.ThrowIfEmptyTree(this);
 		
 		return _root?.FindChild(data.GetHashCode()) is not NullNode<T>;
 	}
@@ -51,7 +51,7 @@ public class BinarySearchTree<T> : IBinarySearchTree<T>
 	public bool Remove(T data)
 	{
 		ArgumentNullException.ThrowIfNull(data);
-		EmptyTreeException.ThrowIfEmptyTree((IBinarySearchTree<object>) this);
+		EmptyTreeException.ThrowIfEmptyTree(this);
 
 		var removedNode = _root?.Remove(data.GetHashCode());
 		
@@ -64,7 +64,7 @@ public class BinarySearchTree<T> : IBinarySearchTree<T>
 
 	public void Balance()
 	{
-		EmptyTreeException.ThrowIfEmptyTree((IBinarySearchTree<T>) this);
+		EmptyTreeException.ThrowIfEmptyTree(this);
 		_root = _root?.Balance();
 	}
 
@@ -78,35 +78,18 @@ public class BinarySearchTree<T> : IBinarySearchTree<T>
 		if (_root is null)
 			throw new EmptyTreeException("Tree is empty");
 		
-		return IsSubtreeLessThan(_root, false) && IsSubtreeGreaterThan(_root, false);
+		return IsSubtreeValid(_root, int.MinValue, int.MaxValue);
 	}
 	
-	private bool IsSubtreeLessThan(INode<T>? node, bool inclusive)
+	private bool IsSubtreeValid(INode<T>? node, int? min, int? max)
 	{
 		if (node is NullNode<T>)
 			return true;
 
-		if (node?.Left is not NullNode<T> && (node?.Left?.Key >= node?.Key || (inclusive && node?.Left?.Key == node?.Key)))
+		if (node?.Key <= min || node?.Key > max)
 			return false;
 
-		if (node?.Right is not NullNode<T> && node?.Right?.Key <= node?.Key)
-			return false;
-
-		return IsSubtreeLessThan(node?.Left, inclusive) && IsSubtreeLessThan(node?.Right, inclusive);
-	}
-
-	private static bool IsSubtreeGreaterThan(INode<T>? node, bool inclusive)
-	{
-		if (node is NullNode<T>)
-			return true;
-
-		if (node?.Left is not NullNode<T> && node?.Left?.Key >= node?.Key)
-			return false;
-
-		if (node?.Right is not NullNode<T> && (node?.Right?.Key <= node?.Key || (inclusive && node?.Right?.Key == node?.Key)))
-			return false;
-
-		return IsSubtreeGreaterThan(node?.Left, inclusive) && IsSubtreeGreaterThan(node?.Right, inclusive);
+		return IsSubtreeValid(node?.Left, min, node?.Key) && IsSubtreeValid(node?.Right, node?.Key, max);
 	}
 	
 	private void UpdateSize(bool success, int value)

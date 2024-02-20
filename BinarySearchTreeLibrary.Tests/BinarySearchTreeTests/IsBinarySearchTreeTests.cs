@@ -2,6 +2,7 @@
 using BinarySearchTreeLibrary.Exceptions;
 using BinarySearchTreeLibrary.Models;
 using BinarySearchTreeLibrary.Tests.NodesCases;
+using BinarySearchTreeLibrary.Tests.NodesCases.CaseGenerators;
 using FluentAssertions;
 
 namespace BinarySearchTreeLibrary.Tests.BinarySearchTreeTests;
@@ -29,8 +30,8 @@ public static class IsBinarySearchTreeTests
 	}
 	
 	[Theory(DisplayName = "IsBinarySearchTree should return true when the tree is a binary search tree")]
-	[MemberData(nameof(NodesFourLevelTreeCaseGenerator.GetNodesFourLevelTreeCases),
-		MemberType = typeof(NodesFourLevelTreeCaseGenerator))]
+	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
+		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
 	
 	public static void IsBinarySearchTree_ShouldReturnTrue(NodeCase testCase)
 	{

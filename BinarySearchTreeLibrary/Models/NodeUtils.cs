@@ -30,25 +30,6 @@ internal static class NodeUtils<T>
 		return node.Left.Height - node.Right.Height;
 	}
 	
-	public static CompareResult Compare(INode<T> node1, INode<T> node2)
-	{
-		if (node1 is NullNode<T>)
-		{
-			return node2 is NullNode<T> ? CompareResult.EqualTo : CompareResult.LessThan;
-		}
-
-		if (node2 is NullNode<T>)
-		{
-			return CompareResult.GreaterThan;
-		}
-
-		if (node1.Key < node2.Key)
-		{
-			return CompareResult.LessThan;
-		}
-
-		return node1.Key > node2.Key ? CompareResult.GreaterThan : CompareResult.EqualTo;
-	}
 	
 	public static bool UpdateBalanceFactor(INode<T> node)
 	{
@@ -60,6 +41,23 @@ internal static class NodeUtils<T>
 		var rightBalance = node.Right is {IsBalanced: true};
 
 		return  Math.Abs(balanceFactor) <= 1 && leftBalance && rightBalance;
+	}
+
+	public static void ReplaceNode(INode<T> nodeToReplace, INode<T>? newNode)
+	{
+		if (nodeToReplace.Parent is null)
+		{
+			return;
+		}
+
+		if (nodeToReplace.Parent.Left == nodeToReplace)
+		{
+			nodeToReplace.Parent.Left = newNode;
+		}
+		else
+		{
+			nodeToReplace.Parent.Right = newNode;
+		}
 	}
 
 }

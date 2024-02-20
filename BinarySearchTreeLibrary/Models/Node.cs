@@ -5,7 +5,9 @@ namespace BinarySearchTreeLibrary.Models;
 
 internal class Node<T>(T data) : INode<T>
 {
-	private readonly IBalancer<T> _balancer = new Balancer<T>();
+	private readonly ITreeBalancer<T> _treeBalancer = new TreeBalancer<T>();
+	private readonly INodeRemover<T> _nodeRemover = new NodeRemover<T>();
+	
 	public T Data { get; set; } = data ?? default!;
 	public int Key => Data is not null ? Data.GetHashCode() : 0;
 	public INode<T>? Left { get; set; }= new NullNode<T>();
@@ -16,7 +18,7 @@ internal class Node<T>(T data) : INode<T>
 	public bool HasBothChildren => Left is not NullNode<T> && Right is not NullNode<T>;
 
 	public bool IsBalanced { get; private set; } = true;
-
+	
 	public bool Insert(T data)
 	{
 		ArgumentNullException.ThrowIfNull(data);
@@ -70,7 +72,7 @@ internal class Node<T>(T data) : INode<T>
 			return null;
 		}
 
-		ReplaceNode(this, newRoot);
+		NodeUtils<T>.ReplaceNode(this, newRoot);
 
 		if (isRight)
 		{
@@ -113,113 +115,27 @@ internal class Node<T>(T data) : INode<T>
 
 	public INode<T> Balance()
 	{
-		return _balancer.Balance(this);
+		return _treeBalancer.Balance(this);
 	}
 
 	public INode<T> Remove(int key)
 	{
 		var nodeToRemove = FindChild(key);
 
-		if (nodeToRemove is  NullNode<T>)
+		if (nodeToRemove is  NullNode<T> or null)
 		{
 			return this;
 		}
-
-		RemoveNode(nodeToRemove);
+		
+		_nodeRemover.RemoveNode(nodeToRemove);
 		
 		return this;
 	}
+	
 
-	private void RemoveNode(INode<T> node)
+	private void CreateChild(T data, int compareDirection)
 	{
-		if (node.IsLeaf)
-		{
-			RemoveLeafNode(node);
-		}
-		else if (!node.HasBothChildren)
-		{
-			RemoveNodeWithSingleChild(node);
-		}
-		else
-		{
-			RemoveNodeWithTwoChildren(node);
-		}
-
-		NodeUtils<T>.UpdateHeightPropsUpwards(node);
-	}
-
-	private static void RemoveLeafNode(INode<T> node)
-	{
-		if (node.Parent is  null)
-		{
-			node.Data = default!;
-		}
-		else
-		{
-			ReplaceNode(node, new NullNode<T>());
-		}
-	}
-
-	private static void RemoveNodeWithSingleChild(INode<T> node)
-	{
-		var child = node.Left is not NullNode<T> ? node.Left : node.Right;
-
-		if (child is NullNode<T>)
-		{
-			return;
-		}
-
-		child.Parent = node.Parent;
-
-		if (node.Parent is not null)
-		{
-			ReplaceNode(node, child);
-
-			return;
-		}
-
-		node.Data = child.Data;
-		node.Left = child.Left;
-		node.Right = child.Right;
-	}
-
-	private static void ReplaceNode(INode<T> nodeToReplace, INode<T>? newNode)
-	{
-		if (nodeToReplace.Parent is  null)
-		{
-			return;
-		}
-
-		if (nodeToReplace.Parent.Left == nodeToReplace)
-		{
-			nodeToReplace.Parent.Left = newNode;
-		}
-		else
-		{
-			nodeToReplace.Parent.Right = newNode;
-		}
-	}
-
-	private void RemoveNodeWithTwoChildren(INode<T> node)
-	{
-		var successor = FindMinInRight(node.Right!);
-		node.Data = successor.Data;
-
-		RemoveNode(successor);
-		NodeUtils<T>.UpdateHeightPropsUpwards(node.Parent);
-	}
-
-	private static INode<T> FindMinInRight(INode<T> node)
-	{
-		while (node.Left is not NullNode<T>)
-			node = node.Left;
-
-		return node;
-	}
-
-	private void CreateChild(T data, int direction)
-	{
-		if (direction < 0)
+		if (compareDirection < 0)
 		{
 			Left = new Node<T>(data);
 			Left.Parent = this;
@@ -230,27 +146,4 @@ internal class Node<T>(T data) : INode<T>
 		Right = new Node<T>(data);
 		Right.Parent = this;
 	}
-	
-	public CompareResult Compare(INode<T> other)
-	{
-		return Key.CompareTo(other.Key) switch
-		{
-			> 0 => CompareResult.GreaterThan,
-			< 0 => CompareResult.LessThan,
-			_ => CompareResult.EqualTo
-		};
-	}
-	/*var result = Compare(value1, value2);
-
-switch (result)
-{
-    case ComparisonResult.LessThan:
-        // Handle the case where value1 is less than value2
-        break;
-    case ComparisonResult.EqualTo:
-        // Handle the case where value1 is equal to value2
-        break;
-    case ComparisonResult.GreaterThan:
-        // Handle the case where value1 is greater than value2
-        break*/
 }

@@ -1,7 +1,9 @@
 ﻿using BinarySearchTreeLibrary.Interfaces;
 using BinarySearchTreeLibrary.Models;
 using BinarySearchTreeLibrary.Tests.NodesCases;
+using BinarySearchTreeLibrary.Tests.NodesCases.CaseGenerators;
 using FluentAssertions;
+using NSubstitute;
 
 namespace BinarySearchTreeLibrary.Tests.NodeTests;
 
@@ -34,8 +36,8 @@ public static class InsertTests
 	}
 
 	[Theory(DisplayName = "Should correctly set properties' values for Root and just one child-node")]
-	[MemberData(nameof(JustTwoNodesCaseGenerator.GetTwoNodesCases),
-		MemberType = typeof(JustTwoNodesCaseGenerator))]
+	[MemberData(nameof(TwoNodesCaseGenerator.GetTwoNodesCases),
+		MemberType = typeof(TwoNodesCaseGenerator))]
 	public static void Should_CorrectlySetProperties_ForRootAndJustOneChildNode(NodeCase testCase)
 	{
 		_input = testCase.InputData;
@@ -67,13 +69,16 @@ public static class InsertTests
 	}
 
 	[Theory(DisplayName = "Should correctly insert and set properties' values for four-level trees' nodes")]
-	[MemberData(nameof(NodesFourLevelTreeCaseGenerator.GetNodesFourLevelTreeCases),
-		MemberType = typeof(NodesFourLevelTreeCaseGenerator))]
+	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
+		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
 	public static void Should_CorrectlyInsertAndSetProperties_FourLevelTreeNodes(NodeCase testCase)
 	{
+		//var stringHasher = Substitute.For<IStringHasher>();
+		//stringHasher.GetHash(Arg.Any<string>()).Returns(callInfo => ((string)callInfo[0]).Length);
+		
 		_input = testCase.InputData;
+		//var root = new Node<object>(_input[0], stringHasher);
 		var root = new Node<object>(_input[0]);
-
 		for (var i = 1; i < _input.Length; i++)
 			root.Insert(_input[i]);
 
@@ -109,7 +114,7 @@ public static class InsertTests
 	/*    Visual representation of the test four-level tree (INDEXES of the test-case's input array)
 	*                     0
 	*                   /   \
-	*  		   	   /      \
+	*  		      	   /      \
 	* 				 1          3
 	* 			  /   \       /  \
 	* 			7     2      5    4
