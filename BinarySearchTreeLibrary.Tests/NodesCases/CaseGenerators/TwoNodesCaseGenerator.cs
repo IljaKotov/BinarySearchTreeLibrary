@@ -9,14 +9,14 @@ public static class TwoNodesCaseGenerator
 	private static readonly HashSet<int> _existingHashes = new();
 	public static IEnumerable<object[]> GetTwoNodesCases()
 	{
-		yield return new object[] { GetTwoIntNodeTestCase() };
+		yield return new object[] { GetIntTestCase() };
 
-		yield return new object[] { GetTwoStringNodeTestCase() };
+		yield return new object[] { GetStringTestCase() };
 
-		yield return new object[] { GetTwoCustomClassNodeTestCase() };
+		yield return new object[] { GetCustomClassTestCase() };
 	}
 
-	private static NodeCase GetTwoIntNodeTestCase()
+	private static NodeCase GetIntTestCase()
 	{
 		var firstInt = _faker.Random.Unique(() => _faker.Random.Int(), x => x, _existingHashes);
 		var secondInt = _faker.Random.Unique(() => _faker.Random.Int(), x => x, _existingHashes);
@@ -24,7 +24,7 @@ public static class TwoNodesCaseGenerator
 		return  NodeCaseFactory.Create(firstInt, secondInt) ;
 	}
 
-	private static NodeCase GetTwoStringNodeTestCase()
+	private static NodeCase GetStringTestCase()
 	{
 		_existingHashes.Clear();
 		
@@ -34,7 +34,7 @@ public static class TwoNodesCaseGenerator
 		return NodeCaseFactory.Create(firstString, secondString);
 	}
 
-	private static NodeCase GetTwoCustomClassNodeTestCase()
+	private static NodeCase GetCustomClassTestCase()
 	{
 		_existingHashes.Clear();
 		var factory = new FakeClassFactory();

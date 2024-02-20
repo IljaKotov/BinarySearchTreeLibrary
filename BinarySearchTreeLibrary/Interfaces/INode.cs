@@ -10,14 +10,9 @@ internal interface INode<T>
 	int Height { get; set; }
 	bool IsLeaf { get; }
 	bool HasBothChildren { get; }
-	bool IsBalanced { get; }
+	bool IsBalanced { get; set; }
 	bool Insert(T data);
 	INode<T>? FindChild(int key);
 	INode<T> Remove(int key);
 	INode<T>? Balance();
-	INode<T>? RotateLeft();
-	INode<T>? RotateRight();
-	INode<T>? Rotate(bool isRight);
-	void UpdateBalanceFactor();
-	void UpdateHeight();
 }

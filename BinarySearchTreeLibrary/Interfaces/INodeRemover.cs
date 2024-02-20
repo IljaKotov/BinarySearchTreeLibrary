@@ -2,5 +2,5 @@
 
 internal interface INodeRemover<T>
 {
-	void RemoveNode(INode<T> node);
+	void RemoveNode(INode<T?> node);
 }

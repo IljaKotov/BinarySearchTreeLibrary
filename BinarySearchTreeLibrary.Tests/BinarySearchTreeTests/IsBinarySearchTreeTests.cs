@@ -23,8 +23,8 @@ public static class IsBinarySearchTreeTests
 	public static void IsBinarySearchTree_OneNode_ShouldReturnTrue()
 	{
 		var tree = new BinarySearchTree<int>();
-		tree.Insert(10);
-		tree.Insert(20);
+		tree.Add(10);
+		tree.Add(20);
 		
 		tree.IsBinarySearchTree().Should().BeTrue();
 	}
@@ -39,7 +39,7 @@ public static class IsBinarySearchTreeTests
 		var input = testCase.InputData;
 		
 		foreach (var data in input)
-			tree.Insert(data);
+			tree.Add(data);
 		
 		tree.IsBinarySearchTree().Should().BeTrue();
 	}

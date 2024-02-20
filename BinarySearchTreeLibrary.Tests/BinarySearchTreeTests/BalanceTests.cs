@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using BinarySearchTreeLibrary.Exceptions;
+﻿using BinarySearchTreeLibrary.Exceptions;
 using BinarySearchTreeLibrary.Models;
 using FluentAssertions;
 
@@ -28,7 +27,7 @@ public static class BalanceTests
 		var tree = new BinarySearchTree<int>();
 
 		foreach (var data in  inputs)
-			tree.Insert(data);
+			tree.Add(data);
 
 		tree.Balance();
 

@@ -33,6 +33,4 @@ public static class DeepBalancedTreeCaseGenerator
 		
 		return NodeCaseFactory.Create(fakeClasses.ToArray());
 	}
-
-	
 }

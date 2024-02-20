@@ -6,9 +6,9 @@ public interface IBinarySearchTree<T>
 	public int Height { get; }
 	public int RootBalanceFactor { get; }
 	public object? Root { get; }
-	bool Insert(T data);
+	bool Add(T data);
 	bool Contains(T data);
-	bool Remove(T data);
+	bool Delete(T data);
 	void Balance();
 	bool IsBalanced();
 	bool IsBinarySearchTree();

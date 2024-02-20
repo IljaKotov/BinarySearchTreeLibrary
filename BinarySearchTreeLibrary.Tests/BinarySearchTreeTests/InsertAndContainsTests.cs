@@ -47,7 +47,7 @@ public static class InsertAndContainsTests
 		var tree = new BinarySearchTree<object>();
 
 		foreach (var data in _input)
-			tree.Insert(data);
+			tree.Add(data);
 
 		tree.Size.Should().Be(_input.Length);
 		tree.Height.Should().Be(3);
@@ -64,9 +64,9 @@ public static class InsertAndContainsTests
 	{
 		var nullNode = new NullNode<object>();
 		var tree = new BinarySearchTree<object>();
-		tree.Insert(10);
-		tree.Insert(5);
-		tree.Insert(2);
+		tree.Add(10);
+		tree.Add(5);
+		tree.Add(2);
 
 		tree.Size.Should().Be(3);
 		tree.Height.Should().Be(2);
@@ -76,7 +76,7 @@ public static class InsertAndContainsTests
 		tree.Contains(10).Should().BeTrue();
 		tree.Contains(18).Should().BeFalse();
 
-		tree.Insert(18);
+		tree.Add(18);
 		tree.Size.Should().Be(4);
 		tree.Height.Should().Be(2);
 		tree.RootBalanceFactor.Should().Be(1);
