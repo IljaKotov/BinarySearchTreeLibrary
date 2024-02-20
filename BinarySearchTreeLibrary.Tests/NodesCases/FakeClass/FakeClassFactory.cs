@@ -6,6 +6,7 @@ namespace BinarySearchTreeLibrary.Tests.NodesCases.FakeClass;
 public class FakeClassFactory
 {
 	private readonly Faker _faker = new();
+
 	public FakeClassWrapper Create(int hashCode)
 	{
 		var fakeClass = Substitute.For<IFakeClass>();

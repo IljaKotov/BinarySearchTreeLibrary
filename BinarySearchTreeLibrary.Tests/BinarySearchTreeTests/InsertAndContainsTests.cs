@@ -1,5 +1,4 @@
 ﻿using BinarySearchTreeLibrary.Exceptions;
-using BinarySearchTreeLibrary.Interfaces;
 using BinarySearchTreeLibrary.Models;
 using BinarySearchTreeLibrary.Tests.NodesCases;
 using BinarySearchTreeLibrary.Tests.NodesCases.CaseGenerators;
@@ -12,7 +11,6 @@ public static class InsertAndContainsTests
 	private static object[] _input = Array.Empty<object>();
 
 	[Fact(DisplayName = "Insert method should throw ArgumentNullException when inserting null data")]
-
 	public static void Insert_NullData_ShouldThrowArgumentNullException()
 	{
 		var root = new Node<string?>("Some data");
@@ -21,7 +19,6 @@ public static class InsertAndContainsTests
 	}
 
 	[Fact(DisplayName = "Contains method should throw ArgumentNullException when inserting null data")]
-
 	public static void Contains_NullData_ShouldThrowArgumentNullException()
 	{
 		var tree = new BinarySearchTree<object?>();
@@ -30,7 +27,6 @@ public static class InsertAndContainsTests
 	}
 
 	[Fact(DisplayName = "Contains method should throw EmptyTreeException when searching in empty tree")]
-
 	public static void Contains_InEmptyTree_ShouldThrowEmptyTreeException()
 	{
 		var tree = new BinarySearchTree<object>();

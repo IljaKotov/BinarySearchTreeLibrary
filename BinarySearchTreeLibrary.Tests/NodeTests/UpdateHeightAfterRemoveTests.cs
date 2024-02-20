@@ -126,7 +126,9 @@ public static class UpdateHeightAfterRemoveTests
 		for (var i = 1; i < _input.Length; i++)
 			root.Insert(_input[i]);
 
-		root.Remove(_input[2].GetHashCode()); //removed 4 nodes for creating 2 node with single depth sub-tree (left and right)
+		root.Remove(_input[2]
+			.GetHashCode()); //removed 4 nodes for creating 2 node with single depth sub-tree (left and right)
+
 		root.Remove(_input[10].GetHashCode());
 		root.Remove(_input[5].GetHashCode());
 		root.Remove(_input[12].GetHashCode());
@@ -165,29 +167,28 @@ public static class UpdateHeightAfterRemoveTests
 		root.Right?.Right?.Right?.Height.Should().Be(0);
 		root.Right?.Left?.Right?.Height.Should().Be(0);
 	}
-	
-	[Theory(DisplayName = "Update property Height after remove tests. Should correct update height after remove all levels of tree")]
+
+	[Theory(DisplayName =
+		"Update property Height after remove tests. Should correct update height after remove all levels of tree")]
 	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
 		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
-	
 	public static void Should_CorrectlyUpdateHeight_AfterRemoveAllLevelsOfTree(NodeCase testCase)
 	{
-		
 		_input = testCase.InputData;
 		var root = new Node<object>(_input[0]);
-		
+
 		for (var i = 1; i < _input.Length; i++)
 			root.Insert(_input[i]);
 
 		root.Height.Should().Be(3);
-		
+
 		root.Remove(_input[8].GetHashCode());
 		root.Remove(_input[9].GetHashCode());
 		root.Remove(_input[10].GetHashCode());
 		root.Remove(_input[12].GetHashCode());
 		root.Remove(_input[6].GetHashCode());
 		root.Remove(_input[11].GetHashCode());
-		
+
 		root.Height.Should().Be(2);
 	}
 	/*    Visual representation of the test four-level tree (INDEXES of the test-case's input array)

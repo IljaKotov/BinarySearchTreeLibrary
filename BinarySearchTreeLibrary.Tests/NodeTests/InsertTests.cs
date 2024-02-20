@@ -3,7 +3,6 @@ using BinarySearchTreeLibrary.Models;
 using BinarySearchTreeLibrary.Tests.NodesCases;
 using BinarySearchTreeLibrary.Tests.NodesCases.CaseGenerators;
 using FluentAssertions;
-using NSubstitute;
 
 namespace BinarySearchTreeLibrary.Tests.NodeTests;
 
@@ -11,7 +10,7 @@ public static class InsertTests
 {
 	private static object[] _input = Array.Empty<object>();
 	private static readonly NullNode<object> _nullNode = new();
-	
+
 	[Fact(DisplayName = "Insert method should throw ArgumentNullException when inserting null data")]
 	public static void Insert_NullData_ShouldThrowArgumentNullException()
 	{
@@ -21,7 +20,7 @@ public static class InsertTests
 	}
 
 	[Theory(DisplayName = "Should correctly set properties' values for single node")]
-	[MemberData(nameof(SingleNodeCaseGenerator.GetSingleNodeCases),
+	[MemberData(nameof(SingleNodeCaseGenerator.GenerateCases),
 		MemberType = typeof(SingleNodeCaseGenerator))]
 	public static void Should_CorrectlySetProperties_ForSingleNode(NodeCase testCase)
 	{
@@ -75,10 +74,12 @@ public static class InsertTests
 	{
 		//var stringHasher = Substitute.For<IStringHasher>();
 		//stringHasher.GetHash(Arg.Any<string>()).Returns(callInfo => ((string)callInfo[0]).Length);
-		
+
 		_input = testCase.InputData;
+
 		//var root = new Node<object>(_input[0], stringHasher);
 		var root = new Node<object>(_input[0]);
+
 		for (var i = 1; i < _input.Length; i++)
 			root.Insert(_input[i]);
 

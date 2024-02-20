@@ -5,16 +5,20 @@ namespace BinarySearchTreeLibrary.Models;
 
 public class BinarySearchTree<T> : IBinarySearchTree<T>
 {
-	private INode<T>? _root;
 	private readonly ITreeBalancer<T> _treeBalancer = new TreeBalancer<T>();
+	private INode<T>? _root;
 	public int Size { get; private set; }
 	public int Height => Root is not null ? _root!.Height : -1;
 	public int RootBalanceFactor => _root is not null ? NodeUtils<T>.GetBalanceFactor(_root) : 0;
-	public object?  Root => _root is not null ? _root.Data : null;
+	public object? Root => _root is not null ? _root.Data : null;
 
-	public BinarySearchTree() { }
-	
-	internal BinarySearchTree(T rootData, T leftData=default(T), T rightData=default(T))
+	public BinarySearchTree()
+	{
+	}
+
+	internal BinarySearchTree(T rootData,
+		T leftData = default,
+		T rightData = default)
 	{
 		_root = new Node<T>(rootData)
 		{
@@ -22,22 +26,24 @@ public class BinarySearchTree<T> : IBinarySearchTree<T>
 			Right = new Node<T>(rightData)
 		};
 	}
-	
+
 	public bool Add(T data)
 	{
 		ArgumentNullException.ThrowIfNull(data);
 		bool isAdded;
-		
+
 		if (_root is null)
 		{
 			_root = new Node<T>(data);
 			isAdded = true;
 		}
 		else
+		{
 			isAdded = _root.Insert(data);
+		}
 
 		UpdateSize(isAdded, 1);
-		
+
 		return isAdded;
 	}
 
@@ -45,7 +51,7 @@ public class BinarySearchTree<T> : IBinarySearchTree<T>
 	{
 		ArgumentNullException.ThrowIfNull(data);
 		EmptyTreeException.ThrowIfEmptyTree(this);
-		
+
 		return _root?.FindChild(data.GetHashCode()) is not NullNode<T>;
 	}
 
@@ -55,7 +61,7 @@ public class BinarySearchTree<T> : IBinarySearchTree<T>
 		EmptyTreeException.ThrowIfEmptyTree(this);
 
 		var removedNode = _root?.Remove(data.GetHashCode());
-		
+
 		var isRemoved = removedNode is not NullNode<T>;
 
 		UpdateSize(isRemoved, -1);
@@ -77,22 +83,30 @@ public class BinarySearchTree<T> : IBinarySearchTree<T>
 	public bool IsBinarySearchTree()
 	{
 		if (_root is null)
+		{
 			throw new EmptyTreeException("Tree is empty");
-		
+		}
+
 		return IsSubtreeValid(_root, int.MinValue, int.MaxValue);
 	}
-	
-	private static bool IsSubtreeValid(INode<T>? node, int? min, int? max)
+
+	private static bool IsSubtreeValid(INode<T>? node,
+		int? min,
+		int? max)
 	{
 		if (node is NullNode<T>)
+		{
 			return true;
+		}
 
 		if (node?.Key <= min || node?.Key > max)
+		{
 			return false;
+		}
 
 		return IsSubtreeValid(node?.Left, min, node?.Key) && IsSubtreeValid(node?.Right, node?.Key, max);
 	}
-	
+
 	private void UpdateSize(bool isSuccess, int value)
 	{
 		Size = isSuccess ? Size + value : Size;

@@ -1,48 +1,76 @@
-﻿using BinarySearchTreeLibrary.Models;
+﻿using BinarySearchTreeLibrary.Interfaces;
+using BinarySearchTreeLibrary.Models;
+using BinarySearchTreeLibrary.Tests.NodesCases.FakeClass;
 using Bogus;
-using FluentAssertions;
 
 namespace BinarySearchTreeLibrary.Tests.NodeTests;
 
 public static class ConstructorTests
 {
-
 	[Theory(DisplayName = "Node Data and Key should be set to valid value")]
 	[InlineData(new[] {1, 2, 3}, typeof(int[]))]
 	[InlineData(new[] {'a', 'b', 'c', 'd', 'e'}, typeof(char[]))]
 	[InlineData(new[] {1.1, 2.2, 3.3}, typeof(double[]))]
-	public static void Should_DataAndKey_CorrectlySetArraysValue(object data, Type typeData)
+	public static void Should_CorrectlyCreateNode_WithArray(object data, Type typeData)
 	{
-		var node = new Node<object>(data);
+		var testData = TestDataFactory.CreateNode(data);
 
-		node.Data.Should().BeOfType(typeData);
-		node.Data.Should().Be(data);
-		node.Key.Should().Be(data.GetHashCode());
+		NodeAsserts.AssertNode(testData,
+			data,
+			0,
+			true,
+			null);
+
+		AssertNullChild(testData);
 	}
 
-	[Theory(DisplayName = "Node Data should be set to valid string value")]
+	[Theory(DisplayName = "Should correctly set properties' values for single node with random string")]
 	[InlineData("en")]
 	[InlineData("uk")]
 	[InlineData("fr")]
-	public static void Should_Data_CorrectlySetRandomString(string locale)
+	public static void Should_CorrectlyCreateNode_WithRandomLocaleString(string locale)
 	{
 		var faker = new Faker(locale);
 		var randomString = faker.Random.String();
 
-		var node = new Node<string>(randomString);
+		var testNode = TestDataFactory.CreateNode(randomString);
 
-		node.Data.Should().BeOfType<string>();
-		node.Data.Should().Be(randomString);
-		node.Key.Should().Be(randomString.GetHashCode());
+		NodeAsserts.AssertNode(testNode,
+			randomString,
+			0,
+			true,
+			null);
+
+		AssertNullChild(testNode);
 	}
 
-	/*[Fact(DisplayName = "Node Key should set valid value for custom class")]
-	public static void Node_Key_ShouldSetValidValueForCustomClass()
+	[Fact(DisplayName = "Should correctly set properties' values for single node with custom class")]
+	public static void Should_CorrectlyCreateNode_WithCustomClass()
 	{
-		var fakerClass = new FakeClass(2);
-		var node = new Node<FakeClass>(fakerClass);
+		var factory = new FakeClassFactory();
+		var fakeClass = factory.Create(Randomizer.Seed.Next());
 
-		node.Key.Should().Be(fakerClass.GetHashCode());
-		node.Data.Should().Be(fakerClass);
-	}*/
+		var testNode = TestDataFactory.CreateNode(fakeClass);
+
+		NodeAsserts.AssertNode(testNode,
+			fakeClass,
+			0,
+			true,
+			null);
+
+		AssertNullChild(testNode);
+	}
+
+	private static void AssertNullChild<T>(INode<T> node, NullNode<T>? expectedChild = null)
+	{
+		expectedChild ??= new NullNode<T>();
+
+		if (node.Left is not null && node.Right is not null)
+		{
+			NodeAsserts.AssertNode(node.Left, expectedChild);
+			NodeAsserts.AssertNode(node.Right, expectedChild);
+		}
+
+		
+	}
 }

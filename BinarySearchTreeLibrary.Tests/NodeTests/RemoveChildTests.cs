@@ -11,7 +11,7 @@ public static class RemoveChildTests
 	private static readonly NullNode<object> _nullNode = new();
 
 	[Theory(DisplayName = "RemoveChild method tests. Should remove correct single node")]
-	[MemberData(nameof(SingleNodeCaseGenerator.GetSingleNodeCases),
+	[MemberData(nameof(SingleNodeCaseGenerator.GenerateCases),
 		MemberType = typeof(SingleNodeCaseGenerator))]
 	public static void Should_CorrectlyRemove_SingleNode(NodeCase testCase)
 	{
@@ -32,7 +32,7 @@ public static class RemoveChildTests
 	{
 		_input = testCase.InputData;
 		var root = new Node<object>(_input[0]);
-		
+
 		root.Insert(_input[1]);
 		root.Remove(_input[1].GetHashCode());
 
@@ -51,7 +51,7 @@ public static class RemoveChildTests
 	{
 		_input = testCase.InputData;
 		var root = new Node<object>(_input[0]);
-		
+
 		root.Insert(_input[1]);
 		root.Remove(_input[0].GetHashCode());
 
@@ -159,7 +159,9 @@ public static class RemoveChildTests
 		for (var i = 1; i < _input.Length; i++)
 			root.Insert(_input[i]);
 
-		root.Remove(_input[2].GetHashCode()); //removed 4 nodes for creating 2 node with single depth sub-tree (left and right)
+		root.Remove(_input[2]
+			.GetHashCode()); //removed 4 nodes for creating 2 node with single depth sub-tree (left and right)
+
 		root.Remove(_input[10].GetHashCode());
 		root.Remove(_input[5].GetHashCode());
 		root.Remove(_input[12].GetHashCode());
@@ -212,13 +214,13 @@ public static class RemoveChildTests
 		root.FindChild(_input[3].GetHashCode()).Should().BeEquivalentTo(_nullNode);
 	}
 	/*    Visual representation of the test four-level tree (INDEXES of the test-case's input array)
-	 *                     0
-	 *                   /   \
-	 *  		   	   /      \
-	 * 				 1          3
-	 * 			  /   \       /  \
-	 * 			7     2      5    4
-	 *		  / \	 /       \   / \
-	 *		8	9	10		12	6  11
-	 */
+	*                     0
+	*                   /   \
+	*  		   	   /      \
+	* 				 1          3
+	* 			  /   \       /  \
+	* 			7     2      5    4
+	*		  / \	 /       \   / \
+	*		8	9	10		12	6  11
+	*/
 }

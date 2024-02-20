@@ -6,7 +6,6 @@ namespace BinarySearchTreeLibrary.Tests.BinarySearchTreeTests;
 public static class ConstructorTests
 {
 	[Fact(DisplayName = "BinarySearchTree should correctly initialize properties")]
-	
 	public static void BinarySearchTree_ShouldCorrectlyInitializeProperties()
 	{
 		var tree = new BinarySearchTree<object>();

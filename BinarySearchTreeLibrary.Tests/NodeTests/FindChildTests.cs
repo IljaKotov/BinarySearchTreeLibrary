@@ -11,9 +11,9 @@ public static class FindChildTests
 {
 	private static object[] _input = Array.Empty<object>();
 	private static readonly NullNode<object> _nullNode = new();
-	
+
 	[Theory(DisplayName = "Should correctly find child for single node")]
-	[MemberData(nameof(SingleNodeCaseGenerator.GetSingleNodeCases), MemberType = typeof(SingleNodeCaseGenerator))]
+	[MemberData(nameof(SingleNodeCaseGenerator.GenerateCases), MemberType = typeof(SingleNodeCaseGenerator))]
 	public static void Should_CorrectlyFindChild_ForSingleNode(NodeCase testCase)
 	{
 		_input = testCase.InputData;

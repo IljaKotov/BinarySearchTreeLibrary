@@ -28,9 +28,13 @@ internal class Node<T>(T data) : INode<T>
 		var child = compareKeyResult < 0 ? Left : Right;
 
 		if (child is not NullNode<T> and not null)
+		{
 			child?.Insert(data);
+		}
 		else
+		{
 			CreateChild(data, compareKeyResult);
+		}
 
 		NodeUtils<T>.UpdateHeightProps(this);
 
@@ -42,23 +46,27 @@ internal class Node<T>(T data) : INode<T>
 		var compareKeyResult = key.CompareTo(Key);
 
 		if (compareKeyResult < 0)
+		{
 			return Left?.FindChild(key);
+		}
 
 		return compareKeyResult > 0 ? Right?.FindChild(key) : this;
 	}
-	
+
 	public INode<T> Remove(int key)
 	{
 		var nodeToRemove = FindChild(key);
 
 		if (nodeToRemove is NullNode<T> or null)
+		{
 			return this;
+		}
 
 		_nodeRemover.RemoveNode(nodeToRemove);
 
 		return this;
 	}
-	
+
 	public INode<T> Balance()
 	{
 		return _treeBalancer.Balance(this);

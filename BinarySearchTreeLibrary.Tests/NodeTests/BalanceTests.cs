@@ -1,20 +1,25 @@
-﻿using FluentAssertions;
-using BinarySearchTreeLibrary.Models;
+﻿using BinarySearchTreeLibrary.Models;
+using FluentAssertions;
 
 namespace BinarySearchTreeLibrary.Tests.NodeTests;
 
 public static class BalanceTests
 {
 	private static readonly NullNode<int> _nullNode = new();
-	
-	[Theory(DisplayName = "Should balance the degenerate tree")]
-	[InlineData(new[] {0, 1, 2, 3, 4, 5, 6},0 )]
-	[InlineData(new[] {0, 1, 2, 3, 4, 5, 6},6 )]
 
+	[Theory(DisplayName = "Should balance the degenerate tree")]
+	[InlineData(new[]
+	{
+		0, 1, 2, 3, 4, 5, 6
+	}, 0)]
+	[InlineData(new[]
+	{
+		0, 1, 2, 3, 4, 5, 6
+	}, 6)]
 	public static void Should_Balance_TheDegenerateTree1(int[] inputs, int startNode)
 	{
 		var root = new Node<int>(startNode);
-		
+
 		if (startNode == 0)
 		{
 			for (var i = 1; i < inputs.Length; i++)
@@ -27,7 +32,7 @@ public static class BalanceTests
 		}
 
 		var result = root.Balance();
-		
+
 		result.Data.Should().Be(inputs[3]);
 		result.Left?.Data.Should().Be(inputs[1]);
 		result.Right?.Data.Should().Be(inputs[5]);
@@ -48,7 +53,7 @@ public static class BalanceTests
 		result.Left?.Right?.Height.Should().Be(0);
 		result.Right?.Left?.Height.Should().Be(0);
 		result.Right?.Right?.Height.Should().Be(0);
-		
+
 		result.IsBalanced.Should().BeTrue();
 		result.Right?.IsBalanced.Should().BeTrue();
 		result.Left?.IsBalanced.Should().BeTrue();
@@ -59,7 +64,6 @@ public static class BalanceTests
 	}
 
 	[Fact(DisplayName = "Should balance the  tree")]
-
 	public static void Should_Balance_TheTree()
 	{
 		var root = new Node<int>(100);
@@ -71,7 +75,7 @@ public static class BalanceTests
 
 		foreach (var data in inputs)
 			root.Insert(data);
-		
+
 		root.IsBalanced.Should().BeFalse();
 		root.Height.Should().Be(3);
 
@@ -86,35 +90,35 @@ public static class BalanceTests
 		result.Right?.Right?.Data.Should().Be(190);
 		result.Right?.Left?.Right?.Data.Should().Be(160);
 		result.Right?.Right?.Right.Should().BeEquivalentTo(_nullNode);
-		
+
 		result.Height.Should().Be(3);
 		result.IsBalanced.Should().BeTrue();
 		result.Right?.Height.Should().Be(2);
 		result.Left?.Height.Should().Be(1);
 	}
 	/* Visual representation of the tree before and after balancing
-	 *    UNBALANCED TREE --> BALANCED TREE
-	 *       100                  100
-	 *      /   \               /     \
-	 *     50   150           70     180
-	 *       \    \          /  \    /  \
-	 *       80   180       50  80  150 190
-	 *      /    /   \                \
-	 *     70  160  190 	    	  160
-	 *
-	 *   DEGENERATE-LEFT TREE --> BALANCED TREE  <--- DEGENERATE-RIGHT TREE
-	 *           0                     3                      6
-	 * 		      \                  /   \                   /
-	 * 			   1                1     5                 5
-	 * 			    \              / \   / \               /
-	 * 			     2           0    2 4   6             4
-	 * 			      \                                  /
-	 * 			       3                                3
-	 *                  \							   /
-	 * 		    		 4                            2
-	 *                    \ 						 /
-	 * 		       		   5                        1
-	 * 				     	\                      /
-	 * 			        	 6                    0
-	 */
+	*    UNBALANCED TREE --> BALANCED TREE
+	*       100                  100
+	*      /   \               /     \
+	*     50   150           70     180
+	*       \    \          /  \    /  \
+	*       80   180       50  80  150 190
+	*      /    /   \                \
+	*     70  160  190 	    	  160
+	*
+	*   DEGENERATE-LEFT TREE --> BALANCED TREE  <--- DEGENERATE-RIGHT TREE
+	*           0                     3                      6
+	* 		      \                  /   \                   /
+	* 			   1                1     5                 5
+	* 			    \              / \   / \               /
+	* 			     2           0    2 4   6             4
+	* 			      \                                  /
+	* 			       3                                3
+	*                  \							   /
+	* 		    		 4                            2
+	*                    \ 						 /
+	* 		       		   5                        1
+	* 				     	\                      /
+	* 			        	 6                    0
+	*/
 }

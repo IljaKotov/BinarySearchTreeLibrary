@@ -9,11 +9,17 @@ internal class NodeRemover<T> : INodeRemover<T>
 	public void RemoveNode(INode<T?> node)
 	{
 		if (node.IsLeaf)
+		{
 			RemoveLeafNode(node);
+		}
 		else if (!node.HasBothChildren)
+		{
 			RemoveNodeWithSingleChild(node);
+		}
 		else
+		{
 			RemoveNodeWithTwoChildren(node);
+		}
 
 		NodeUtils<T>.UpdateHeightPropsUpwards(node);
 	}
@@ -21,9 +27,13 @@ internal class NodeRemover<T> : INodeRemover<T>
 	private static void RemoveLeafNode(INode<T?> node)
 	{
 		if (node.Parent is null)
-			node.Data = default(T);
+		{
+			node.Data = default;
+		}
 		else
+		{
 			NodeUtils<T>.ReplaceNode(node, new NullNode<T>());
+		}
 	}
 
 	private static void RemoveNodeWithSingleChild(INode<T?> node)
@@ -31,13 +41,16 @@ internal class NodeRemover<T> : INodeRemover<T>
 		var child = node.Left is not NullNode<T> and not null ? node.Left : node.Right;
 
 		if (child is NullNode<T> or null)
+		{
 			return;
+		}
 
 		child.Parent = node.Parent;
 
 		if (node.Parent is not null)
 		{
 			NodeUtils<T>.ReplaceNode(node, child);
+
 			return;
 		}
 
