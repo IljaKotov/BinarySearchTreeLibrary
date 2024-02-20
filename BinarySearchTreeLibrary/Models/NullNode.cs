@@ -27,7 +27,7 @@ internal class NullNode<T> : INode<T>
 		return false;
 	}
 
-	public INode<T> FindChild(int key)
+	public INode<T> FindByKey(int key)
 	{
 		return this;
 	}

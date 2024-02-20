@@ -27,8 +27,8 @@ public static class IsBinarySearchTreeTests
 	}
 
 	[Theory(DisplayName = "IsBinarySearchTree should return true when the tree is a binary search tree")]
-	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
-		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
+	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
+		MemberType = typeof(MultiLevelTreeCase))]
 	public static void IsBinarySearchTree_ShouldReturnTrue(NodeCase testCase)
 	{
 		var tree = new BinarySearchTree<object>();

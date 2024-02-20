@@ -11,8 +11,8 @@ public static class UpdateHeightAfterRemoveTests
 
 	[Theory(DisplayName =
 		"Update property Height after remove tests. Should correct update root's height after remove single child")]
-	[MemberData(nameof(TwoNodesCaseGenerator.GetTwoNodesCases),
-		MemberType = typeof(TwoNodesCaseGenerator))]
+	[MemberData(nameof(TwoNodesCase.GetTwoNodesCases),
+		MemberType = typeof(TwoNodesCase))]
 	public static void Should_CorrectlyUpdateHeight_RootsWithSingleChild(NodeCase testCase)
 	{
 		_input = testCase.InputData;
@@ -27,8 +27,8 @@ public static class UpdateHeightAfterRemoveTests
 
 	[Theory(DisplayName =
 		"Update property Height after remove tests. Should correct update height after remove root with single child")]
-	[MemberData(nameof(TwoNodesCaseGenerator.GetTwoNodesCases),
-		MemberType = typeof(TwoNodesCaseGenerator))]
+	[MemberData(nameof(TwoNodesCase.GetTwoNodesCases),
+		MemberType = typeof(TwoNodesCase))]
 	public static void Should_CorrectlyUpdateHeight_RootWithSingleChild(NodeCase testCase)
 	{
 		_input = testCase.InputData;
@@ -43,8 +43,8 @@ public static class UpdateHeightAfterRemoveTests
 
 	[Theory(DisplayName =
 		"Update property Height after remove tests. Should correct update height of sub-tree after remove root in deep tree.")]
-	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
-		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
+	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
+		MemberType = typeof(MultiLevelTreeCase))]
 	public static void Should_CorrectlyUpdateHeight_RootWithBothChildNodes(NodeCase testCase)
 	{
 		_input = testCase.InputData;
@@ -66,8 +66,8 @@ public static class UpdateHeightAfterRemoveTests
 
 	[Theory(DisplayName =
 		"Update property Height after remove tests. Should correct update height of sub-tree after remove leaf in deep tree.")]
-	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
-		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
+	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
+		MemberType = typeof(MultiLevelTreeCase))]
 	public static void Should_CorrectlyUpdateHeight_Leaf(NodeCase testCase)
 	{
 		_input = testCase.InputData;
@@ -89,8 +89,8 @@ public static class UpdateHeightAfterRemoveTests
 
 	[Theory(DisplayName =
 		"Update property Height after remove tests. Should correct update height of sub-tree after remove node with one child inside deep tree.")]
-	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
-		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
+	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
+		MemberType = typeof(MultiLevelTreeCase))]
 	public static void Should_CorrectlyUpdateHeight_NodeWithOneChild(NodeCase testCase)
 	{
 		_input = testCase.InputData;
@@ -116,8 +116,8 @@ public static class UpdateHeightAfterRemoveTests
 
 	[Theory(DisplayName =
 		"Update property Height after remove tests. Should correct update height of sub-tree after remove node with one sub-tree inside deep tree.")]
-	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
-		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
+	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
+		MemberType = typeof(MultiLevelTreeCase))]
 	public static void Should_CorrectlyUpdateHeight_NodeWithOneSubTree(NodeCase testCase)
 	{
 		_input = testCase.InputData;
@@ -146,8 +146,8 @@ public static class UpdateHeightAfterRemoveTests
 
 	[Theory(DisplayName =
 		"Update property Height after remove tests. Should correct update height of sub-tree after remove node with both sub-tree inside deep tree.")]
-	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
-		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
+	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
+		MemberType = typeof(MultiLevelTreeCase))]
 	public static void Should_CorrectlyUpdateHeight_NodeWithBothSubTrees(NodeCase testCase)
 	{
 		_input = testCase.InputData;
@@ -170,8 +170,8 @@ public static class UpdateHeightAfterRemoveTests
 
 	[Theory(DisplayName =
 		"Update property Height after remove tests. Should correct update height after remove all levels of tree")]
-	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
-		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
+	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
+		MemberType = typeof(MultiLevelTreeCase))]
 	public static void Should_CorrectlyUpdateHeight_AfterRemoveAllLevelsOfTree(NodeCase testCase)
 	{
 		_input = testCase.InputData;

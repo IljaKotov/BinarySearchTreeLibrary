@@ -12,8 +12,8 @@ public static class IsBalancedTests
 	private static readonly NullNode<object> _nullNode = new();
 
 	[Theory(DisplayName = "IsBalanced property tests. Should return true for single node")]
-	[MemberData(nameof(SingleNodeCaseGenerator.GenerateCases),
-		MemberType = typeof(SingleNodeCaseGenerator))]
+	[MemberData(nameof(SingleNodeCase.GenerateCases),
+		MemberType = typeof(SingleNodeCase))]
 	public static void Should_ReturnTrue_SingleNode(NodeCase testCase)
 	{
 		var node = new Node<object>(testCase.InputData[0]);
@@ -37,8 +37,8 @@ public static class IsBalancedTests
 	}
 
 	[Theory(DisplayName = "IsBalanced property tests. Expected return true result for all nodes")]
-	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
-		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
+	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
+		MemberType = typeof(MultiLevelTreeCase))]
 	public static void Should_CorrectlyUpdateBalanceFactor_DuringInsertNodes(NodeCase testCase)
 	{
 		_input = testCase.InputData;
@@ -57,8 +57,8 @@ public static class IsBalancedTests
 	}
 
 	[Theory(DisplayName = "IsBalanced property tests. Expected return correct result after remove nodes")]
-	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
-		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
+	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
+		MemberType = typeof(MultiLevelTreeCase))]
 	public static void Should_CorrectlyUpdateBalanceFactor_DuringRemoveNodes(NodeCase testCase)
 	{
 		_input = testCase.InputData;

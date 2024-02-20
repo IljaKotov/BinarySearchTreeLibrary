@@ -35,8 +35,8 @@ public static class InsertAndContainsTests
 	}
 
 	[Theory(DisplayName = "Should correctly insert and contains data, and set properties' values")]
-	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
-		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
+	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
+		MemberType = typeof(MultiLevelTreeCase))]
 	public static void Should_CorrectlyInsertAndContainsAllData_AndSetPropertiesValues(NodeCase testCase)
 	{
 		_input = testCase.InputData;

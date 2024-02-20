@@ -7,12 +7,23 @@ internal static class TestDataFactory
 {
 	public static INode<T> CreateNode<T>(T value) => new Node<T>(value);
 	
-	public static INode<T> InsertNodes<T>(INode<T> root, params T[] inputs)
+	public static INode<T> CreateNode<T>(IEnumerable<T> inputs,int startIndex = 0, bool byGrowth = true)
 	{
-		for (var i = 1; i < inputs.Length; i++)
-			root.Insert(inputs[i]);
+		var inputList = inputs.ToList();
+		var root = CreateNode(inputList[startIndex]);
+		
+		if (inputList.Count == 1)
+			return root;
 
+		var nodesToInsert = inputList
+			.Where((value, index) => index != startIndex)
+			.ToList();
+
+		foreach (var data in nodesToInsert)
+			root.Insert(data);
+		
 		return root;
+	
 	}
 }
 

@@ -8,8 +8,8 @@ namespace BinarySearchTreeLibrary.Tests.NodeTests;
 public static class HeightTests
 {
 	[Theory(DisplayName = "Should return height zero for single node")]
-	[MemberData(nameof(SingleNodeCaseGenerator.GenerateCases),
-		MemberType = typeof(SingleNodeCaseGenerator))]
+	[MemberData(nameof(SingleNodeCase.GenerateCases),
+		MemberType = typeof(SingleNodeCase))]
 	public static void CreateSingleNode_ExpectHeightZero(NodeCase testCase)
 	{
 		var node = new Node<object>(testCase.InputData[0]);
@@ -17,8 +17,8 @@ public static class HeightTests
 	}
 
 	[Theory(DisplayName = "Should return height one for root and zero for child-node")]
-	[MemberData(nameof(TwoNodesCaseGenerator.GetTwoNodesCases),
-		MemberType = typeof(TwoNodesCaseGenerator))]
+	[MemberData(nameof(TwoNodesCase.GetTwoNodesCases),
+		MemberType = typeof(TwoNodesCase))]
 	public static void CreateRootAndOneChildNode_ExpectHeightOneAndZero(NodeCase testCase)
 	{
 		var root = new Node<object>(testCase.InputData[0]);
@@ -37,8 +37,8 @@ public static class HeightTests
 	}
 
 	[Theory(DisplayName = "Should return correct height for four-level tree nodes")]
-	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
-		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
+	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
+		MemberType = typeof(MultiLevelTreeCase))]
 	public static void CreateFourLevelTree_ExpectCorrectHeights(NodeCase testCase)
 	{
 		var root = new Node<object>(testCase.InputData[0]);

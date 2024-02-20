@@ -41,21 +41,21 @@ internal class Node<T>(T data) : INode<T>
 		return true;
 	}
 
-	public INode<T>? FindChild(int key)
+	public INode<T>? FindByKey(int key)
 	{
 		var compareKeyResult = key.CompareTo(Key);
 
 		if (compareKeyResult < 0)
 		{
-			return Left?.FindChild(key);
+			return Left?.FindByKey(key);
 		}
 
-		return compareKeyResult > 0 ? Right?.FindChild(key) : this;
+		return compareKeyResult > 0 ? Right?.FindByKey(key) : this;
 	}
 
 	public INode<T> Remove(int key)
 	{
-		var nodeToRemove = FindChild(key);
+		var nodeToRemove = FindByKey(key);
 
 		if (nodeToRemove is NullNode<T> or null)
 		{

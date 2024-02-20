@@ -20,8 +20,8 @@ public static class InsertTests
 	}
 
 	[Theory(DisplayName = "Should correctly set properties' values for single node")]
-	[MemberData(nameof(SingleNodeCaseGenerator.GenerateCases),
-		MemberType = typeof(SingleNodeCaseGenerator))]
+	[MemberData(nameof(SingleNodeCase.GenerateCases),
+		MemberType = typeof(SingleNodeCase))]
 	public static void Should_CorrectlySetProperties_ForSingleNode(NodeCase testCase)
 	{
 		_input = testCase.InputData;
@@ -35,8 +35,8 @@ public static class InsertTests
 	}
 
 	[Theory(DisplayName = "Should correctly set properties' values for Root and just one child-node")]
-	[MemberData(nameof(TwoNodesCaseGenerator.GetTwoNodesCases),
-		MemberType = typeof(TwoNodesCaseGenerator))]
+	[MemberData(nameof(TwoNodesCase.GetTwoNodesCases),
+		MemberType = typeof(TwoNodesCase))]
 	public static void Should_CorrectlySetProperties_ForRootAndJustOneChildNode(NodeCase testCase)
 	{
 		_input = testCase.InputData;
@@ -68,8 +68,8 @@ public static class InsertTests
 	}
 
 	[Theory(DisplayName = "Should correctly insert and set properties' values for four-level trees' nodes")]
-	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
-		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
+	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
+		MemberType = typeof(MultiLevelTreeCase))]
 	public static void Should_CorrectlyInsertAndSetProperties_FourLevelTreeNodes(NodeCase testCase)
 	{
 		//var stringHasher = Substitute.For<IStringHasher>();

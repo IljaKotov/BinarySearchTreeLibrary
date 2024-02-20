@@ -12,7 +12,7 @@ internal interface INode<T>
 	bool HasBothChildren { get; }
 	bool IsBalanced { get; set; }
 	bool Insert(T data);
-	INode<T>? FindChild(int key);
+	INode<T>? FindByKey(int key);
 	INode<T> Remove(int key);
 	INode<T>? Balance();
 }

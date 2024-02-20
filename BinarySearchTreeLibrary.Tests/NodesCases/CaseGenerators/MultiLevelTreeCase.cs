@@ -2,7 +2,7 @@
 
 namespace BinarySearchTreeLibrary.Tests.NodesCases.CaseGenerators;
 
-public static class DeepBalancedTreeCaseGenerator
+public static class MultiLevelTreeCase
 {
 	private static int[] _inputs = null!;
 

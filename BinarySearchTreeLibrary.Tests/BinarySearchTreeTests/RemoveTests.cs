@@ -29,8 +29,8 @@ public static class RemoveTests
 
 	[Theory(DisplayName =
 		"Should correctly Remove all nodes and Update Height.")]
-	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
-		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
+	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
+		MemberType = typeof(MultiLevelTreeCase))]
 	public static void Should_CorrectlyRemove_WorkWithAllNodes(NodeCase testCase)
 	{
 		var tree = new BinarySearchTree<object>();
@@ -51,8 +51,8 @@ public static class RemoveTests
 	}
 
 	[Theory(DisplayName = "Should correctly Remove and replace Root.")]
-	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
-		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
+	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
+		MemberType = typeof(MultiLevelTreeCase))]
 	public static void Should_CorrectlyRemove_AndReplaceRoot(NodeCase testCase)
 	{
 		var tree = new BinarySearchTree<object>();
@@ -75,8 +75,8 @@ public static class RemoveTests
 	}
 
 	[Theory(DisplayName = "Should correctly remove nodes with update balancing value")]
-	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
-		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
+	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
+		MemberType = typeof(MultiLevelTreeCase))]
 	public static void Should_CorrectlyRemove_AndUpdateBalancingValue(NodeCase testCase)
 	{
 		var tree = new BinarySearchTree<object>();
@@ -100,8 +100,8 @@ public static class RemoveTests
 	}
 
 	[Theory(DisplayName = "Should correctly remove last level of nodes and update Height, IsBalanced properties")]
-	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
-		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
+	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
+		MemberType = typeof(MultiLevelTreeCase))]
 	public static void Should_CorrectlyRemove_LastLevelOfNodes_AndUpdateHeightAndIsBalancedProperties(NodeCase testCase)
 	{
 		var tree = new BinarySearchTree<object>();
@@ -124,8 +124,8 @@ public static class RemoveTests
 
 	[Theory(DisplayName =
 		"It's complexly test of Insert, Contains and Remove methods work. Should correctly functionality and Update Height, IsBalanced properties during work")]
-	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
-		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
+	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
+		MemberType = typeof(MultiLevelTreeCase))]
 	public static void Should_CorrectlyFunctionality_WorkWithSomeNodes(NodeCase testCase)
 	{
 		var tree = new BinarySearchTree<object>();

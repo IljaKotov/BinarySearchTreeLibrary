@@ -3,7 +3,7 @@ using Bogus;
 
 namespace BinarySearchTreeLibrary.Tests.NodesCases.CaseGenerators;
 
-public static class SingleNodeCaseGenerator
+public static class SingleNodeCase
 {
 	private static readonly Faker _faker = new();
 

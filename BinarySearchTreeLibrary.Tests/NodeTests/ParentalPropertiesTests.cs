@@ -10,8 +10,8 @@ public static class ParentalPropertiesTests
 	private static object[] _input = Array.Empty<object>();
 
 	[Theory(DisplayName = "Should correctly set parental properties inside binary tree")]
-	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
-		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
+	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
+		MemberType = typeof(MultiLevelTreeCase))]
 	public static void Should_CorrectlySetParentalProperties_ForFourLevelTreeNodes(NodeCase testCase)
 	{
 		_input = testCase.InputData;
@@ -24,7 +24,7 @@ public static class ParentalPropertiesTests
 		root.HasBothChildren.Should().BeTrue();
 		root.IsLeaf.Should().BeFalse();
 
-		var leaf = root.FindChild(_input[12].GetHashCode());
+		var leaf = root.FindByKey(_input[12].GetHashCode());
 		leaf?.Parent.Should().NotBeNull();
 		leaf?.Parent?.Data.Should().Be(_input[5]);
 		leaf?.HasBothChildren.Should().BeFalse();

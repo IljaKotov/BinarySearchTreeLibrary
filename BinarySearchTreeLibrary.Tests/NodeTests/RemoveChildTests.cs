@@ -11,8 +11,8 @@ public static class RemoveChildTests
 	private static readonly NullNode<object> _nullNode = new();
 
 	[Theory(DisplayName = "RemoveChild method tests. Should remove correct single node")]
-	[MemberData(nameof(SingleNodeCaseGenerator.GenerateCases),
-		MemberType = typeof(SingleNodeCaseGenerator))]
+	[MemberData(nameof(SingleNodeCase.GenerateCases),
+		MemberType = typeof(SingleNodeCase))]
 	public static void Should_CorrectlyRemove_SingleNode(NodeCase testCase)
 	{
 		var node = new Node<object>(testCase.InputData[0]);
@@ -26,8 +26,8 @@ public static class RemoveChildTests
 	}
 
 	[Theory(DisplayName = "RemoveChild method tests. Should correct remove root's single child node")]
-	[MemberData(nameof(TwoNodesCaseGenerator.GetTwoNodesCases),
-		MemberType = typeof(TwoNodesCaseGenerator))]
+	[MemberData(nameof(TwoNodesCase.GetTwoNodesCases),
+		MemberType = typeof(TwoNodesCase))]
 	public static void Should_CorrectlyRemove_RootsSingleChild(NodeCase testCase)
 	{
 		_input = testCase.InputData;
@@ -45,8 +45,8 @@ public static class RemoveChildTests
 	}
 
 	[Theory(DisplayName = "RemoveChild method tests. Should correct remove root with single child node")]
-	[MemberData(nameof(TwoNodesCaseGenerator.GetTwoNodesCases),
-		MemberType = typeof(TwoNodesCaseGenerator))]
+	[MemberData(nameof(TwoNodesCase.GetTwoNodesCases),
+		MemberType = typeof(TwoNodesCase))]
 	public static void Should_CorrectlyRemove_RootWithSingleChild(NodeCase testCase)
 	{
 		_input = testCase.InputData;
@@ -63,8 +63,8 @@ public static class RemoveChildTests
 	}
 
 	[Theory(DisplayName = "RemoveChild method tests. Should correct remove root with both child nodes")]
-	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
-		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
+	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
+		MemberType = typeof(MultiLevelTreeCase))]
 	public static void Should_CorrectlyRemove_RootWithBothChildNodes(NodeCase testCase)
 	{
 		_input = testCase.InputData;
@@ -86,12 +86,12 @@ public static class RemoveChildTests
 		root.Right?.Left?.Right.Should().BeEquivalentTo(_nullNode);
 		root.Right?.Left?.Left.Should().BeEquivalentTo(_nullNode);
 
-		root.FindChild(_input[0].GetHashCode()).Should().BeEquivalentTo(_nullNode);
+		root.FindByKey(_input[0].GetHashCode()).Should().BeEquivalentTo(_nullNode);
 	}
 
 	[Theory(DisplayName = "RemoveChild method tests. Should correct remove leaf node")]
-	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
-		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
+	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
+		MemberType = typeof(MultiLevelTreeCase))]
 	public static void Should_CorrectlyRemove_Leaf(NodeCase testCase)
 	{
 		_input = testCase.InputData;
@@ -115,12 +115,12 @@ public static class RemoveChildTests
 		root.Left?.Right?.Left?.Data.Should().Be(_input[10]);
 		root.Left?.Right?.Right.Should().BeEquivalentTo(_nullNode);
 
-		root.FindChild(_input[9].GetHashCode()).Should().BeEquivalentTo(_nullNode);
+		root.FindByKey(_input[9].GetHashCode()).Should().BeEquivalentTo(_nullNode);
 	}
 
 	[Theory(DisplayName = "RemoveChild method tests. Should correct remove node with one left/right child")]
-	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
-		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
+	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
+		MemberType = typeof(MultiLevelTreeCase))]
 	public static void Should_CorrectlyRemove_NodeWithOneChild(NodeCase testCase)
 	{
 		_input = testCase.InputData;
@@ -144,13 +144,13 @@ public static class RemoveChildTests
 		root.Left?.Right?.Data.Should().Be(_input[10]);
 		root.Left?.Right?.Right.Should().BeEquivalentTo(_nullNode);
 
-		root.FindChild(_input[2].GetHashCode()).Should().BeEquivalentTo(_nullNode);
-		root.FindChild(_input[5].GetHashCode()).Should().BeEquivalentTo(_nullNode);
+		root.FindByKey(_input[2].GetHashCode()).Should().BeEquivalentTo(_nullNode);
+		root.FindByKey(_input[5].GetHashCode()).Should().BeEquivalentTo(_nullNode);
 	}
 
 	[Theory(DisplayName = "RemoveChild method tests. Should correct remove node with one left/right sub-tree")]
-	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
-		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
+	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
+		MemberType = typeof(MultiLevelTreeCase))]
 	public static void Should_CorrectlyRemove_NodeWithOneSubTree(NodeCase testCase)
 	{
 		_input = testCase.InputData;
@@ -180,17 +180,17 @@ public static class RemoveChildTests
 		root.Left?.Right?.Data.Should().Be(_input[9]);
 		root.Left?.Left?.Left.Should().BeEquivalentTo(_nullNode);
 
-		root.FindChild(_input[2].GetHashCode()).Should().BeEquivalentTo(_nullNode);
-		root.FindChild(_input[10].GetHashCode()).Should().BeEquivalentTo(_nullNode);
-		root.FindChild(_input[5].GetHashCode()).Should().BeEquivalentTo(_nullNode);
-		root.FindChild(_input[12].GetHashCode()).Should().BeEquivalentTo(_nullNode);
-		root.FindChild(_input[1].GetHashCode()).Should().BeEquivalentTo(_nullNode);
-		root.FindChild(_input[3].GetHashCode()).Should().BeEquivalentTo(_nullNode);
+		root.FindByKey(_input[2].GetHashCode()).Should().BeEquivalentTo(_nullNode);
+		root.FindByKey(_input[10].GetHashCode()).Should().BeEquivalentTo(_nullNode);
+		root.FindByKey(_input[5].GetHashCode()).Should().BeEquivalentTo(_nullNode);
+		root.FindByKey(_input[12].GetHashCode()).Should().BeEquivalentTo(_nullNode);
+		root.FindByKey(_input[1].GetHashCode()).Should().BeEquivalentTo(_nullNode);
+		root.FindByKey(_input[3].GetHashCode()).Should().BeEquivalentTo(_nullNode);
 	}
 
 	[Theory(DisplayName = "RemoveChild method tests. Should correct remove node with both sub-trees")]
-	[MemberData(nameof(DeepBalancedTreeCaseGenerator.GetTreeCases),
-		MemberType = typeof(DeepBalancedTreeCaseGenerator))]
+	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
+		MemberType = typeof(MultiLevelTreeCase))]
 	public static void Should_CorrectlyRemove_NodeWithBothSubTrees(NodeCase testCase)
 	{
 		_input = testCase.InputData;
@@ -211,7 +211,7 @@ public static class RemoveChildTests
 		root.Right?.Left?.Right?.Data.Should().Be(_input[12]);
 		root.Left?.Data.Should().Be(_input[1]);
 
-		root.FindChild(_input[3].GetHashCode()).Should().BeEquivalentTo(_nullNode);
+		root.FindByKey(_input[3].GetHashCode()).Should().BeEquivalentTo(_nullNode);
 	}
 	/*    Visual representation of the test four-level tree (INDEXES of the test-case's input array)
 	*                     0

@@ -52,7 +52,7 @@ public class BinarySearchTree<T> : IBinarySearchTree<T>
 		ArgumentNullException.ThrowIfNull(data);
 		EmptyTreeException.ThrowIfEmptyTree(this);
 
-		return _root?.FindChild(data.GetHashCode()) is not NullNode<T>;
+		return _root?.FindByKey(data.GetHashCode()) is not NullNode<T>;
 	}
 
 	public bool Delete(T data)
