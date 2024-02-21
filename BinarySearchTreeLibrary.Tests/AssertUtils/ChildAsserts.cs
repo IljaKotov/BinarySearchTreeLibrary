@@ -2,7 +2,7 @@
 using BinarySearchTreeLibrary.Models;
 using FluentAssertions;
 
-namespace BinarySearchTreeLibrary.Tests.NodeTests;
+namespace BinarySearchTreeLibrary.Tests.AssertUtils;
 
 internal static class ChildAsserts
 {
@@ -19,6 +19,12 @@ internal static class ChildAsserts
 		root?.Right?.Height.Should().Be(expRightHeight);
 	}
 	
+	public static void AssertIsBalanced<T>(INode<T>? node, bool expLeftBalance, bool expRightBalance)
+	{
+		node?.Left?.IsBalanced.Should().Be(expLeftBalance);
+		node?.Right?.IsBalanced.Should().Be(expRightBalance);
+	}
+	
 	public static void AssertData<T>(INode<T>? node,  T expLeftData, T expRightData)
 	{
 		if (expLeftData is NullNode<T>)
@@ -31,4 +37,5 @@ internal static class ChildAsserts
 		else
 			node?.Right?.Data.Should().Be(expRightData);
 	}
+	
 }

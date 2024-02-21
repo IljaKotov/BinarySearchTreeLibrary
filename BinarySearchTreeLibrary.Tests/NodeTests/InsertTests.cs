@@ -1,11 +1,12 @@
 ﻿using BinarySearchTreeLibrary.Exceptions;
 using BinarySearchTreeLibrary.Interfaces;
 using BinarySearchTreeLibrary.Models;
+using BinarySearchTreeLibrary.Tests.AssertUtils;
 using BinarySearchTreeLibrary.Tests.NodesCases;
 using BinarySearchTreeLibrary.Tests.NodesCases.CaseGenerators;
 using NUnit.Framework;
 using Assert = Xunit.Assert;
-using Asserts = BinarySearchTreeLibrary.Tests.NodeTests.ChildAsserts;
+using Asserts = BinarySearchTreeLibrary.Tests.AssertUtils.ChildAsserts;
 
 namespace BinarySearchTreeLibrary.Tests.NodeTests;
 
@@ -79,7 +80,7 @@ public class InsertTests
 	internal static void SetUp(NodeCase testCase)
 	{
 		_input = testCase.InputData;
-		_testRoot = TestDataFactory.CreateNode(_input, 0);
+		_testRoot = TestNodeFactory.CreateNode(_input, 0);
 	}
 	/*    Visual representation of the test four-level tree (INDEXES of the test-case's input array)
 	*                        0

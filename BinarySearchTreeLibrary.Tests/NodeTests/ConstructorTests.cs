@@ -1,5 +1,6 @@
 ﻿using BinarySearchTreeLibrary.Interfaces;
 using BinarySearchTreeLibrary.Models;
+using BinarySearchTreeLibrary.Tests.AssertUtils;
 using BinarySearchTreeLibrary.Tests.NodesCases.FakeClass;
 using Bogus;
 
@@ -13,7 +14,7 @@ public static class ConstructorTests
 	[InlineData(new[] {1.1, 2.2, 3.3}, typeof(double[]))]
 	public static void Should_CorrectlyCreateNode_WithArray(object data, Type typeData)
 	{
-		var testData = TestDataFactory.CreateNode(data);
+		var testData = TestNodeFactory.CreateNode(data);
 
 		NodeAsserts.AssertNode(testData,
 			expData: data,
@@ -32,7 +33,7 @@ public static class ConstructorTests
 	{
 		var faker = new Faker(locale);
 		var randomString = faker.Random.String();
-		var testNode = TestDataFactory.CreateNode(randomString);
+		var testNode = TestNodeFactory.CreateNode(randomString);
 
 		NodeAsserts.AssertNode(testNode,
 			expData: randomString,
@@ -48,7 +49,7 @@ public static class ConstructorTests
 	{
 		var factory = new FakeClassFactory();
 		var fakeClass = factory.Create(Randomizer.Seed.Next());
-		var testNode = TestDataFactory.CreateNode(fakeClass);
+		var testNode = TestNodeFactory.CreateNode(fakeClass);
 
 		NodeAsserts.AssertNode(testNode,
 			expData: fakeClass,

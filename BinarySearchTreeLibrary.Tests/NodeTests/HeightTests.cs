@@ -4,7 +4,7 @@ using BinarySearchTreeLibrary.Tests.NodesCases;
 using BinarySearchTreeLibrary.Tests.NodesCases.CaseGenerators;
 using FluentAssertions;
 using NUnit.Framework;
-using Asserts = BinarySearchTreeLibrary.Tests.NodeTests.ChildAsserts;
+using Asserts = BinarySearchTreeLibrary.Tests.AssertUtils.ChildAsserts;
 
 namespace BinarySearchTreeLibrary.Tests.NodeTests;
 
@@ -17,10 +17,10 @@ public class HeightTests
 		MemberType = typeof(SingleNodeCase))]
 	public static void SingleNode_HeightZero(NodeCase testCase)
 	{
-		var testNode = TestDataFactory.CreateNode(testCase.InputData[0]);
+		var testNode = TestNodeFactory.CreateNode(testCase.InputData[0]);
 
 		testNode.Height.Should().Be(0);
-		ChildAsserts.AssertHeights(testNode, -1, -1);
+		Asserts.AssertHeights(testNode, -1, -1);
 	}
 
 	[Xunit.Theory(DisplayName = "Should return height one for root and zero for child-node")]
@@ -34,7 +34,7 @@ public class HeightTests
 		var rightHeight = leftHeight == 0 ? -1 : 0;
 
 		_testRoot?.Height.Should().Be(1);
-		ChildAsserts.AssertHeights(_testRoot, leftHeight, rightHeight);
+		Asserts.AssertHeights(_testRoot, leftHeight, rightHeight);
 	}
 
 	[Xunit.Theory(DisplayName = "Should return correct heights for all nodes")]
@@ -57,7 +57,7 @@ public class HeightTests
 	internal void SetUp(NodeCase testCase)
 	{
 		var input = testCase.InputData;
-		_testRoot = TestDataFactory.CreateNode(input, 0);
+		_testRoot = TestNodeFactory.CreateNode(input, 0);
 	}
 	/*    Visual representation of the test four-level tree (INDEXES of the test-case's input array)
 	*                        0

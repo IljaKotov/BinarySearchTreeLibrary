@@ -3,7 +3,7 @@ using BinarySearchTreeLibrary.Models;
 
 namespace BinarySearchTreeLibrary.Tests.NodeTests;
 
-internal static class TestDataFactory
+internal static class TestNodeFactory
 {
 	public static INode<T> CreateNode<T>(T value) => new Node<T>(value);
 	

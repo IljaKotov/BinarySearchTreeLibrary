@@ -2,7 +2,7 @@
 using BinarySearchTreeLibrary.Models;
 using FluentAssertions;
 
-namespace BinarySearchTreeLibrary.Tests.NodeTests;
+namespace BinarySearchTreeLibrary.Tests.AssertUtils;
 
 internal static class NodeAsserts
 {

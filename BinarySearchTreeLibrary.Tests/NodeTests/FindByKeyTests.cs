@@ -73,7 +73,7 @@ public class FindByKeyTests
 	internal void SetUp(NodeCase testCase)
 	{
 		_input = testCase.InputData;
-		_testRoot = TestDataFactory.CreateNode(_input, 0);
+		_testRoot = TestNodeFactory.CreateNode(_input, 0);
 		_mistakeKey = CreateMistakeKey();
 	}
 
