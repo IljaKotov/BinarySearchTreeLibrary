@@ -16,7 +16,7 @@ public static class ConstructorTests
 		var testData = TestDataFactory.CreateNode(data);
 
 		NodeAsserts.AssertNode(testData,
-			data,
+			expectedData: data,
 			0,
 			true,
 			null);
@@ -36,7 +36,7 @@ public static class ConstructorTests
 		var testNode = TestDataFactory.CreateNode(randomString);
 
 		NodeAsserts.AssertNode(testNode,
-			randomString,
+			expectedData: randomString,
 			0,
 			true,
 			null);
@@ -53,7 +53,7 @@ public static class ConstructorTests
 		var testNode = TestDataFactory.CreateNode(fakeClass);
 
 		NodeAsserts.AssertNode(testNode,
-			fakeClass,
+			expectedData: fakeClass,
 			0,
 			true,
 			null);

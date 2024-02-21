@@ -1,70 +1,73 @@
-﻿using BinarySearchTreeLibrary.Models;
+﻿using BinarySearchTreeLibrary.Interfaces;
+using BinarySearchTreeLibrary.Models;
 using BinarySearchTreeLibrary.Tests.NodesCases;
 using BinarySearchTreeLibrary.Tests.NodesCases.CaseGenerators;
 using FluentAssertions;
+using NUnit.Framework;
+using Asserts= BinarySearchTreeLibrary.Tests.NodeTests.ChildAsserts;
 
 namespace BinarySearchTreeLibrary.Tests.NodeTests;
 
-public static class HeightTests
+public class HeightTests
 {
-	[Theory(DisplayName = "Should return height zero for single node")]
+	private INode<object>? _testRoot;
+
+	[Xunit.Theory(DisplayName = "Should return height zero for single node")]
 	[MemberData(nameof(SingleNodeCase.GenerateCases),
 		MemberType = typeof(SingleNodeCase))]
-	public static void CreateSingleNode_ExpectHeightZero(NodeCase testCase)
+	public static void SingleNode_HeightZero(NodeCase testCase)
 	{
-		var node = new Node<object>(testCase.InputData[0]);
-		node.Height.Should().Be(0);
+		var testNode = TestDataFactory.CreateNode(testCase.InputData[0]);
+		
+		testNode.Height.Should().Be(0);
+		ChildAsserts.AssertHeights(testNode, -1, -1);
 	}
 
-	[Theory(DisplayName = "Should return height one for root and zero for child-node")]
+	[Xunit.Theory(DisplayName = "Should return height one for root and zero for child-node")]
 	[MemberData(nameof(TwoNodesCase.GetTwoNodesCases),
 		MemberType = typeof(TwoNodesCase))]
-	public static void CreateRootAndOneChildNode_ExpectHeightOneAndZero(NodeCase testCase)
+	public void RootAndChildNode_HeightOneAndZero(NodeCase testCase)
 	{
-		var root = new Node<object>(testCase.InputData[0]);
-		root.Insert(testCase.InputData[1]);
-
-		root.Height.Should().Be(1);
-
-		if (root.Left is not NullNode<object>)
-		{
-			root.Left.Height.Should().Be(0);
-		}
-		else
-		{
-			root.Right?.Height.Should().Be(0);
-		}
+		SetUp(testCase);
+		
+		var leftHeight = _testRoot?.Left is not NullNode<object> ? 0 : -1;
+		var rightHeight = leftHeight == 0 ? -1 : 0;
+		
+		_testRoot?.Height.Should().Be(1);
+		ChildAsserts.AssertHeights(_testRoot, leftHeight, rightHeight);
 	}
 
-	[Theory(DisplayName = "Should return correct height for four-level tree nodes")]
+	[Xunit.Theory(DisplayName = "Should return correct heights for all nodes")]
 	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
 		MemberType = typeof(MultiLevelTreeCase))]
-	public static void CreateFourLevelTree_ExpectCorrectHeights(NodeCase testCase)
+	public void FourLevelTree_CorrectHeights(NodeCase testCase)
 	{
-		var root = new Node<object>(testCase.InputData[0]);
+		SetUp(testCase);
 
-		for (var i = 1; i < testCase.InputData.Length; i++)
-			root.Insert(testCase.InputData[i]);
-
-		root.Height.Should().Be(3);
-		root.Left?.Height.Should().Be(2);
-		root.Right?.Height.Should().Be(2);
-		root.Left?.Left?.Height.Should().Be(1);
-		root.Left?.Right?.Height.Should().Be(1);
-		root.Right?.Left?.Height.Should().Be(1);
-		root.Right?.Right?.Height.Should().Be(1);
-		root.Left?.Left?.Left?.Height.Should().Be(0);
-		root.Left?.Left?.Right?.Height.Should().Be(0);
-		root.Left?.Right?.Left?.Height.Should().Be(0);
+		Asserts.AssertHeights(_testRoot, 3, 2, 2);
+		Asserts.AssertHeights(_testRoot?.Left, 1, 1);
+		Asserts.AssertHeights(_testRoot?.Right, 1, 1);
+		Asserts.AssertHeights(_testRoot?.Left?.Left, 0, 0);
+		Asserts.AssertHeights(_testRoot?.Left?.Right, 0, -1);
+		Asserts.AssertHeights(_testRoot?.Right?.Left, -1, 0);
+		Asserts.AssertHeights(_testRoot?.Right?.Right, 0, 0);
+	}
+	
+	[SetUp]
+	internal void SetUp(NodeCase testCase)
+	{
+		var input = testCase.InputData;
+		_testRoot = TestDataFactory.CreateNode(input, 0);
 	}
 	/*    Visual representation of the test four-level tree (INDEXES of the test-case's input array)
 	*                        0
-	*                     /   \
-	*  		   	        /      \
-	* 				 1          3
-	* 			  /   \       /  \
-	* 			7     2      5    4
-	*		  / \	 /       \   / \
-	*		8	9	10		12	6  11
+	* 				       /   \
+	*                     /     \
+	*  		   	        /         \
+	* 				  1           3
+	* 			   /   \        /    \
+	* 			 7     2       5      4
+	*		   /  \	  /        \     /  \
+	*		  8	  9	 10	       12	6   11
 	*/
 }

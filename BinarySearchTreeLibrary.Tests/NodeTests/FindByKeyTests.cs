@@ -87,12 +87,8 @@ public class FindByKeyTests
 		var foundNode = _testRoot?.FindByKey(key);
 
 		if (expectedNode is NullNode<T>)
-		{
 			foundNode.Should().BeEquivalentTo(_nullNode);
-		}
 		else
-		{
 			foundNode?.Should().Be(expectedNode);
-		}
 	}
 }
