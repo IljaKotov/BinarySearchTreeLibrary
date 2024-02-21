@@ -4,7 +4,7 @@ using BinarySearchTreeLibrary.Tests.NodesCases;
 using BinarySearchTreeLibrary.Tests.NodesCases.CaseGenerators;
 using FluentAssertions;
 using NUnit.Framework;
-using Asserts= BinarySearchTreeLibrary.Tests.NodeTests.ChildAsserts;
+using Asserts = BinarySearchTreeLibrary.Tests.NodeTests.ChildAsserts;
 
 namespace BinarySearchTreeLibrary.Tests.NodeTests;
 
@@ -18,7 +18,7 @@ public class HeightTests
 	public static void SingleNode_HeightZero(NodeCase testCase)
 	{
 		var testNode = TestDataFactory.CreateNode(testCase.InputData[0]);
-		
+
 		testNode.Height.Should().Be(0);
 		ChildAsserts.AssertHeights(testNode, -1, -1);
 	}
@@ -29,10 +29,10 @@ public class HeightTests
 	public void RootAndChildNode_HeightOneAndZero(NodeCase testCase)
 	{
 		SetUp(testCase);
-		
+
 		var leftHeight = _testRoot?.Left is not NullNode<object> ? 0 : -1;
 		var rightHeight = leftHeight == 0 ? -1 : 0;
-		
+
 		_testRoot?.Height.Should().Be(1);
 		ChildAsserts.AssertHeights(_testRoot, leftHeight, rightHeight);
 	}
@@ -52,7 +52,7 @@ public class HeightTests
 		Asserts.AssertHeights(_testRoot?.Right?.Left, -1, 0);
 		Asserts.AssertHeights(_testRoot?.Right?.Right, 0, 0);
 	}
-	
+
 	[SetUp]
 	internal void SetUp(NodeCase testCase)
 	{

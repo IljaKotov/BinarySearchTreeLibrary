@@ -37,7 +37,10 @@ public class FindByKeyTests
 	{
 		SetUp(testCase);
 
-		var expectedChild = _testRoot?.Right is not NullNode<object> ? _testRoot?.Right : _testRoot.Left;
+		var expectedChild = 
+			_testRoot?.Right is not NullNode<object> ?
+				_testRoot?.Right :
+				_testRoot.Left;
 
 		if (_testRoot is not null && expectedChild is not null)
 		{

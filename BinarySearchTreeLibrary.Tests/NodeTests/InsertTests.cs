@@ -1,125 +1,95 @@
-﻿using BinarySearchTreeLibrary.Interfaces;
+﻿using BinarySearchTreeLibrary.Exceptions;
+using BinarySearchTreeLibrary.Interfaces;
 using BinarySearchTreeLibrary.Models;
 using BinarySearchTreeLibrary.Tests.NodesCases;
 using BinarySearchTreeLibrary.Tests.NodesCases.CaseGenerators;
-using FluentAssertions;
+using NUnit.Framework;
+using Assert = Xunit.Assert;
+using Asserts = BinarySearchTreeLibrary.Tests.NodeTests.ChildAsserts;
 
 namespace BinarySearchTreeLibrary.Tests.NodeTests;
 
-public static class InsertTests
+public class InsertTests
 {
 	private static object[] _input = Array.Empty<object>();
 	private static readonly NullNode<object> _nullNode = new();
+	private static INode<object>? _testRoot;
 
 	[Fact(DisplayName = "Insert method should throw ArgumentNullException when inserting null data")]
-	public static void Insert_NullData_ShouldThrowArgumentNullException()
+	public void Insert_NullData_ShouldThrowArgumentNullException()
 	{
-		var root = new Node<string?>("Some data");
+		var testNode = new Node<string?>("Some data");
 
-		Assert.Throws<ArgumentNullException>(() => root.Insert(null));
+		Assert.Throws<ArgumentNullException>(() => testNode.Insert(null));
 	}
 
-	[Theory(DisplayName = "Should correctly set properties' values for single node")]
+	[Xunit.Theory(DisplayName = "Insert method should throw DuplicateKeyException when inserting duplicate key")]
 	[MemberData(nameof(SingleNodeCase.GenerateCases),
 		MemberType = typeof(SingleNodeCase))]
-	public static void Should_CorrectlySetProperties_ForSingleNode(NodeCase testCase)
+	public void Insert_DuplicateKey_ShouldThrowDuplicateKeyException(NodeCase testCase)
 	{
-		_input = testCase.InputData;
-		var node = new Node<object>(_input[0]);
-
-		node.Data.Should().Be(testCase.InputData[0]);
-		node.Left.Should().BeEquivalentTo(_nullNode);
-		node.Right.Should().BeEquivalentTo(_nullNode);
-		node.Parent.Should().BeNull();
-		node.Key.Should().Be(testCase.InputData[0].GetHashCode());
+		SetUp(testCase);
+		
+		if(_testRoot is not null)
+			Assert.Throws<DuplicateKeyException>(() => _testRoot.Insert(_input[0]));
 	}
 
-	[Theory(DisplayName = "Should correctly set properties' values for Root and just one child-node")]
+	[Xunit.Theory(DisplayName = "Should correctly set properties' values for Root and just one child-node")]
 	[MemberData(nameof(TwoNodesCase.GetTwoNodesCases),
 		MemberType = typeof(TwoNodesCase))]
-	public static void Should_CorrectlySetProperties_ForRootAndJustOneChildNode(NodeCase testCase)
+	public void Insert_TwoNodes_ShouldSetCorrectProperties(NodeCase testCase)
 	{
-		_input = testCase.InputData;
-		var root = new Node<object>(_input[0]);
-		root.Insert(_input[1]);
+		SetUp(testCase);
 
-		root.Data.Should().Be(_input[0]);
-		root.Parent.Should().BeNull();
-		root.Key.Should().Be(_input[0].GetHashCode());
+		NodeAsserts.AssertNode(_testRoot, _input[0], null);
 
-		INode<object>? child;
+		var child = 
+			_input[1].GetHashCode() > _input[0].GetHashCode() ? 
+				_testRoot?.Right : _testRoot?.Left;
 
-		if (_input[1].GetHashCode() > _input[0].GetHashCode())
-		{
-			child = root.Right;
-			root.Left.Should().BeEquivalentTo(_nullNode);
-		}
-		else
-		{
-			child = root.Left;
-			root.Right.Should().BeEquivalentTo(_nullNode);
-		}
+		var secondChild = 
+			child == _testRoot?.Left ? 
+				_testRoot?.Right : _testRoot?.Left;
 
-		child?.Data.Should().Be(_input[1]);
-		child?.Parent.Should().Be(root);
-		child?.Key.Should().Be(_input[1].GetHashCode());
-		child?.Left.Should().BeEquivalentTo(_nullNode);
-		child?.Right.Should().BeEquivalentTo(_nullNode);
+		NodeAsserts.AssertNode(child, _input[1]);
+		NodeAsserts.AssertNode(secondChild, _nullNode);
+		NodeAsserts.AssertNode(child?.Left, _nullNode);
+		NodeAsserts.AssertNode(child?.Right, _nullNode);
 	}
 
-	[Theory(DisplayName = "Should correctly insert and set properties' values for four-level trees' nodes")]
+	[Xunit.Theory(DisplayName = "Should correctly insert and set properties' values for four-level trees' nodes")]
 	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
 		MemberType = typeof(MultiLevelTreeCase))]
 	public static void Should_CorrectlyInsertAndSetProperties_FourLevelTreeNodes(NodeCase testCase)
 	{
-		//var stringHasher = Substitute.For<IStringHasher>();
-		//stringHasher.GetHash(Arg.Any<string>()).Returns(callInfo => ((string)callInfo[0]).Length);
+		SetUp(testCase);
 
+		NodeAsserts.AssertNode(_testRoot, _input[0], null);
+
+		Asserts.AssertData(_testRoot, _input[1], _input[3]);
+		Asserts.AssertData(_testRoot?.Left, _input[7], _input[2]);
+		Asserts.AssertData(_testRoot?.Right, _input[5], _input[4]);
+		Asserts.AssertData(_testRoot?.Left?.Left, _input[8], _input[9]);
+		Asserts.AssertData(_testRoot?.Left?.Right, _input[10], _nullNode);
+		Asserts.AssertData(_testRoot?.Right?.Left, _nullNode, _input[12]);
+		Asserts.AssertData(_testRoot?.Right?.Right, _input[6], _input[11]);
+	}
+
+	[SetUp]
+	internal static void SetUp(NodeCase testCase)
+	{
 		_input = testCase.InputData;
-
-		//var root = new Node<object>(_input[0], stringHasher);
-		var root = new Node<object>(_input[0]);
-
-		for (var i = 1; i < _input.Length; i++)
-			root.Insert(_input[i]);
-
-		root.Data.Should().Be(_input[0]);
-		root.Parent.Should().BeNull();
-		root.Key.Should().Be(_input[0].GetHashCode());
-
-		Validate_CorrectlyInsert_LeftSubTree(root, _input);
-		Validate_CorrectlyInsert_RightSubTree(root, _input);
-	}
-
-	private static void Validate_CorrectlyInsert_LeftSubTree(INode<object> root, IReadOnlyList<object> input)
-	{
-		root.Left?.Data.Should().Be(input[1]);
-		root.Left?.Left?.Data.Should().Be(input[7]);
-		root.Left?.Right?.Data.Should().Be(input[2]);
-		root.Left?.Left?.Left?.Data.Should().Be(input[8]);
-		root.Left?.Left?.Right?.Data.Should().Be(input[9]);
-		root.Left?.Right?.Left?.Data.Should().Be(input[10]);
-		root.Left?.Right?.Right?.Should().BeEquivalentTo(_nullNode);
-	}
-
-	private static void Validate_CorrectlyInsert_RightSubTree(INode<object> root, IReadOnlyList<object> input)
-	{
-		root.Right?.Data.Should().Be(input[3]);
-		root.Right?.Left?.Data.Should().Be(input[5]);
-		root.Right?.Right?.Data.Should().Be(input[4]);
-		root.Right?.Left?.Left?.Should().BeEquivalentTo(_nullNode);
-		root.Right?.Left?.Right?.Data.Should().Be(input[12]);
-		root.Right?.Right?.Left?.Data.Should().Be(input[6]);
-		root.Right?.Right?.Right?.Data.Should().Be(input[11]);
+		_testRoot = TestDataFactory.CreateNode(_input, 0);
 	}
 	/*    Visual representation of the test four-level tree (INDEXES of the test-case's input array)
-	*                     0
-	*                   /   \
-	*  		      	   /      \
-	* 				 1          3
-	* 			  /   \       /  \
-	* 			7     2      5    4
-	*		  / \	 /       \   / \
-	*		8	9	10		12	6  11
+	*                        0
+	* 				       /   \
+	*                     /     \
+	*  		   	        /         \
+	* 				  1           3
+	* 			   /   \        /    \
+	* 			 7     2       5      4
+	*		   /  \	  /        \     /  \
+	*		  8	  9	 10	       12	6   11
 	*/
 }

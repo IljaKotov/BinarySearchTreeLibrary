@@ -16,7 +16,7 @@ public static class ConstructorTests
 		var testData = TestDataFactory.CreateNode(data);
 
 		NodeAsserts.AssertNode(testData,
-			expectedData: data,
+			expData: data,
 			0,
 			true,
 			null);
@@ -32,11 +32,10 @@ public static class ConstructorTests
 	{
 		var faker = new Faker(locale);
 		var randomString = faker.Random.String();
-
 		var testNode = TestDataFactory.CreateNode(randomString);
 
 		NodeAsserts.AssertNode(testNode,
-			expectedData: randomString,
+			expData: randomString,
 			0,
 			true,
 			null);
@@ -49,11 +48,10 @@ public static class ConstructorTests
 	{
 		var factory = new FakeClassFactory();
 		var fakeClass = factory.Create(Randomizer.Seed.Next());
-
 		var testNode = TestDataFactory.CreateNode(fakeClass);
 
 		NodeAsserts.AssertNode(testNode,
-			expectedData: fakeClass,
+			expData: fakeClass,
 			0,
 			true,
 			null);
@@ -61,16 +59,14 @@ public static class ConstructorTests
 		AssertNullChild(testNode);
 	}
 
-	private static void AssertNullChild<T>(INode<T> node, NullNode<T>? expectedChild = null)
+	private static void AssertNullChild<T>(INode<T> node)
 	{
-		expectedChild ??= new NullNode<T>();
+		var expectedChild = new NullNode<T>();
 
 		if (node.Left is not null && node.Right is not null)
 		{
 			NodeAsserts.AssertNode(node.Left, expectedChild);
 			NodeAsserts.AssertNode(node.Right, expectedChild);
 		}
-
-		
 	}
 }
