@@ -13,6 +13,6 @@ public static class ConstructorTests
 		tree.Size.Should().Be(0);
 		tree.Height.Should().Be(-1);
 		tree.RootBalanceFactor.Should().Be(0);
-		tree.Root.Should().BeNull();
+		tree.RootData.Should().BeNull();
 	}
 }

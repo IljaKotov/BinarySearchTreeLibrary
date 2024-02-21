@@ -15,7 +15,7 @@ public static class RemoveTests
 	{
 		var tree = new BinarySearchTree<object>();
 
-		Assert.Throws<EmptyTreeException>(() => tree.Delete(10));
+		Assert.Throws<EmptyTreeException>(() => tree.TryDelete(10));
 	}
 
 	[Fact(DisplayName = "Remove method should throw ArgumentNullException when inserting null data")]
@@ -24,7 +24,7 @@ public static class RemoveTests
 		var tree = new BinarySearchTree<string?>();
 		tree.Add("Some data");
 
-		Assert.Throws<ArgumentNullException>(() => tree.Delete(null));
+		Assert.Throws<ArgumentNullException>(() => tree.TryDelete(null));
 	}
 
 	[Theory(DisplayName =
@@ -41,12 +41,12 @@ public static class RemoveTests
 
 		tree.Height.Should().Be(3);
 		tree.IsBalanced().Should().BeTrue();
-		tree.Root.Should().Be(_input[0]);
+		tree.RootData.Should().Be(_input[0]);
 
 		foreach (var data in _input)
-			tree.Delete(data).Should().BeTrue();
+			tree.TryDelete(data).Should().BeTrue();
 
-		tree.Root.Should().BeNull();
+		tree.RootData.Should().BeNull();
 		tree.Height.Should().Be(-1);
 	}
 
@@ -61,13 +61,13 @@ public static class RemoveTests
 		foreach (var data in _input)
 			tree.Add(data);
 
-		tree.Root.Should().Be(_input[0]);
+		tree.RootData.Should().Be(_input[0]);
 		tree.Height.Should().Be(3);
 		tree.Size.Should().Be(13);
 
-		tree.Delete(_input[0]).Should().BeTrue();
+		tree.TryDelete(_input[0]).Should().BeTrue();
 
-		tree.Root.Should().Be(_input[5]);
+		tree.RootData.Should().Be(_input[5]);
 		tree.Height.Should().Be(3);
 		tree.IsBalanced().Should().BeTrue();
 		tree.Contains(_input[0]).Should().BeFalse();
@@ -88,9 +88,9 @@ public static class RemoveTests
 		tree.IsBalanced().Should().BeTrue();
 		tree.RootBalanceFactor.Should().Be(0);
 
-		tree.Delete(_input[2]).Should().BeTrue();
+		tree.TryDelete(_input[2]).Should().BeTrue();
 		tree.Height.Should().Be(3);
-		tree.Delete(_input[10]).Should().BeTrue();
+		tree.TryDelete(_input[10]).Should().BeTrue();
 		tree.Height.Should().Be(3);
 
 		tree.IsBalanced().Should().BeFalse();
@@ -112,12 +112,12 @@ public static class RemoveTests
 
 		tree.Height.Should().Be(3);
 
-		tree.Delete(_input[8]).Should().BeTrue();
-		tree.Delete(_input[9]).Should().BeTrue();
-		tree.Delete(_input[6]).Should().BeTrue();
-		tree.Delete(_input[11]).Should().BeTrue();
-		tree.Delete(_input[12]).Should().BeTrue();
-		tree.Delete(_input[10]).Should().BeTrue();
+		tree.TryDelete(_input[8]).Should().BeTrue();
+		tree.TryDelete(_input[9]).Should().BeTrue();
+		tree.TryDelete(_input[6]).Should().BeTrue();
+		tree.TryDelete(_input[11]).Should().BeTrue();
+		tree.TryDelete(_input[12]).Should().BeTrue();
+		tree.TryDelete(_input[10]).Should().BeTrue();
 		tree.Height.Should().Be(2);
 		tree.IsBalanced().Should().BeTrue();
 	}
@@ -143,11 +143,11 @@ public static class RemoveTests
 
 	private static void Validate_Remove_LeftSubTree(BinarySearchTree<object> tree)
 	{
-		tree.Delete(_input[2]).Should().BeTrue();
+		tree.TryDelete(_input[2]).Should().BeTrue();
 		tree.Height.Should().Be(3);
 		tree.IsBalanced().Should().BeTrue();
 
-		tree.Delete(_input[10]).Should().BeTrue();
+		tree.TryDelete(_input[10]).Should().BeTrue();
 		tree.Height.Should().Be(3);
 		tree.IsBalanced().Should().BeFalse();
 		tree.RootBalanceFactor.Should().Be(0);
@@ -162,11 +162,11 @@ public static class RemoveTests
 
 	private static void Validate_Remove_LastLevelNodes(BinarySearchTree<object> tree)
 	{
-		tree.Delete(_input[8]).Should().BeTrue();
-		tree.Delete(_input[9]).Should().BeTrue();
-		tree.Delete(_input[6]).Should().BeTrue();
-		tree.Delete(_input[11]).Should().BeTrue();
-		tree.Delete(_input[12]).Should().BeTrue();
+		tree.TryDelete(_input[8]).Should().BeTrue();
+		tree.TryDelete(_input[9]).Should().BeTrue();
+		tree.TryDelete(_input[6]).Should().BeTrue();
+		tree.TryDelete(_input[11]).Should().BeTrue();
+		tree.TryDelete(_input[12]).Should().BeTrue();
 
 		tree.Height.Should().Be(2);
 		tree.IsBalanced().Should().BeTrue();
@@ -182,16 +182,16 @@ public static class RemoveTests
 
 	private static void Validate_RemoveInsert_UpdateProp(BinarySearchTree<object> tree)
 	{
-		tree.Delete(_input[5]).Should().BeTrue();
+		tree.TryDelete(_input[5]).Should().BeTrue();
 		tree.Height.Should().Be(2);
 		tree.IsBalanced().Should().BeTrue();
 
-		tree.Delete(_input[4]).Should().BeTrue();
+		tree.TryDelete(_input[4]).Should().BeTrue();
 		tree.Height.Should().Be(2);
 		tree.IsBalanced().Should().BeTrue();
 
 		tree.Add(_input[10]);
-		tree.Delete(_input[3]).Should().BeTrue();
+		tree.TryDelete(_input[3]).Should().BeTrue();
 		tree.Height.Should().Be(3);
 		tree.IsBalanced().Should().BeFalse();
 		tree.RootBalanceFactor.Should().Be(2);

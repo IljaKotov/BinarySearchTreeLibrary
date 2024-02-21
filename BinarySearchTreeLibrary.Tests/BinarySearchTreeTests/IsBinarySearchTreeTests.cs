@@ -46,9 +46,9 @@ public static class IsBinarySearchTreeTests
 	[InlineData(10, 15, 5)]
 	public static void IsBinarySearchTree_NotBinarySearchTree_ShouldReturnFalse(object root,
 		object left,
-		object right)
+		object? right)
 	{
-		var tree = new BinarySearchTree<object>(root, left, right);
+		var tree = new BinarySearchTree<object?>(root, left, right);
 
 		tree.IsBinarySearchTree().Should().BeFalse();
 	}

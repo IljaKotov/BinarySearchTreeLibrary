@@ -31,6 +31,6 @@ public static class BalanceTests
 
 		tree.IsBalanced().Should().BeTrue();
 
-		tree.Root.Should().Be(30);
+		tree.RootData.Should().Be(30);
 	}
 }

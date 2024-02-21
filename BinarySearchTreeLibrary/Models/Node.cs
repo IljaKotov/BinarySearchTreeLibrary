@@ -3,15 +3,15 @@ using BinarySearchTreeLibrary.Interfaces;
 
 namespace BinarySearchTreeLibrary.Models;
 
-internal class Node<T>(T data) : INode<T>
+internal class Node<T> : INode<T>
 {
-	private readonly ITreeBalancer<T> _treeBalancer = new TreeBalancer<T>();
-	private readonly INodeRemover<T?> _nodeRemover = new NodeRemover<T?>();
+	private static readonly ITreeBalancer<T> _treeBalancer = new TreeBalancer<T>();
+	private static readonly INodeRemover<T> _nodeRemover = new NodeRemover<T>();
 
-	public T Data { get; set; } = data ?? default!;
-	public int Key => Data is not null ? Data.GetHashCode() : 0;
-	public INode<T>? Left { get; set; } = new NullNode<T>();
-	public INode<T>? Right { get; set; } = new NullNode<T>();
+	public T? Data { get; set; }
+	public int Key => Data?.GetHashCode() ?? 0;
+	public INode<T> Left { get; set; } = new NullNode<T>();
+	public INode<T> Right { get; set; } = new NullNode<T>();
 	public INode<T>? Parent { get; set; }
 	public int Height { get; set; }
 	public bool IsLeaf => Left is NullNode<T> && Right is NullNode<T>;
@@ -19,7 +19,13 @@ internal class Node<T>(T data) : INode<T>
 
 	public bool IsBalanced { get; set; } = true;
 
-	public bool Insert(T data)
+	public Node(T data)
+	{
+		ArgumentNullException.ThrowIfNull(data);
+		Data = data;
+	}
+
+	public void Insert(T data)
 	{
 		ArgumentNullException.ThrowIfNull(data);
 		DuplicateKeyException.ThrowIfEqual(Key, data.GetHashCode());
@@ -27,49 +33,39 @@ internal class Node<T>(T data) : INode<T>
 		var compareKeyResult = data.GetHashCode().CompareTo(Key);
 		var child = compareKeyResult < 0 ? Left : Right;
 
-		if (child is not NullNode<T> and not null)
-		{
-			child?.Insert(data);
-		}
+		if (child is not NullNode<T>)
+			child.Insert(data);
 		else
-		{
 			CreateChild(data, compareKeyResult);
-		}
 
-		NodeUtils<T>.UpdateHeightProps(this);
-
-		return true;
+		NodeUtils<T>.UpdateHeightProps((INode<T?>) this);
 	}
 
-	public INode<T>? FindByKey(int key)
+	public INode<T?> FindByKey(int key)
 	{
 		var compareKeyResult = key.CompareTo(Key);
 
 		if (compareKeyResult < 0)
-		{
-			return Left?.FindByKey(key);
-		}
+			return Left.FindByKey(key);
 
-		return compareKeyResult > 0 ? Right?.FindByKey(key) : this;
+		return compareKeyResult > 0 ? Right.FindByKey(key) : (INode<T?>) this;
 	}
 
 	public INode<T> Remove(int key)
 	{
 		var nodeToRemove = FindByKey(key);
 
-		if (nodeToRemove is NullNode<T> or null)
-		{
+		if (nodeToRemove is NullNode<T>)
 			return this;
-		}
 
 		_nodeRemover.RemoveNode(nodeToRemove);
 
 		return this;
 	}
 
-	public INode<T> Balance()
+	public INode<T?> Balance()
 	{
-		return _treeBalancer.Balance(this);
+		return _treeBalancer.Balance((INode<T?>) this);
 	}
 
 	private void CreateChild(T data, int compareDirection)

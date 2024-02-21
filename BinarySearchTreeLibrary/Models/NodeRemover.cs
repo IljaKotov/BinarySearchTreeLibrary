@@ -4,22 +4,18 @@ namespace BinarySearchTreeLibrary.Models;
 
 internal class NodeRemover<T> : INodeRemover<T>
 {
-	private readonly INodeExtremumFinder<T> _minNodeAtRight = new NodeExtremumFinder<T>();
+	private static readonly INodeExtremumFinder<T?> _minNodeAtRight = new NodeExtremumFinder<T?>();
 
 	public void RemoveNode(INode<T?> node)
 	{
 		if (node.IsLeaf)
-		{
 			RemoveLeafNode(node);
-		}
-		else if (!node.HasBothChildren)
-		{
+		
+		else if (node.HasBothChildren is false)
 			RemoveNodeWithSingleChild(node);
-		}
+		
 		else
-		{
 			RemoveNodeWithTwoChildren(node);
-		}
 
 		NodeUtils<T>.UpdateHeightPropsUpwards(node);
 	}
@@ -32,18 +28,17 @@ internal class NodeRemover<T> : INodeRemover<T>
 		}
 		else
 		{
-			NodeUtils<T>.ReplaceNode(node, new NullNode<T>());
+			var newNode = new NullNode<T?>();
+			NodeUtils<T>.ReplaceNode(node, newNode);
 		}
 	}
 
 	private static void RemoveNodeWithSingleChild(INode<T?> node)
 	{
-		var child = node.Left is not NullNode<T> and not null ? node.Left : node.Right;
+		var child = node.Left is not NullNode<T> ? node.Left : node.Right;
 
-		if (child is NullNode<T> or null)
-		{
+		if (child is NullNode<T>)
 			return;
-		}
 
 		child.Parent = node.Parent;
 
@@ -65,6 +60,8 @@ internal class NodeRemover<T> : INodeRemover<T>
 		node.Data = successor.Data;
 
 		RemoveNode(successor);
-		NodeUtils<T>.UpdateHeightPropsUpwards(node.Parent);
+
+		if (node.Parent is not null)
+			NodeUtils<T>.UpdateHeightPropsUpwards(node.Parent);
 	}
 }

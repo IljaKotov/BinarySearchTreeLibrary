@@ -4,11 +4,10 @@ namespace BinarySearchTreeLibrary.Models;
 
 internal class NullNode<T> : INode<T>
 {
-	public static NullNode<T> Instance { get; } = new NullNode<T>();
-	public T Data { get; set; } = default!;
+	public T? Data { get; set; } = default;
 	public int Key => 0;
-	public INode<T>? Left { get; set; } = Instance;
-	public INode<T>? Right { get; set; } = Instance;
+	public INode<T> Left { get; set; } = Instance;
+	public INode<T> Right { get; set; } = Instance;
 	public INode<T>? Parent { get; set; } = null;
 	public int Height { get; set; } = -1;
 	public bool IsLeaf => true;
@@ -23,14 +22,15 @@ internal class NullNode<T> : INode<T>
 		}
 	}
 
-	public bool Insert(T data)
+	private static NullNode<T> Instance { get; } = new();
+
+	public void Insert(T data)
 	{
-		return false;
 	}
 
-	public INode<T> FindByKey(int key)
+	public INode<T?> FindByKey(int key)
 	{
-		return this;
+		return (INode<T?>) this;
 	}
 
 	public INode<T> Remove(int key)
@@ -38,8 +38,8 @@ internal class NullNode<T> : INode<T>
 		return this;
 	}
 
-	public INode<T> Balance()
+	public INode<T?> Balance()
 	{
-		return this;
+		return (INode<T?>) this;
 	}
 }

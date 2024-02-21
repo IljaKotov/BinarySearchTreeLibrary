@@ -49,7 +49,7 @@ public static class InsertAndContainsTests
 		tree.Height.Should().Be(3);
 		tree.RootBalanceFactor.Should().Be(0);
 		tree.IsBalanced().Should().BeTrue();
-		tree.Root.Should().Be(_input[0]);
+		tree.RootData.Should().Be(_input[0]);
 
 		foreach (var data in _input)
 			tree.Contains(data).Should().BeTrue();
@@ -79,7 +79,7 @@ public static class InsertAndContainsTests
 		tree.IsBalanced().Should().BeTrue();
 
 		tree.Contains(18).Should().BeTrue();
-		tree.Root.Should().Be(10);
+		tree.RootData.Should().Be(10);
 
 		tree.Contains(35).Should().BeFalse();
 	}

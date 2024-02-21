@@ -1,4 +1,5 @@
-﻿using BinarySearchTreeLibrary.Models;
+﻿using BinarySearchTreeLibrary.Interfaces;
+using BinarySearchTreeLibrary.Models;
 using FluentAssertions;
 
 namespace BinarySearchTreeLibrary.Tests.NodeTests;
