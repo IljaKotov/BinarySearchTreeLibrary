@@ -1,0 +1,53 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=08c823c7_002Db0b0_002D44c9_002Db6a5_002D3bd8151efb6a/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="ChildProperties" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Project Location="D:\ПРОЕКТИ\Education\BinarySearchTreeLibrary\BinarySearchTreeLibrary.Tests" Presentation="&amp;lt;BinarySearchTreeLibrary.Tests&amp;gt;" /&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=2c4b4043_002D526c_002D4eb8_002D8088_002D9c496dda0165/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Node_IsRoot_ShouldReturnFalseForNonRootNode" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;2AD703A4-BBBB-4AAB-97DE-B8B00414075D::net8.0::xUnit::BinarySearchTreeLibrary.Tests.NodeTests.PropertiesTests.AuxiliaryPropertiesTests.IsLeafIsRootPropertiesTests.Node_IsRoot_ShouldReturnFalseForNonRootNode&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=3e2bdbd1_002D1ed4_002D42dc_002D885d_002D9e43dd5a3786/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="PropertyDataTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Project Location="D:\ПРОЕКТИ\Education\BinarySearchTreeLibrary\BinarySearchTreeLibrary.Tests" Presentation="&amp;lt;BinarySearchTreeLibrary.Tests&amp;gt;" /&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=657415a3_002D9911_002D4916_002Db28a_002D08e975c6863d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Node_IsLeftChild_ShouldReturnTrueForLeftChild" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Project Location="D:\ПРОЕКТИ\Education\BinarySearchTreeLibrary\BinarySearchTreeLibrary.Tests" Presentation="&amp;lt;BinarySearchTreeLibrary.Tests&amp;gt;" /&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=7bdaf15e_002D2318_002D488b_002Dbf17_002D917f106dd948/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Node_Height_ShouldReturnCorrectHeightForRandomData #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Project Location="D:\ПРОЕКТИ\Education\BinarySearchTreeLibrary\BinarySearchTreeLibrary.Tests" Presentation="&amp;lt;BinarySearchTreeLibrary.Tests&amp;gt;" /&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=88f738c6_002D5844_002D477e_002Dad87_002Dfa9cb0219eb7/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Should correctly insert and set properties' values for four-level trees' nodes" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;ProjectFolder&gt;2AD703A4-BBBB-4AAB-97DE-B8B00414075D/d:NodeTests&lt;/ProjectFolder&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=89f06bb6_002Dbb34_002D4a83_002D8aef_002D72e569c6e26f/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;BinarySearchTreeLibrary.Tests&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Project Location="D:\ПРОЕКТИ\Education\BinarySearchTreeLibrary\BinarySearchTreeLibrary.Tests" Presentation="&amp;lt;BinarySearchTreeLibrary.Tests&amp;gt;" /&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=8eab62a5_002D9caa_002D4e1c_002Dba63_002D075e3ae7e3e2/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Node_IsRoot_ShouldReturnTrueForRootNode" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;2AD703A4-BBBB-4AAB-97DE-B8B00414075D::net8.0::xUnit::BinarySearchTreeLibrary.Tests.NodeTests.PropertiesTests.AuxiliaryPropertiesTests.IsLeafIsRootPropertiesTests.Node_IsRoot_ShouldReturnTrueForRootNode&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=abce6960_002D76b5_002D41e1_002D8a80_002D4c11342cc31d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Node_Height_ShouldReturnCorrectHeightForRandomData" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;2AD703A4-BBBB-4AAB-97DE-B8B00414075D::net8.0::xUnit::BinarySearchTreeLibrary.Tests.NodeTests.PropertiesTests.AuxiliaryPropertiesTests.HeightPropertyTests.Node_Height_ShouldReturnCorrectHeightForRandomData&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b1947faa_002Db98a_002D4121_002D94fb_002Dd2dfc7fbc7de/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Node_IsRoot_ShouldReturnFalseForNonRootNode #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;2AD703A4-BBBB-4AAB-97DE-B8B00414075D::net8.0::xUnit::BinarySearchTreeLibrary.Tests.NodeTests.PropertiesTests.AuxiliaryPropertiesTests.IsLeafIsRootPropertiesTests.Node_IsRoot_ShouldReturnFalseForNonRootNode&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=bce86352_002D5ec2_002D4c4d_002D82f1_002D406b4fa1141d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Node Data should throw exception when null data provided" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;2AD703A4-BBBB-4AAB-97DE-B8B00414075D::net8.0::xUnit::BinarySearchTreeLibrary.Tests.NodeTests.PropertiesTests.GeneralPropertiesTests.PropertyDataTests.Node_Data_ShouldThrowException_WhenNullDataProvided&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c4aac7c4_002Dbdeb_002D4479_002D989f_002Daac4259d1323/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Node Data should throw exception when null data provided #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Project Location="D:\ПРОЕКТИ\Education\BinarySearchTreeLibrary\BinarySearchTreeLibrary.Tests" Presentation="&amp;lt;BinarySearchTreeLibrary.Tests&amp;gt;" /&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=c8e76cb0_002De516_002D4e44_002Dafc3_002D3563bf6c9d5b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Node_IsLeftChild_ShouldReturnFalseForRightChild" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Project Location="D:\ПРОЕКТИ\Education\BinarySearchTreeLibrary\BinarySearchTreeLibrary.Tests" Presentation="&amp;lt;BinarySearchTreeLibrary.Tests&amp;gt;" /&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=d22cb2f8_002Daf6b_002D40b2_002Db985_002De546ff079e00/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Node_Height_ShouldReturnCorrectHeightForUnbalancedTree" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Project Location="D:\ПРОЕКТИ\Education\BinarySearchTreeLibrary\BinarySearchTreeLibrary.Tests" Presentation="&amp;lt;BinarySearchTreeLibrary.Tests&amp;gt;" /&gt;&#xD;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
