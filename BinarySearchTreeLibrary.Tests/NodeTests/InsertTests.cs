@@ -60,7 +60,7 @@ public class InsertTests
 	[Xunit.Theory(DisplayName = "Should correctly insert and set properties' values for four-level trees' nodes")]
 	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
 		MemberType = typeof(MultiLevelTreeCase))]
-	public static void Should_CorrectlyInsertAndSetProperties_FourLevelTreeNodes(NodeCase testCase)
+	public static void Insert_MultiLevelTree_ShouldInsertCorrectly(NodeCase testCase)
 	{
 		SetUp(testCase);
 
