@@ -3,11 +3,11 @@
 internal interface INode<T>
 {
 	T Data { get; set; }
-	int Key => Data != null ? Data.GetHashCode() : 0;
+	int Key { get; }
 	INode<T>? Left { get; set; }
 	INode<T>? Right { get; set; }
 	INode<T>? Parent { get; set; }
-	int Height { get; set; }
+	int Height { get; internal set; }
 	bool IsLeaf { get; }
 	bool HasBothChildren { get; }
 	bool IsBalanced { get; set; }

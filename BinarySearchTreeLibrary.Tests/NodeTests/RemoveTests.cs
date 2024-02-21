@@ -1,16 +1,20 @@
-﻿using BinarySearchTreeLibrary.Models;
+﻿using BinarySearchTreeLibrary.Interfaces;
+using BinarySearchTreeLibrary.Models;
+using BinarySearchTreeLibrary.Tests.AssertUtils;
 using BinarySearchTreeLibrary.Tests.NodesCases;
 using BinarySearchTreeLibrary.Tests.NodesCases.CaseGenerators;
 using FluentAssertions;
+using NUnit.Framework;
 
 namespace BinarySearchTreeLibrary.Tests.NodeTests;
 
-public static class RemoveChildTests
+public class RemoveTests
 {
 	private static object[] _input = Array.Empty<object>();
 	private static readonly NullNode<object> _nullNode = new();
+	private static INode<object>? root;
 
-	[Theory(DisplayName = "RemoveChild method tests. Should remove correct single node")]
+	[Xunit.Theory(DisplayName = "Should correct remove single node without children")]
 	[MemberData(nameof(SingleNodeCase.GenerateCases),
 		MemberType = typeof(SingleNodeCase))]
 	public static void Should_CorrectlyRemove_SingleNode(NodeCase testCase)
@@ -19,13 +23,11 @@ public static class RemoveChildTests
 		node.Remove(testCase.InputData[0].GetHashCode());
 
 		node.Data.Should().BeNull();
-		node.Left.Should().BeEquivalentTo(_nullNode);
-		node.Right.Should().BeEquivalentTo(_nullNode);
 		node.Parent.Should().BeNull();
-		node.Key.Should().Be(0);
+		ChildAsserts.AssertData(node,_nullNode,_nullNode);
 	}
 
-	[Theory(DisplayName = "RemoveChild method tests. Should correct remove root's single child node")]
+	[Xunit.Theory(DisplayName = "RemoveChild method tests. Should correct remove root's single child node")]
 	[MemberData(nameof(TwoNodesCase.GetTwoNodesCases),
 		MemberType = typeof(TwoNodesCase))]
 	public static void Should_CorrectlyRemove_RootsSingleChild(NodeCase testCase)
@@ -44,7 +46,7 @@ public static class RemoveChildTests
 		root.Left?.Left.Should().BeNull();
 	}
 
-	[Theory(DisplayName = "RemoveChild method tests. Should correct remove root with single child node")]
+	[Xunit.Theory(DisplayName = "RemoveChild method tests. Should correct remove root with single child node")]
 	[MemberData(nameof(TwoNodesCase.GetTwoNodesCases),
 		MemberType = typeof(TwoNodesCase))]
 	public static void Should_CorrectlyRemove_RootWithSingleChild(NodeCase testCase)
@@ -62,7 +64,7 @@ public static class RemoveChildTests
 		root.Left.Should().BeEquivalentTo(_nullNode);
 	}
 
-	[Theory(DisplayName = "RemoveChild method tests. Should correct remove root with both child nodes")]
+	[Xunit.Theory(DisplayName = "RemoveChild method tests. Should correct remove root with both child nodes")]
 	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
 		MemberType = typeof(MultiLevelTreeCase))]
 	public static void Should_CorrectlyRemove_RootWithBothChildNodes(NodeCase testCase)
@@ -89,7 +91,7 @@ public static class RemoveChildTests
 		root.FindByKey(_input[0].GetHashCode()).Should().BeEquivalentTo(_nullNode);
 	}
 
-	[Theory(DisplayName = "RemoveChild method tests. Should correct remove leaf node")]
+	[Xunit.Theory(DisplayName = "RemoveChild method tests. Should correct remove leaf node")]
 	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
 		MemberType = typeof(MultiLevelTreeCase))]
 	public static void Should_CorrectlyRemove_Leaf(NodeCase testCase)
@@ -118,7 +120,7 @@ public static class RemoveChildTests
 		root.FindByKey(_input[9].GetHashCode()).Should().BeEquivalentTo(_nullNode);
 	}
 
-	[Theory(DisplayName = "RemoveChild method tests. Should correct remove node with one left/right child")]
+	[Xunit.Theory(DisplayName = "RemoveChild method tests. Should correct remove node with one left/right child")]
 	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
 		MemberType = typeof(MultiLevelTreeCase))]
 	public static void Should_CorrectlyRemove_NodeWithOneChild(NodeCase testCase)
@@ -148,7 +150,7 @@ public static class RemoveChildTests
 		root.FindByKey(_input[5].GetHashCode()).Should().BeEquivalentTo(_nullNode);
 	}
 
-	[Theory(DisplayName = "RemoveChild method tests. Should correct remove node with one left/right sub-tree")]
+	[Xunit.Theory(DisplayName = "RemoveChild method tests. Should correct remove node with one left/right sub-tree")]
 	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
 		MemberType = typeof(MultiLevelTreeCase))]
 	public static void Should_CorrectlyRemove_NodeWithOneSubTree(NodeCase testCase)
@@ -188,7 +190,7 @@ public static class RemoveChildTests
 		root.FindByKey(_input[3].GetHashCode()).Should().BeEquivalentTo(_nullNode);
 	}
 
-	[Theory(DisplayName = "RemoveChild method tests. Should correct remove node with both sub-trees")]
+	[Xunit.Theory(DisplayName = "RemoveChild method tests. Should correct remove node with both sub-trees")]
 	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
 		MemberType = typeof(MultiLevelTreeCase))]
 	public static void Should_CorrectlyRemove_NodeWithBothSubTrees(NodeCase testCase)
@@ -212,6 +214,13 @@ public static class RemoveChildTests
 		root.Left?.Data.Should().Be(_input[1]);
 
 		root.FindByKey(_input[3].GetHashCode()).Should().BeEquivalentTo(_nullNode);
+	}
+	
+	[SetUp]
+	internal void SetUp(NodeCase testCase)
+	{
+		_input = testCase.InputData;
+		root=TestNodeFactory.CreateNode(_input, 0);
 	}
 	/*    Visual representation of the test four-level tree (INDEXES of the test-case's input array)
 	*                     0

@@ -12,13 +12,10 @@ public static class ParentalPropertiesTests
 	[Theory(DisplayName = "Should correctly set parental properties inside binary tree")]
 	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
 		MemberType = typeof(MultiLevelTreeCase))]
-	public static void Should_CorrectlySetParentalProperties_ForFourLevelTreeNodes(NodeCase testCase)
+	public static void Insert_MultiLevelTree_SetCorrectParentalProperties(NodeCase testCase)
 	{
 		_input = testCase.InputData;
-		var root = new Node<object>(_input[0]);
-
-		for (var i = 1; i < _input.Length; i++)
-			root.Insert(_input[i]);
+		var root = TestNodeFactory.CreateNode(_input, 0);
 
 		root.Parent.Should().BeNull();
 		root.HasBothChildren.Should().BeTrue();
@@ -33,9 +30,9 @@ public static class ParentalPropertiesTests
 		leaf?.Parent?.IsLeaf.Should().BeFalse();
 	}
 	/*    Visual representation of the test four-level tree (INDEXES of the test-case's input array)
-	*                     0
-	*                   /   \
-	*  		   	   /      \
+	*                      0
+	*                    /   \
+	*  		   	       /      \
 	* 				 1          3
 	* 			  /   \       /  \
 	* 			7     2      5    4
