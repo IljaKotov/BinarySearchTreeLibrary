@@ -9,7 +9,7 @@ internal class Node<T> : INode<T>
 	private static readonly INodeRemover<T> _nodeRemover = new NodeRemover<T>();
 
 	public T Data { get; set; }
-	public int Key => Data.GetHashCode();//Data?.GetHashCode() ?? 0;
+	public int Key => Data?.GetHashCode() ?? 0;
 	public INode<T>? Left { get; set; } 
 	public INode<T>? Right { get; set; }  
 	public INode<T>? Parent { get; set; }
@@ -26,6 +26,8 @@ internal class Node<T> : INode<T>
 		Left = null;
 		Right = null;
 	}
+	
+	public event Action? RootDeleted;
 
 	public void Insert(T data)
 	{
@@ -43,14 +45,14 @@ internal class Node<T> : INode<T>
 		NodeUtils<T>.UpdateHeightProps( this);
 	}
 
-	public INode<T> FindByKey(int key)
+	public INode<T>? FindByKey(int key)
 	{
 		var compareKeyResult = key.CompareTo(Key);
 
 		if (compareKeyResult < 0)
-			return Left?.FindByKey(key); //Left == null && Right == null;
+			return Left?.FindByKey(key); 
 
-		return compareKeyResult > 0 ? Right?.FindByKey(key) :  this; //return compareKeyResult > 0 ? Right?.FindByKey(key) ?? this : this;
+		return compareKeyResult > 0 ? Right?.FindByKey(key) :  this; 
 	}
 
 	public INode<T> Remove(int key)
@@ -82,5 +84,10 @@ internal class Node<T> : INode<T>
 
 		Right = new Node<T>(data);
 		Right.Parent = this;
+	}
+	
+	public void OnRootDeleted()
+	{
+		RootDeleted?.Invoke();
 	}
 }

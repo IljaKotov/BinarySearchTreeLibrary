@@ -17,7 +17,7 @@ internal static class NodeUtils<T>
 		node.IsBalanced = UpdateBalanceFactor(node);
 	}
 
-	public static void UpdateHeightPropsUpwards(INode<T> node)
+	public static void UpdateHeightPropsUpwards(INode<T>? node)
 	{
 		while (node is not null)
 		{
@@ -26,7 +26,7 @@ internal static class NodeUtils<T>
 		}
 	}
 
-	public static void ReplaceNode(INode<T> nodeToReplace, INode<T> newNode)
+	public static void ReplaceNode(INode<T> nodeToReplace, INode<T>? newNode)
 	{
 		if (nodeToReplace.Parent is null)
 			return;

@@ -24,7 +24,7 @@ internal class NodeRemover<T> : INodeRemover<T>
 	{
 		if (node.Parent is null)
 		{
-			node.Data = default;
+			node.OnRootDeleted();
 		}
 		else
 		{
@@ -34,11 +34,10 @@ internal class NodeRemover<T> : INodeRemover<T>
 
 	private static void RemoveNodeWithSingleChild(INode<T> node)
 	{
-		var child = node.Left is not null ? node.Left : node.Right;
+		var child = node.Left ?? node.Right;
 
-		//if (child is null)
-		//	return;
-
+		ArgumentNullException.ThrowIfNull(child);
+		
 		child.Parent = node.Parent;
 
 		if (node.Parent is not null)
@@ -55,6 +54,8 @@ internal class NodeRemover<T> : INodeRemover<T>
 
 	private void RemoveNodeWithTwoChildren(INode<T> node)
 	{
+		ArgumentNullException.ThrowIfNull(node.Right);
+		
 		var successor = _minNodeAtRight.FindMinAt(node.Right);
 		node.Data = successor.Data;
 

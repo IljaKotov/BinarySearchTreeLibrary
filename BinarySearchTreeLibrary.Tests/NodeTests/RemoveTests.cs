@@ -19,11 +19,11 @@ public class RemoveTests
 	public static void Should_CorrectlyRemove_SingleNode(NodeCase testCase)
 	{
 		var node = new Node<object>(testCase.InputData[0]);
+		bool isRootDeleted = false;
+		node.RootDeleted += () => isRootDeleted = true;
 		node.Remove(testCase.InputData[0].GetHashCode());
 
-		node.Data.Should().BeNull();
-		node.Parent.Should().BeNull();
-		ChildAsserts.AssertData(node,null,null);
+		isRootDeleted.Should().BeTrue();
 	}
 
 	[Xunit.Theory(DisplayName = "RemoveChild method tests. Should correct remove root's single child node")]

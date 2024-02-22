@@ -48,6 +48,7 @@ public static class RemoveTests
 
 		tree.RootData.Should().BeNull();
 		tree.Height.Should().Be(-1);
+		tree.Size.Should().Be(0);
 	}
 
 	[Theory(DisplayName = "Should correctly Remove and replace Root.")]

@@ -1,5 +1,4 @@
 ﻿using BinarySearchTreeLibrary.Interfaces;
-using BinarySearchTreeLibrary.Models;
 
 namespace BinarySearchTreeLibrary.Exceptions;
 
