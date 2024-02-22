@@ -4,7 +4,7 @@ namespace BinarySearchTreeLibrary.Exceptions;
 
 public class EmptyTreeException : Exception
 {
-	internal EmptyTreeException(string message) : base(message)
+	private EmptyTreeException(string message) : base(message)
 	{
 	}
 

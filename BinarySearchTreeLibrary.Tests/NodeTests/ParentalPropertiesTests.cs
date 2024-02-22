@@ -21,7 +21,7 @@ public static class ParentalPropertiesTests
 		root.HasBothChildren.Should().BeTrue();
 		root.IsLeaf.Should().BeFalse();
 
-		var leaf = root.FindByKey(_input[12].GetHashCode());
+		var leaf = root.GetNodeByKey(_input[12].GetHashCode());
 		leaf?.Parent.Should().NotBeNull();
 		leaf?.Parent?.Data.Should().Be(_input[5]);
 		leaf?.HasBothChildren.Should().BeFalse();

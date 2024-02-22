@@ -4,64 +4,60 @@ namespace BinarySearchTreeLibrary.Models;
 
 internal class NodeRemover<T> : INodeRemover<T>
 {
-	private static readonly INodeExtremumFinder<T> _minNodeAtRight = new NodeExtremumFinder<T>();
+	private static readonly ITreeGuide<T> _treeGuide = new TreeGuide<T>();
 
-	public void RemoveNode(INode<T> node)
+	public void RemoveNode(INode<T> removalNode)
 	{
-		if (node.IsLeaf)
-			RemoveLeafNode(node);
-		
-		else if (node.HasBothChildren is false)
-			RemoveNodeWithSingleChild(node);
-		
+		if (removalNode.IsLeaf)
+			RemoveLeaf(removalNode);
+
+		else if (removalNode.HasBothChildren is false)
+			RemoveSingleChildNode(removalNode);
+
 		else
-			RemoveNodeWithTwoChildren(node);
+			RemoveDoubleChildNode(removalNode);
 
-		NodeUtils<T>.UpdateHeightPropsUpwards(node);
+		Utils<T>.UpdatePropertiesUpwards(removalNode);
 	}
 
-	private static void RemoveLeafNode(INode<T> node)
+	private static void RemoveLeaf(INode<T> removalLeaf)
 	{
-		if (node.Parent is null)
+		if (removalLeaf.Parent is null)
+			removalLeaf.OnRootDeleted();
+		else
+			Utils<T>.ReplaceNodes(removalLeaf, null);
+	}
+
+	private static void RemoveSingleChildNode(INode<T> removalNode)
+	{
+		var inheritor = removalNode.Left ?? removalNode.Right;
+
+		ArgumentNullException.ThrowIfNull(inheritor);
+
+		inheritor.Parent = removalNode.Parent;
+
+		if (removalNode.Parent is null)
 		{
-			node.OnRootDeleted();
+			removalNode.Data = inheritor.Data;
+			removalNode.Left = inheritor.Left;
+			removalNode.Right = inheritor.Right;
 		}
 		else
 		{
-			NodeUtils<T>.ReplaceNode(node, null);
+			Utils<T>.ReplaceNodes(removalNode, inheritor);
 		}
 	}
 
-	private static void RemoveNodeWithSingleChild(INode<T> node)
+	private void RemoveDoubleChildNode(INode<T> removalNode)
 	{
-		var child = node.Left ?? node.Right;
+		ArgumentNullException.ThrowIfNull(removalNode.Right);
 
-		ArgumentNullException.ThrowIfNull(child);
-		
-		child.Parent = node.Parent;
+		var inheritor = _treeGuide.FindMinAt(removalNode.Right);
+		removalNode.Data = inheritor.Data;
 
-		if (node.Parent is not null)
-		{
-			NodeUtils<T>.ReplaceNode(node, child);
+		RemoveNode(inheritor);
 
-			return;
-		}
-
-		node.Data = child.Data;
-		node.Left = child.Left;
-		node.Right = child.Right;
-	}
-
-	private void RemoveNodeWithTwoChildren(INode<T> node)
-	{
-		ArgumentNullException.ThrowIfNull(node.Right);
-		
-		var successor = _minNodeAtRight.FindMinAt(node.Right);
-		node.Data = successor.Data;
-
-		RemoveNode(successor);
-
-		if (node.Parent is not null)
-			NodeUtils<T>.UpdateHeightPropsUpwards(node.Parent);
+		if (removalNode.Parent is not null)
+			Utils<T>.UpdatePropertiesUpwards(removalNode.Parent);
 	}
 }

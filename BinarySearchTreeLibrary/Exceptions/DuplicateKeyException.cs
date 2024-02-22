@@ -1,4 +1,6 @@
-﻿namespace BinarySearchTreeLibrary.Exceptions;
+﻿using BinarySearchTreeLibrary.Models;
+
+namespace BinarySearchTreeLibrary.Exceptions;
 
 public class DuplicateKeyException : Exception
 {
@@ -6,11 +8,11 @@ public class DuplicateKeyException : Exception
 	{
 	}
 
-	public static void ThrowIfEqual(int currentKey, int newKey)
+	public static void ThrowIfSameKeys(Direction direction)
 	{
-		if (currentKey == newKey)
+		if (direction is Direction.Same)
 		{
-			throw new DuplicateKeyException("The key already exists in the child nodes.");
+			throw new DuplicateKeyException("The key already exists in the tree.");
 		}
 	}
 }

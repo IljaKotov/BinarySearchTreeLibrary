@@ -4,104 +4,103 @@ namespace BinarySearchTreeLibrary.Models;
 
 internal class TreeBalancer<T> : ITreeBalancer<T>
 {
-	public INode<T> Balance(INode<T> node)
+	public INode<T> Balance(INode<T> balancingNode)
 	{
-		var newRoot = node;
+		var node = balancingNode;
 
-		while (newRoot.IsBalanced == false)
-			newRoot = BalanceNodeRecursive(newRoot);
-
-		return newRoot;
-	}
-
-	private static INode<T> BalanceNodeRecursive(INode<T> node)
-	{
-		node = AdjustNodeBalance(node);
-		BalanceChildNodes(node);
-
-		NodeUtils<T>.UpdateHeightProps(node);
+		while (node.IsBalanced is false)
+			node = BalanceRecursive(node);
 
 		return node;
 	}
 
-	private static INode<T> AdjustNodeBalance(INode<T> node)
+	private static INode<T> BalanceRecursive(INode<T> node)
 	{
-		if (NodeUtils<T>.GetBalanceFactor(node) > 1)
-		{
-			if (node.Left is not null && NodeUtils<T>.GetBalanceFactor(node.Left) < 0)
-				node.Left = ChooseRotation(node.Left, false);
+		Utils<T>.UpdateProperties(node);
 
-			node = ChooseRotation(node, true);
-		}
-		else if (NodeUtils<T>.GetBalanceFactor(node) < -1)
-		{
-			if (node.Right is not null && NodeUtils<T>.GetBalanceFactor(node.Right) > 0)
-				node.Right = ChooseRotation(node.Right, true);
+		if (node.BalanceFactor > 1)
+			node = CorrectRightHeavy(node);
+		
+		else if (node.BalanceFactor < -1)
+			node = CorrectLeftHeavy(node);
 
-			node = ChooseRotation(node, false);
-		}
+		BalanceNodeChildren(node);
+
+		node.UpdateHeight();
 
 		return node;
 	}
 
-	private static INode<T> ChooseRotation(INode<T> node, bool isRight)
+	private static INode<T> CorrectRightHeavy(INode<T> node)
 	{
-		var newRoot = isRight ? node.Left : node.Right;
+		if (node.Left is not null && node.Left.BalanceFactor < 0)
+			node.Left = Rotate(node.Left, Direction.Left);
 
-		ArgumentNullException.ThrowIfNull(newRoot);
+		return Rotate(node, Direction.Right);
+	}
 
-		if (isRight)
-			RotateRight(node, newRoot);
+	private static INode<T> CorrectLeftHeavy(INode<T> node)
+	{
+		if (node.Right is not null && node.Right.BalanceFactor > 0)
+			node.Right = Rotate(node.Right, Direction.Right);
+
+		return Rotate(node, Direction.Left);
+	}
+
+	private static INode<T> Rotate(INode<T> node, Direction direction)
+	{
+		var newNode = direction is Direction.Right ? node.Left : node.Right;
+
+		ArgumentNullException.ThrowIfNull(newNode);
+
+		if (direction is Direction.Right)
+			RotateRight(node, newNode);
 		else
-			RotateLeft(node, newRoot);
+			RotateLeft(node, newNode);
 
-		return newRoot;
+		return newNode;
 	}
 
-	private static void RotateRight(INode<T> node, INode<T>? newRoot)
+	private static void RotateRight(INode<T> node, INode<T>? newNode)
 	{
-		NodeUtils<T>.ReplaceNode(node, newRoot);
+		Utils<T>.ReplaceNodes(node, newNode);
 
-		node.Left = newRoot?.Right;
+		node.Left = newNode?.Right;
 
 		if (node.Left is not null)
 			node.Left.Parent = node;
 
-		if (newRoot is null)
-		{
+		if (newNode is null)
 			return;
-		}
 
-		newRoot.Right = node;
-		node.Parent = newRoot;
-		newRoot.Parent = null;
+		newNode.Right = node;
+		node.Parent = newNode;
+		newNode.Parent = null;
 	}
 
-	private static void RotateLeft(INode<T> node, INode<T>? newRoot)
+	private static void RotateLeft(INode<T> node, INode<T>? newNode)
 	{
-		NodeUtils<T>.ReplaceNode(node, newRoot);
+		Utils<T>.ReplaceNodes(node, newNode);
 
-		node.Right = newRoot?.Left;
+		node.Right = newNode?.Left;
 
 		if (node.Right is not null)
 			node.Right.Parent = node;
 
-		if (newRoot is null)
-		{
+		if (newNode is null)
 			return;
-		}
 
-		newRoot.Left = node;
-		node.Parent = newRoot;
-		newRoot.Parent = null;
+		newNode.Left = node;
+		node.Parent = newNode;
+		newNode.Parent = null;
 	}
 
-	private static void BalanceChildNodes(INode<T> node)
+	private static void BalanceNodeChildren(INode<T> node)
 	{
 		if (node.Left is not null)
-			node.Left = BalanceNodeRecursive(node.Left);
+			node.Left = BalanceRecursive(node.Left);
 
 		if (node.Right is not null)
-			node.Right = BalanceNodeRecursive(node.Right);
+			node.Right = BalanceRecursive(node.Right);
 	}
 }

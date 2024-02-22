@@ -61,7 +61,7 @@ public class FindByKeyTests
 
 		foreach (var data in testCase.InputData)
 		{
-			var child = _testRoot?.FindByKey(data.GetHashCode());
+			var child = _testRoot?.GetNodeByKey(data.GetHashCode());
 			child.Should().NotBeNull();
 			child?.Data.Should().Be(data);
 		}
@@ -87,7 +87,7 @@ public class FindByKeyTests
 
 	private void AssertFoundNode<T>(int key, INode<T>? expectedNode)
 	{
-		var foundNode = _testRoot?.FindByKey(key);
+		var foundNode = _testRoot?.GetNodeByKey(key);
 		
 		foundNode?.Should().Be(expectedNode);
 	}

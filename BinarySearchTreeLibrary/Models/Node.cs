@@ -7,87 +7,118 @@ internal class Node<T> : INode<T>
 {
 	private static readonly ITreeBalancer<T> _treeBalancer = new TreeBalancer<T>();
 	private static readonly INodeRemover<T> _nodeRemover = new NodeRemover<T>();
+	private static readonly ITreeGuide<T> _treeGuide = new TreeGuide<T>();
 
 	public T Data { get; set; }
 	public int Key => Data?.GetHashCode() ?? 0;
-	public INode<T>? Left { get; set; } 
-	public INode<T>? Right { get; set; }  
+	public INode<T>? Left { get; set; }
+	public INode<T>? Right { get; set; }
 	public INode<T>? Parent { get; set; }
 	public int Height { get; set; }
+	public bool IsBalanced { get; set; } = true;
+	public int BalanceFactor { get; set; }
 	public bool IsLeaf => Left is null && Right is null;
 	public bool HasBothChildren => Left is not null && Right is not null;
-
-	public bool IsBalanced { get; set; } = true;
 
 	public Node(T data)
 	{
 		ArgumentNullException.ThrowIfNull(data);
 		Data = data;
-		Left = null;
-		Right = null;
 	}
-	
-	public event Action? RootDeleted;
+
+	private Node(T data, INode<T>? parent)
+	{
+		ArgumentNullException.ThrowIfNull(data);
+		Data = data;
+		Parent = parent;
+	}
 
 	public void Insert(T data)
 	{
-		ArgumentNullException.ThrowIfNull(data);
-		DuplicateKeyException.ThrowIfEqual(Key, data.GetHashCode());
+		var comparison = DefineDirection(data, this);
+		DuplicateKeyException.ThrowIfSameKeys(comparison);
 
-		var compareKeyResult = data.GetHashCode().CompareTo(Key);
-		var child = compareKeyResult < 0 ? Left : Right;
+		var childToInsert = comparison is Direction.Left ? Left : Right;
 
-		if (child is not null)
-			child.Insert(data);
+		if (childToInsert is not null)
+			childToInsert.Insert(data);
 		else
-			CreateChild(data, compareKeyResult);
+			CreateChild(data, comparison);
 
-		NodeUtils<T>.UpdateHeightProps( this);
+		Utils<T>.UpdateProperties(this);
 	}
 
-	public INode<T>? FindByKey(int key)
+	public INode<T>? GetNodeByKey(int key)
 	{
-		var compareKeyResult = key.CompareTo(Key);
-
-		if (compareKeyResult < 0)
-			return Left?.FindByKey(key); 
-
-		return compareKeyResult > 0 ? Right?.FindByKey(key) :  this; 
+		return _treeGuide.FindByKey(this, key);
 	}
 
 	public INode<T> Remove(int key)
 	{
-		var nodeToRemove = FindByKey(key);
+		var removalNode = _treeGuide.FindByKey(this, key);
 
-		if (nodeToRemove is null)
+		if (removalNode is null)
 			return this;
 
-		_nodeRemover.RemoveNode(nodeToRemove);
+		_nodeRemover.RemoveNode(removalNode);
 
 		return this;
 	}
 
 	public INode<T> Balance()
 	{
-		return _treeBalancer.Balance( this);
+		return _treeBalancer.Balance(this);
 	}
 
-	private void CreateChild(T data, int compareDirection)
+	public void UpdateHeight()
 	{
-		if (compareDirection < 0)
-		{
-			Left = new Node<T>(data);
-			Left.Parent = this;
+		var (leftHeight, rightHeight) = GetChildHeights();
 
-			return;
-		}
-
-		Right = new Node<T>(data);
-		Right.Parent = this;
+		Height = 1 + Math.Max(leftHeight, rightHeight);
 	}
-	
+
+	public void UpdateBalancingData()
+	{
+		var (leftHeight, rightHeight) = GetChildHeights();
+		BalanceFactor = leftHeight - rightHeight;
+
+		var leftBalance = Left?.IsBalanced ?? true;
+		var rightBalance = Right?.IsBalanced ?? true;
+		IsBalanced = Math.Abs(BalanceFactor) <= 1 && leftBalance && rightBalance;
+	}
+
 	public void OnRootDeleted()
 	{
 		RootDeleted?.Invoke();
+	}
+
+	public event Action? RootDeleted;
+
+	private void CreateChild(T data, Direction compareDirection)
+	{
+		if (compareDirection is Direction.Left)
+			Left = new Node<T>(data, this);
+		else
+			Right = new Node<T>(data, this);
+	}
+
+	private (int leftHeight, int rightHeight) GetChildHeights()
+	{
+		var leftHeight = Left?.Height ?? -1;
+		var rightHeight = Right?.Height ?? -1;
+
+		return (leftHeight, rightHeight);
+	}
+
+	private static Direction DefineDirection(T data, INode<T> node)
+	{
+		ArgumentNullException.ThrowIfNull(data);
+
+		return data.GetHashCode().CompareTo(node.Key) switch
+		{
+			> 0 => Direction.Right,
+			< 0 => Direction.Left,
+			_ => Direction.Same
+		};
 	}
 }

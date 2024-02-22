@@ -115,7 +115,7 @@ public class RemoveTests
 		root.Left?.Right?.Left?.Data.Should().Be(_input[10]);
 		root.Left?.Right?.Right.Should().BeNull();
 
-		root.FindByKey(_input[9].GetHashCode()).Should().BeNull();
+		root.GetNodeByKey(_input[9].GetHashCode()).Should().BeNull();
 	}
 
 	[Xunit.Theory(DisplayName = "RemoveChild method tests. Should correct remove node with one left/right child")]
@@ -144,8 +144,8 @@ public class RemoveTests
 		root.Left?.Right?.Data.Should().Be(_input[10]);
 		root.Left?.Right?.Right.Should().BeNull();
 
-		root.FindByKey(_input[2].GetHashCode()).Should().BeNull();
-		root.FindByKey(_input[5].GetHashCode()).Should().BeNull();
+		root.GetNodeByKey(_input[2].GetHashCode()).Should().BeNull();
+		root.GetNodeByKey(_input[5].GetHashCode()).Should().BeNull();
 	}
 
 	[Xunit.Theory(DisplayName = "RemoveChild method tests. Should correct remove node with one left/right sub-tree")]
@@ -180,12 +180,12 @@ public class RemoveTests
 		root.Left?.Right?.Data.Should().Be(_input[9]);
 		root.Left?.Left?.Left.Should().BeNull();
 
-		root.FindByKey(_input[2].GetHashCode()).Should().BeNull();
-		root.FindByKey(_input[10].GetHashCode()).Should().BeNull();
-		root.FindByKey(_input[5].GetHashCode()).Should().BeNull();
-		root.FindByKey(_input[12].GetHashCode()).Should().BeNull();
-		root.FindByKey(_input[1].GetHashCode()).Should().BeNull();
-		root.FindByKey(_input[3].GetHashCode()).Should().BeNull();
+		root.GetNodeByKey(_input[2].GetHashCode()).Should().BeNull();
+		root.GetNodeByKey(_input[10].GetHashCode()).Should().BeNull();
+		root.GetNodeByKey(_input[5].GetHashCode()).Should().BeNull();
+		root.GetNodeByKey(_input[12].GetHashCode()).Should().BeNull();
+		root.GetNodeByKey(_input[1].GetHashCode()).Should().BeNull();
+		root.GetNodeByKey(_input[3].GetHashCode()).Should().BeNull();
 	}
 
 	[Xunit.Theory(DisplayName = "RemoveChild method tests. Should correct remove node with both sub-trees")]
@@ -211,7 +211,7 @@ public class RemoveTests
 		root.Right?.Left?.Right?.Data.Should().Be(_input[12]);
 		root.Left?.Data.Should().Be(_input[1]);
 
-		root.FindByKey(_input[3].GetHashCode()).Should().BeNull();
+		root.GetNodeByKey(_input[3].GetHashCode()).Should().BeNull();
 	}
 	
 	[SetUp]
