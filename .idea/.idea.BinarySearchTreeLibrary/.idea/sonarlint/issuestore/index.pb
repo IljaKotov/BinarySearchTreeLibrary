@@ -20,8 +20,6 @@ BBinarySearchTreeLibrary.Tests/BinarySearchTreeLibrary.Tests.csproj,0\3\03a8a83
 d
 4BinarySearchTreeLibrary.Tests/NodesCases/NodeCase.cs,f\1\f1d5eff82cedf3c00eb0617357a09d8d832e43fe
 k
-;BinarySearchTreeLibrary.Tests/NodeTests/RemoveChildTests.cs,4\6\465b47c4f79d16bd6a9d665b548fb6d06bcefccb
-k
 ;BinarySearchTreeLibrary.Tests/NodeTests/ConstructorTests.cs,f\8\f8855eddeb4c1992d6e3fe9a6bb70e695838bcf5
 r
 BBinarySearchTreeLibrary.Tests/NodeTests/ParentalPropertiesTests.cs,1\6\165faa64289544ef4da45be23c74bbf8f521cc29
@@ -67,8 +65,6 @@ k
 ;BinarySearchTreeLibrary.Tests/NodesCases/NodeCaseFactory.cs,1\d\1d9d4325dcbaaae0f573a12eb141dc932151aa00
 l
 <BinarySearchTreeLibrary.Tests/NodesCases/RandomExtensions.cs,c\f\cfece20b9954189f7a7b7ca1ad36f19739ef2fe2
-j
-:BinarySearchTreeLibrary.Tests/NodeTests/TestDataFactory.cs,2\9\29f1d7cad591b3562787b7ff10302220a2b9fa6b
 v
 FBinarySearchTreeLibrary.Tests/NodesCases/FakeClass/FakeClassFactory.cs,a\2\a21206233a27da891f181db399d8b40a5df4e30f
 v
@@ -79,8 +75,6 @@ i
 9BinarySearchTreeLibrary/Interfaces/INodeExtremumFinder.cs,e\d\ed19a43069dc55b939fcecd0aa1c729c849268d8
 d
 4BinarySearchTreeLibrary/Models/NodeExtremumFinder.cs,1\c\1c0482dbe70264fed500ddd47b3672a573716efc
-f
-6BinarySearchTreeLibrary.Tests/NodeTests/NodeAsserts.cs,0\7\0798cdbdc864896e568c85f3aa740f488fa8e1c4
 i
 9BinarySearchTreeLibrary.Tests/NodeTests/FindByKeyTests.cs,8\4\84ea61cc0869c6ebbbda6195d647b8ff44c186b3
 y
@@ -89,8 +83,6 @@ w
 GBinarySearchTreeLibrary.Tests/NodesCases/CaseGenerators/TwoNodesCase.cs,e\f\ef681164f2722f08fc3ce25c6963fc741f5bc08a
 }
 MBinarySearchTreeLibrary.Tests/NodesCases/CaseGenerators/MultiLevelTreeCase.cs,8\3\83aefda3f930c535ef5870a6e1907946bb952b32
-g
-7BinarySearchTreeLibrary.Tests/NodeTests/ChildAsserts.cs,4\b\4bf0c15fb9fba6a6ace40117dda23b47bfb7c8d5
 i
 9BinarySearchTreeLibrary.Tests/AssertUtils/ChildAsserts.cs,c\9\c963ecca6d2dd46dd8b1cfdc5b3d6d8ae7241273
 h

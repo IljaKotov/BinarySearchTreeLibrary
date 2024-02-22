@@ -62,12 +62,7 @@ public static class ConstructorTests
 
 	private static void AssertNullChild<T>(INode<T> node)
 	{
-		var expectedChild = new NullNode<T>();
-
-		if (node.Left is not null && node.Right is not null)
-		{
-			NodeAsserts.AssertNode(node.Left, expectedChild);
-			NodeAsserts.AssertNode(node.Right, expectedChild);
-		}
+			NodeAsserts.AssertNode(node.Left, null);
+			NodeAsserts.AssertNode(node.Right, null);
 	}
 }

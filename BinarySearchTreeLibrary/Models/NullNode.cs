@@ -1,10 +1,15 @@
 ﻿using BinarySearchTreeLibrary.Interfaces;
 
-namespace BinarySearchTreeLibrary.Models;
+//namespace BinarySearchTreeLibrary.Models;
 
-internal class NullNode<T> : INode<T>
-{
-	public T? Data { get; set; } = default;
+//internal class NullNode<T> : INode<T>
+//{
+	/*private T _data = default!;
+	public T Data
+	{
+		get => throw new InvalidOperationException("Cannot access data on a NullNode.");
+		set => _data = value;
+	}
 	public int Key => 0;
 	public INode<T> Left { get; set; } = Instance;
 	public INode<T> Right { get; set; } = Instance;
@@ -19,7 +24,7 @@ internal class NullNode<T> : INode<T>
 		set
 		{
 			/* Do nothing */
-		}
+		/*}
 	}
 
 	private static NullNode<T> Instance { get; } = new();
@@ -28,9 +33,9 @@ internal class NullNode<T> : INode<T>
 	{
 	}
 
-	public INode<T?> FindByKey(int key)
+	public INode<T> FindByKey(int key)
 	{
-		return (INode<T?>) this;
+		return (INode<T>) this;
 	}
 
 	public INode<T> Remove(int key)
@@ -38,8 +43,8 @@ internal class NullNode<T> : INode<T>
 		return this;
 	}
 
-	public INode<T?> Balance()
+	public INode<T> Balance()
 	{
-		return (INode<T?>) this;
-	}
-}
+		return (INode<T>) this;
+	}*/
+//}

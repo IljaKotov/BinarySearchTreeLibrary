@@ -13,7 +13,6 @@ namespace BinarySearchTreeLibrary.Tests.NodeTests;
 public class InsertTests
 {
 	private static object[] _input = Array.Empty<object>();
-	private static readonly NullNode<object> _nullNode = new();
 	private static INode<object>? _testRoot;
 
 	[Fact(DisplayName = "Insert method should throw ArgumentNullException when inserting null data")]
@@ -53,9 +52,9 @@ public class InsertTests
 				_testRoot?.Right : _testRoot?.Left;
 
 		NodeAsserts.AssertNode(child, _input[1]);
-		NodeAsserts.AssertNode(secondChild, _nullNode);
-		NodeAsserts.AssertNode(child?.Left, _nullNode);
-		NodeAsserts.AssertNode(child?.Right, _nullNode);
+		NodeAsserts.AssertNode(secondChild,null);
+		NodeAsserts.AssertNode(child?.Left, null);
+		NodeAsserts.AssertNode(child?.Right, null);
 	}
 
 	[Xunit.Theory(DisplayName = "Should correctly insert and set properties' values for four-level trees' nodes")]
@@ -71,8 +70,8 @@ public class InsertTests
 		Asserts.AssertData(_testRoot?.Left, _input[7], _input[2]);
 		Asserts.AssertData(_testRoot?.Right, _input[5], _input[4]);
 		Asserts.AssertData(_testRoot?.Left?.Left, _input[8], _input[9]);
-		Asserts.AssertData(_testRoot?.Left?.Right, _input[10], _nullNode);
-		Asserts.AssertData(_testRoot?.Right?.Left, _nullNode, _input[12]);
+		Asserts.AssertData(_testRoot?.Left?.Right, _input[10], null);
+		Asserts.AssertData(_testRoot?.Right?.Left, null, _input[12]);
 		Asserts.AssertData(_testRoot?.Right?.Right, _input[6], _input[11]);
 	}
 

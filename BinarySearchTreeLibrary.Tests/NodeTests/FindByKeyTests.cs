@@ -4,6 +4,7 @@ using BinarySearchTreeLibrary.Tests.NodesCases;
 using BinarySearchTreeLibrary.Tests.NodesCases.CaseGenerators;
 using Bogus;
 using FluentAssertions;
+using FluentAssertions.Equivalency;
 using NUnit.Framework;
 
 namespace BinarySearchTreeLibrary.Tests.NodeTests;
@@ -11,7 +12,6 @@ namespace BinarySearchTreeLibrary.Tests.NodeTests;
 public class FindByKeyTests
 {
 	private static object[] _input = Array.Empty<object>();
-	private static readonly NullNode<object> _nullNode = new();
 	private INode<object>? _testRoot;
 	private int _mistakeKey;
 
@@ -26,7 +26,7 @@ public class FindByKeyTests
 		if (_testRoot is not null)
 			AssertFoundNode(_input[0].GetHashCode(), _testRoot);
 
-		AssertFoundNode(_mistakeKey, _nullNode);
+		AssertFoundNode<object>(_mistakeKey, null);
 	}
 
 	[Xunit.Theory(DisplayName = "Should correctly find child in two node tree, " +
@@ -38,7 +38,7 @@ public class FindByKeyTests
 		SetUp(testCase);
 
 		var expectedChild = 
-			_testRoot?.Right is not NullNode<object> ?
+			_testRoot?.Right is not null ?
 				_testRoot?.Right :
 				_testRoot.Left;
 
@@ -48,7 +48,7 @@ public class FindByKeyTests
 			AssertFoundNode(_input[1].GetHashCode(), expectedChild);
 		}
 
-		AssertFoundNode(_mistakeKey, _nullNode);
+		AssertFoundNode<object>(_mistakeKey, null);
 	}
 
 	[Xunit.Theory(DisplayName = "Should correctly find 13 nodes in multi-level tree, " +
@@ -62,11 +62,11 @@ public class FindByKeyTests
 		foreach (var data in testCase.InputData)
 		{
 			var child = _testRoot?.FindByKey(data.GetHashCode());
-			child.Should().NotBeEquivalentTo(_nullNode);
+			child.Should().NotBeNull();
 			child?.Data.Should().Be(data);
 		}
 
-		AssertFoundNode(_mistakeKey, _nullNode);
+		AssertFoundNode<object>(_mistakeKey, null);
 	}
 
 	[SetUp]
@@ -85,13 +85,10 @@ public class FindByKeyTests
 		return faker.Random.Unique(() => faker.Random.Int(), x => x, existingHashes);
 	}
 
-	private void AssertFoundNode<T>(int key, INode<T> expectedNode)
+	private void AssertFoundNode<T>(int key, INode<T>? expectedNode)
 	{
 		var foundNode = _testRoot?.FindByKey(key);
-
-		if (expectedNode is NullNode<T>)
-			foundNode.Should().BeEquivalentTo(_nullNode);
-		else
-			foundNode?.Should().Be(expectedNode);
+		
+		foundNode?.Should().Be(expectedNode);
 	}
 }

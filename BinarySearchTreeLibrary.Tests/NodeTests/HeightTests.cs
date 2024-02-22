@@ -30,7 +30,7 @@ public class HeightTests
 	{
 		SetUp(testCase);
 
-		var leftHeight = _testRoot?.Left is not NullNode<object> ? 0 : -1;
+		var leftHeight = _testRoot?.Left is not null ? 0 : -1;
 		var rightHeight = leftHeight == 0 ? -1 : 0;
 
 		_testRoot?.Height.Should().Be(1);

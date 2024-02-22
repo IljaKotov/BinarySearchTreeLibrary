@@ -8,14 +8,14 @@ internal class Node<T> : INode<T>
 	private static readonly ITreeBalancer<T> _treeBalancer = new TreeBalancer<T>();
 	private static readonly INodeRemover<T> _nodeRemover = new NodeRemover<T>();
 
-	public T? Data { get; set; }
-	public int Key => Data?.GetHashCode() ?? 0;
-	public INode<T> Left { get; set; } = new NullNode<T>();
-	public INode<T> Right { get; set; } = new NullNode<T>();
+	public T Data { get; set; }
+	public int Key => Data.GetHashCode();//Data?.GetHashCode() ?? 0;
+	public INode<T>? Left { get; set; } 
+	public INode<T>? Right { get; set; }  
 	public INode<T>? Parent { get; set; }
 	public int Height { get; set; }
-	public bool IsLeaf => Left is NullNode<T> && Right is NullNode<T>;
-	public bool HasBothChildren => Left is not NullNode<T> && Right is not NullNode<T>;
+	public bool IsLeaf => Left is null && Right is null;
+	public bool HasBothChildren => Left is not null && Right is not null;
 
 	public bool IsBalanced { get; set; } = true;
 
@@ -23,6 +23,8 @@ internal class Node<T> : INode<T>
 	{
 		ArgumentNullException.ThrowIfNull(data);
 		Data = data;
+		Left = null;
+		Right = null;
 	}
 
 	public void Insert(T data)
@@ -33,29 +35,29 @@ internal class Node<T> : INode<T>
 		var compareKeyResult = data.GetHashCode().CompareTo(Key);
 		var child = compareKeyResult < 0 ? Left : Right;
 
-		if (child is not NullNode<T>)
+		if (child is not null)
 			child.Insert(data);
 		else
 			CreateChild(data, compareKeyResult);
 
-		NodeUtils<T>.UpdateHeightProps((INode<T?>) this);
+		NodeUtils<T>.UpdateHeightProps( this);
 	}
 
-	public INode<T?> FindByKey(int key)
+	public INode<T> FindByKey(int key)
 	{
 		var compareKeyResult = key.CompareTo(Key);
 
 		if (compareKeyResult < 0)
-			return Left.FindByKey(key);
+			return Left?.FindByKey(key); //Left == null && Right == null;
 
-		return compareKeyResult > 0 ? Right.FindByKey(key) : (INode<T?>) this;
+		return compareKeyResult > 0 ? Right?.FindByKey(key) :  this; //return compareKeyResult > 0 ? Right?.FindByKey(key) ?? this : this;
 	}
 
 	public INode<T> Remove(int key)
 	{
 		var nodeToRemove = FindByKey(key);
 
-		if (nodeToRemove is NullNode<T>)
+		if (nodeToRemove is null)
 			return this;
 
 		_nodeRemover.RemoveNode(nodeToRemove);
@@ -63,9 +65,9 @@ internal class Node<T> : INode<T>
 		return this;
 	}
 
-	public INode<T?> Balance()
+	public INode<T> Balance()
 	{
-		return _treeBalancer.Balance((INode<T?>) this);
+		return _treeBalancer.Balance( this);
 	}
 
 	private void CreateChild(T data, int compareDirection)

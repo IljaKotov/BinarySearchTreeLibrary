@@ -4,39 +4,29 @@ namespace BinarySearchTreeLibrary.Models;
 
 internal static class NodeUtils<T>
 {
-	public static int GetBalanceFactor(INode<T?> node)
+	public static int GetBalanceFactor(INode<T> node)
 	{
-		if (node is NullNode<T>)
-			return 0;
-		
 		var (leftHeight, rightHeight) = GetNodeHeights(node);
 
 		return leftHeight - rightHeight;
 	}
 
-	public static void UpdateHeightProps(INode<T?> node)
+	public static void UpdateHeightProps(INode<T> node)
 	{
-		if (node is NullNode<T>)
-			return;
-
 		node.Height = GetHeight(node);
 		node.IsBalanced = UpdateBalanceFactor(node);
 	}
 
-	public static void UpdateHeightPropsUpwards(INode<T?> node)
+	public static void UpdateHeightPropsUpwards(INode<T> node)
 	{
-		while (true)
+		while (node is not null)
 		{
 			UpdateHeightProps(node);
-
-			if (node.Parent is not null)
-				node = node.Parent;
-			else
-				break;
+			node = node.Parent;
 		}
 	}
 
-	public static void ReplaceNode(INode<T?> nodeToReplace, INode<T?> newNode)
+	public static void ReplaceNode(INode<T> nodeToReplace, INode<T> newNode)
 	{
 		if (nodeToReplace.Parent is null)
 			return;
@@ -47,29 +37,26 @@ internal static class NodeUtils<T>
 			nodeToReplace.Parent.Right = newNode;
 	}
 
-	private static int GetHeight(INode<T?> node)
+	private static int GetHeight(INode<T> node)
 	{
 		var (leftHeight, rightHeight) = GetNodeHeights(node);
 
 		return 1 + Math.Max(leftHeight, rightHeight);
 	}
 
-	private static bool UpdateBalanceFactor(INode<T?> node)
+	private static bool UpdateBalanceFactor(INode<T> node)
 	{
-		if (node is NullNode<T>)
-			return true;
-
 		var balanceFactor = GetBalanceFactor(node);
-		var leftBalance = node.Left is {IsBalanced: true};
-		var rightBalance = node.Right is {IsBalanced: true};
+		var leftBalance =  node.Left?.IsBalanced ?? true;
+		var rightBalance =  node.Right?.IsBalanced ?? true;
 
 		return Math.Abs(balanceFactor) <= 1 && leftBalance && rightBalance;
 	}
 	
-	private static (int leftHeight, int rightHeight) GetNodeHeights(INode<T?> node)
+	private static (int leftHeight, int rightHeight) GetNodeHeights(INode<T> node)
 	{
-		var leftHeight = node.Left.Height;
-		var rightHeight = node.Right.Height;
+		var leftHeight = node.Left?.Height ?? -1;
+		var rightHeight = node.Right?.Height ?? -1;
 
 		return (leftHeight, rightHeight);
 	}

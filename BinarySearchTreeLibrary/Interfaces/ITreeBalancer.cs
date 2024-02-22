@@ -2,5 +2,5 @@
 
 internal interface ITreeBalancer<T>
 {
-	INode<T?> Balance(INode<T?> node);
+	INode<T> Balance(INode<T> node);
 }

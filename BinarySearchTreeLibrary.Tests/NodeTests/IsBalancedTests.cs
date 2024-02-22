@@ -11,7 +11,7 @@ namespace BinarySearchTreeLibrary.Tests.NodeTests;
 public class IsBalancedTests
 {
 	private static object[] _input = Array.Empty<object>();
-	private static INode<object> _testRoot = new NullNode<object>();
+	private static INode<object>? _testRoot;
 
 	[Xunit.Theory(DisplayName = "IsBalanced property tests. Should return true for single node")]
 	[MemberData(nameof(SingleNodeCase.GenerateCases),

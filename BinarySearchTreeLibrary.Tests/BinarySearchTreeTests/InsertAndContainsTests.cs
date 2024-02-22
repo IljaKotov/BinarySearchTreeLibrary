@@ -58,7 +58,6 @@ public static class InsertAndContainsTests
 	[Fact(DisplayName = "Should correctly insert and contains data, and set properties' values ")]
 	public static void Should_CorrectlyInsertAndContainsSomeData_AndSetPropertiesValues()
 	{
-		var nullNode = new NullNode<object>();
 		var tree = new BinarySearchTree<object>();
 		tree.Add(10);
 		tree.Add(5);

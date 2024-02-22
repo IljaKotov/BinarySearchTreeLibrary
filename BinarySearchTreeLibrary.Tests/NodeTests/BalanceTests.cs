@@ -6,8 +6,6 @@ namespace BinarySearchTreeLibrary.Tests.NodeTests;
 
 public static class BalanceTests
 {
-	private static readonly NullNode<int> _nullNode = new();
-
 	[Theory(DisplayName = "Should balance the degenerate tree")]
 	[InlineData(new[]
 	{
@@ -41,10 +39,10 @@ public static class BalanceTests
 		result.Left?.Left?.Data.Should().Be(inputs[0]);
 		result.Right?.Right?.Data.Should().Be(inputs[6]);
 		result.Right?.Left?.Data.Should().Be(inputs[4]);
-		result.Right?.Right?.Right.Should().BeEquivalentTo(_nullNode);
-		result.Right?.Right?.Left.Should().BeEquivalentTo(_nullNode);
-		result.Right?.Left?.Right.Should().BeEquivalentTo(_nullNode);
-		result.Right?.Left?.Left.Should().BeEquivalentTo(_nullNode);
+		result.Right?.Right?.Right.Should().BeNull();
+		result.Right?.Right?.Left.Should().BeNull();
+		result.Right?.Left?.Right.Should().BeNull();
+		result.Right?.Left?.Left.Should().BeNull();
 		result.Parent.Should().BeNull();
 
 		result.Height.Should().Be(2);
@@ -90,7 +88,7 @@ public static class BalanceTests
 		result.Right?.Left?.Data.Should().Be(150);
 		result.Right?.Right?.Data.Should().Be(190);
 		result.Right?.Left?.Right?.Data.Should().Be(160);
-		result.Right?.Right?.Right.Should().BeEquivalentTo(_nullNode);
+		result.Right?.Right?.Right.Should().BeNull();
 
 		result.Height.Should().Be(3);
 		result.IsBalanced.Should().BeTrue();

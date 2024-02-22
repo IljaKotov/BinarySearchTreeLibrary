@@ -11,7 +11,7 @@ public class EmptyTreeException : Exception
 
 	public static void ThrowIfEmptyTree<T>(IBinarySearchTree<T> tree)
 	{
-		if (tree.RootData is null || tree.RootData is NullNode<T>)
+		if (tree.RootData is null)
 		{
 			throw new EmptyTreeException("The tree is empty.");
 		}
