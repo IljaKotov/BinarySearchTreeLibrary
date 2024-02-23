@@ -1,5 +1,4 @@
-﻿using BinarySearchTreeLibrary.Models;
-using BinarySearchTreeLibrary.Tests.NodesCases;
+﻿using BinarySearchTreeLibrary.Tests.NodesCases;
 using BinarySearchTreeLibrary.Tests.NodesCases.CaseGenerators;
 using FluentAssertions;
 
@@ -22,6 +21,7 @@ public static class ParentalPropertiesTests
 		root.IsLeaf.Should().BeFalse();
 
 		var leaf = root.GetNodeByKey(_input[12].GetHashCode());
+
 		leaf?.Parent.Should().NotBeNull();
 		leaf?.Parent?.Data.Should().Be(_input[5]);
 		leaf?.HasBothChildren.Should().BeFalse();
@@ -29,14 +29,15 @@ public static class ParentalPropertiesTests
 		leaf?.Parent?.HasBothChildren.Should().BeFalse();
 		leaf?.Parent?.IsLeaf.Should().BeFalse();
 	}
-	/*    Visual representation of the test four-level tree (INDEXES of the test-case's input array)
-	*                      0
-	*                    /   \
-	*  		   	       /      \
-	* 				 1          3
-	* 			  /   \       /  \
-	* 			7     2      5    4
-	*		  / \	 /       \   / \
-	*		8	9	10		12	6  11
+	/*    Visual representation of the test multi-level tree (INDEXES of the test-case's input array)
+	*                        0
+	* 		   		       /   \
+	*                    /      \
+	*  	     	       /         \
+	* 				  1           3
+	* 			   /   \        /   \
+	* 			 7     2       5     4
+	*		   /  \	  /        \    /  \
+	*		  8	  9	 10	       12  6   11
 	*/
 }

@@ -1,23 +1,26 @@
 ﻿using BinarySearchTreeLibrary.Interfaces;
-using BinarySearchTreeLibrary.Models;
 using BinarySearchTreeLibrary.Tests.AssertUtils;
 using BinarySearchTreeLibrary.Tests.NodesCases.FakeClass;
 using Bogus;
+using FluentAssertions;
 
 namespace BinarySearchTreeLibrary.Tests.NodeTests;
 
 public static class ConstructorTests
 {
-	[Theory(DisplayName = "Node Data and Key should be set to valid value")]
-	[InlineData(new[] {1, 2, 3}, typeof(int[]))]
-	[InlineData(new[] {'a', 'b', 'c', 'd', 'e'}, typeof(char[]))]
-	[InlineData(new[] {1.1, 2.2, 3.3}, typeof(double[]))]
-	public static void Should_CorrectlyCreateNode_WithArray(object data, Type typeData)
+	[Theory(DisplayName = "Correctly create node with some array")]
+	[InlineData(new[]
+	{1, 2, 3})]
+	[InlineData(new[]
+	{'a', 'b', 'c', 'd', 'e'})]
+	[InlineData(new[]
+	{1.1, 2.2, 3.3})]
+	public static void Constructor_Array_CorrectlyCreateNode(object data)
 	{
 		var testData = TestNodeFactory.CreateNode(data);
 
 		NodeAsserts.AssertNode(testData,
-			expData: data,
+			expData:data,
 			0,
 			true,
 			null);
@@ -25,11 +28,11 @@ public static class ConstructorTests
 		AssertNullChild(testData);
 	}
 
-	[Theory(DisplayName = "Should correctly set properties' values for single node with random string")]
+	[Theory(DisplayName = "Correctly create node with random string")]
 	[InlineData("en")]
 	[InlineData("uk")]
 	[InlineData("fr")]
-	public static void Should_CorrectlyCreateNode_WithRandomLocaleString(string locale)
+	public static void Constructor_RandomLocaleString_CorrectlyCreateNode(string locale)
 	{
 		var faker = new Faker(locale);
 		var randomString = faker.Random.String();
@@ -44,8 +47,8 @@ public static class ConstructorTests
 		AssertNullChild(testNode);
 	}
 
-	[Fact(DisplayName = "Should correctly set properties' values for single node with custom class")]
-	public static void Should_CorrectlyCreateNode_WithCustomClass()
+	[Fact(DisplayName = "Correctly create node with custom class")]
+	public static void Constructor_CustomClass_CorrectlyCreateNode()
 	{
 		var factory = new FakeClassFactory();
 		var fakeClass = factory.Create(Randomizer.Seed.Next());
@@ -62,7 +65,7 @@ public static class ConstructorTests
 
 	private static void AssertNullChild<T>(INode<T> node)
 	{
-			NodeAsserts.AssertNode(node.Left, null);
-			NodeAsserts.AssertNode(node.Right, null);
+		node.Left.Should().BeNull();
+		node.Right.Should().BeNull();
 	}
 }

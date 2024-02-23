@@ -16,28 +16,24 @@ public static class IsBinarySearchTreeTests
 		Assert.Throws<EmptyTreeException>(() => tree.IsBinarySearchTree());
 	}
 
-	[Fact(DisplayName = "IsBinarySearchTree should return true when the tree has only one node")]
-	public static void IsBinarySearchTree_OneNode_ShouldReturnTrue()
+	[Fact(DisplayName = "IsBinarySearchTree should return true when the tree has only one or two node")]
+	public static void IsBinarySearchTree_TwoNode_ShouldReturnTrue()
 	{
-		var tree = new BinarySearchTree<int>();
-		tree.Add(10);
-		tree.Add(20);
+		var tree = TestTreeFactory.CreateTree(10);
+		tree.IsBinarySearchTree().Should().BeTrue();
 
+		tree.Add(20);
 		tree.IsBinarySearchTree().Should().BeTrue();
 	}
 
 	[Theory(DisplayName = "IsBinarySearchTree should return true when the tree is a binary search tree")]
 	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
 		MemberType = typeof(MultiLevelTreeCase))]
-	public static void IsBinarySearchTree_ShouldReturnTrue(NodeCase testCase)
+	public static void IsBinarySearchTree_MultiLevelTree_ShouldReturnTrue(NodeCase testCase)
 	{
-		var tree = new BinarySearchTree<object>();
-		var input = testCase.InputData;
+		var tree = TestTreeFactory.CreateTree(testCase.InputData, true);
 
-		foreach (var data in input)
-			tree.Add(data);
-
-		tree.IsBinarySearchTree().Should().BeTrue();
+		tree?.IsBinarySearchTree().Should().BeTrue();
 	}
 
 	[Theory(DisplayName = "IsBinarySearchTree should return false when the tree is not a binary search tree")]

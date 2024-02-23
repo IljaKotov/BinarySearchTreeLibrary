@@ -8,10 +8,7 @@ public static class MultiLevelTreeCase
 
 	public static IEnumerable<object[]> GetTreeCases()
 	{
-		_inputs = new[]
-		{
-			50, 25, 35, 75, 85, 65, 80, 15, 10, 20, 30, 90, 70
-		};
+		_inputs = new[] {50, 25, 35, 75, 85, 65, 80, 15, 10, 20, 30, 90, 70};
 
 		yield return new object[] {GetIntTestCase()};
 		yield return new object[] {GetFakeClassTestCase()};

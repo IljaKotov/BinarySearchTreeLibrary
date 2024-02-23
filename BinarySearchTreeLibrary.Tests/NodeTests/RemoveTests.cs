@@ -1,233 +1,205 @@
-﻿using BinarySearchTreeLibrary.Interfaces;
+﻿using BinarySearchTreeLibrary.Exceptions;
+using BinarySearchTreeLibrary.Interfaces;
 using BinarySearchTreeLibrary.Models;
 using BinarySearchTreeLibrary.Tests.AssertUtils;
 using BinarySearchTreeLibrary.Tests.NodesCases;
 using BinarySearchTreeLibrary.Tests.NodesCases.CaseGenerators;
 using FluentAssertions;
 using NUnit.Framework;
+using Assert = Xunit.Assert;
+using Theory = Xunit.TheoryAttribute;
 
 namespace BinarySearchTreeLibrary.Tests.NodeTests;
 
 public class RemoveTests
 {
 	private static object[] _input = Array.Empty<object>();
-	private static INode<object>? root;
+	private static INode<object>? _root;
 
-	[Xunit.Theory(DisplayName = "Should correct remove single node without children")]
+	[Theory(DisplayName = "Should throw NodeNotFoundException when removing non-existent node")]
+	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
+		MemberType = typeof(MultiLevelTreeCase))]
+	public void Remove_NonExistentNode_ShouldThrowNodeNotFoundException(NodeCase testCase)
+	{
+		SetUp(testCase);
+
+		var twiceRemovedIndex = _input[1].GetHashCode();
+
+		_root?.Remove(twiceRemovedIndex);
+
+		Assert.Throws<NodeNotFoundException>(() => _root?.Remove(twiceRemovedIndex));
+	}
+
+	[Theory(DisplayName = "Should correct remove single node without children")]
 	[MemberData(nameof(SingleNodeCase.GenerateCases),
 		MemberType = typeof(SingleNodeCase))]
-	public static void Should_CorrectlyRemove_SingleNode(NodeCase testCase)
+	public static void Remove_SingleNode_ShouldBeRemoved(NodeCase testCase)
 	{
-		var node = new Node<object>(testCase.InputData[0]);
-		bool isRootDeleted = false;
-		node.RootDeleted += () => isRootDeleted = true;
-		node.Remove(testCase.InputData[0].GetHashCode());
+		_root = new Node<object>(testCase.InputData[0]);
+		var isRootDeleted = false;
+
+		_root.RootDeleted += () => isRootDeleted = true;
+
+		_root.Remove(testCase.InputData[0].GetHashCode());
 
 		isRootDeleted.Should().BeTrue();
 	}
 
-	[Xunit.Theory(DisplayName = "RemoveChild method tests. Should correct remove root's single child node")]
+	[Theory(DisplayName = "Should correct remove root's single child node")]
 	[MemberData(nameof(TwoNodesCase.GetTwoNodesCases),
 		MemberType = typeof(TwoNodesCase))]
-	public static void Should_CorrectlyRemove_RootsSingleChild(NodeCase testCase)
+	public void Remove_RootsSingleChild_CorrectlyRemove(NodeCase testCase)
 	{
-		_input = testCase.InputData;
-		var root = new Node<object>(_input[0]);
+		SetUp(testCase);
 
-		root.Insert(_input[1]);
-		root.Remove(_input[1].GetHashCode());
+		_root?.Remove(_input[1].GetHashCode());
+		_root?.GetNodeByKey(_input[1].GetHashCode()).Should().BeNull();
 
-		root.Data.Should().Be(_input[0]);
-		root.Parent.Should().BeNull();
-		root.Key.Should().Be(_input[0].GetHashCode());
-		root.Right.Should().BeNull();
-		root.Left.Should().BeNull();
+		NodeAsserts.AssertNode(_root, _input[0], null);
+		ChildAsserts.AssertData<object?>(_root, null, null);
 	}
 
-	[Xunit.Theory(DisplayName = "RemoveChild method tests. Should correct remove root with single child node")]
+	[Theory(DisplayName = "Should correct remove root and set new root.")]
 	[MemberData(nameof(TwoNodesCase.GetTwoNodesCases),
 		MemberType = typeof(TwoNodesCase))]
-	public static void Should_CorrectlyRemove_RootWithSingleChild(NodeCase testCase)
+	public void Remove_RootWithSingleChild_CorrectlyRemove_(NodeCase testCase)
 	{
-		_input = testCase.InputData;
-		var root = new Node<object>(_input[0]);
+		SetUp(testCase);
 
-		root.Insert(_input[1]);
-		root.Remove(_input[0].GetHashCode());
+		_root?.Remove(_input[0].GetHashCode());
+		_root?.GetNodeByKey(_input[0].GetHashCode()).Should().BeNull();
 
-		root.Data.Should().Be(_input[1]);
-		root.Parent.Should().BeNull();
-		root.Key.Should().Be(_input[1].GetHashCode());
-		root.Right.Should().BeNull();
-		root.Left.Should().BeNull();
+		NodeAsserts.AssertNode(_root, _input[1], null);
+		ChildAsserts.AssertData<object?>(_root, null, null);
 	}
 
-	[Xunit.Theory(DisplayName = "RemoveChild method tests. Should correct remove root with both child nodes")]
+	[Theory(DisplayName = "Should correct remove root and set new root.")]
 	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
 		MemberType = typeof(MultiLevelTreeCase))]
-	public static void Should_CorrectlyRemove_RootWithBothChildNodes(NodeCase testCase)
+	public void Remove_RootWithBothChild_CorrectRemove(NodeCase testCase)
 	{
-		_input = testCase.InputData;
-		var root = new Node<object>(_input[0]);
+		SetUp(testCase);
 
-		for (var i = 1; i < _input.Length; i++)
-			root.Insert(_input[i]);
+		_root?.Remove(_input[0].GetHashCode());
+		_root?.GetNodeByKey(_input[0].GetHashCode()).Should().BeNull();
 
-		root.Remove(_input[0].GetHashCode());
-
-		root.Data.Should().Be(_input[5]);
-		root.Parent.Should().BeNull();
-		root.Left?.Data.Should().Be(_input[1]);
-		root.Right?.Data.Should().Be(_input[3]);
-		root.Right?.Left?.Data.Should().Be(_input[12]);
-		root.Right?.Right?.Data.Should().Be(_input[4]);
-		root.Right?.Right?.Right?.Data.Should().Be(_input[11]);
-		root.Right?.Right?.Left?.Data.Should().Be(_input[6]);
-		root.Right?.Left?.Right.Should().BeNull();
-		root.Right?.Left?.Left.Should().BeNull();
-
-		//root.FindByKey(_input[0].GetHashCode()).Should().BeEquivalentTo(_nullNode);
+		NodeAsserts.AssertNode(_root, _input[5], null);
+		ChildAsserts.AssertData(_root, _input[1], _input[3]);
+		ChildAsserts.AssertData(_root?.Left, _input[7], _input[2]);
+		ChildAsserts.AssertData(_root?.Right, _input[12], _input[4]);
+		ChildAsserts.AssertData<object?>(_root?.Right?.Left, null, null);
+		ChildAsserts.AssertData(_root?.Right?.Right, _input[6], _input[11]);
 	}
 
-	[Xunit.Theory(DisplayName = "RemoveChild method tests. Should correct remove leaf node")]
+	[Theory(DisplayName = "Should correct remove leaf node")]
 	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
 		MemberType = typeof(MultiLevelTreeCase))]
-	public static void Should_CorrectlyRemove_Leaf(NodeCase testCase)
+	public void Remove_Leaf_ShouldBeRemoved(NodeCase testCase)
 	{
-		_input = testCase.InputData;
-		var root = new Node<object>(_input[0]);
+		SetUp(testCase);
 
-		for (var i = 1; i < _input.Length; i++)
-			root.Insert(_input[i]);
+		_root?.Remove(_input[9].GetHashCode());
+		_root?.GetNodeByKey(_input[9].GetHashCode()).Should().BeNull();
 
-		root.Remove(_input[9].GetHashCode());
-
-		root.Data.Should().Be(_input[0]);
-		root.Parent.Should().BeNull();
-		root.Right?.Data.Should().Be(_input[3]);
-		root.Right?.Left?.Data.Should().Be(_input[5]);
-		root.Right?.Right?.Data.Should().Be(_input[4]);
-		root.Left?.Data.Should().Be(_input[1]);
-		root.Left?.Left?.Data.Should().Be(_input[7]);
-		root.Left?.Right?.Data.Should().Be(_input[2]);
-		root.Left?.Left?.Left?.Data.Should().Be(_input[8]);
-		root.Left?.Left?.Right.Should().BeNull();
-		root.Left?.Right?.Left?.Data.Should().Be(_input[10]);
-		root.Left?.Right?.Right.Should().BeNull();
-
-		root.GetNodeByKey(_input[9].GetHashCode()).Should().BeNull();
+		NodeAsserts.AssertNode(_root, _input[0], null);
+		ChildAsserts.AssertData(_root, _input[1], _input[3]);
+		ChildAsserts.AssertData(_root?.Left, _input[7], _input[2]);
+		ChildAsserts.AssertData(_root?.Left?.Left, _input[8], null);
+		ChildAsserts.AssertData(_root?.Left?.Right, _input[10], null);
 	}
 
-	[Xunit.Theory(DisplayName = "RemoveChild method tests. Should correct remove node with one left/right child")]
+	[Theory(DisplayName = "Should correct remove (with replace) node with one left/right child ")]
 	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
 		MemberType = typeof(MultiLevelTreeCase))]
-	public static void Should_CorrectlyRemove_NodeWithOneChild(NodeCase testCase)
+	public void Remove_NodeWithOneChild_CorrectRemove(NodeCase testCase)
 	{
-		_input = testCase.InputData;
-		var root = new Node<object>(_input[0]);
+		SetUp(testCase);
 
-		for (var i = 1; i < _input.Length; i++)
-			root.Insert(_input[i]);
+		_root?.Remove(_input[2].GetHashCode());
+		_root?.Remove(_input[5].GetHashCode());
 
-		root.Remove(_input[2].GetHashCode());
-		root.Remove(_input[5].GetHashCode());
+		_root?.GetNodeByKey(_input[2].GetHashCode()).Should().BeNull();
+		_root?.GetNodeByKey(_input[5].GetHashCode()).Should().BeNull();
 
-		root.Data.Should().Be(_input[0]);
-		root.Parent.Should().BeNull();
-		root.Right?.Data.Should().Be(_input[3]);
-		root.Right?.Left?.Data.Should().Be(_input[12]);
-		root.Right?.Right?.Data.Should().Be(_input[4]);
-		root.Right?.Left?.Right?.Should().BeNull();
-		root.Right?.Left?.Left.Should().BeNull();
-		root.Left?.Data.Should().Be(_input[1]);
-		root.Left?.Left?.Data.Should().Be(_input[7]);
-		root.Left?.Right?.Data.Should().Be(_input[10]);
-		root.Left?.Right?.Right.Should().BeNull();
-
-		root.GetNodeByKey(_input[2].GetHashCode()).Should().BeNull();
-		root.GetNodeByKey(_input[5].GetHashCode()).Should().BeNull();
+		NodeAsserts.AssertNode(_root, _input[0], null);
+		ChildAsserts.AssertData(_root, _input[1], _input[3]);
+		ChildAsserts.AssertData(_root?.Left, _input[7], _input[10]);
+		ChildAsserts.AssertData(_root?.Left?.Left, _input[8], _input[9]);
+		ChildAsserts.AssertData(_root?.Right, _input[12], _input[4]);
+		ChildAsserts.AssertData<object?>(_root?.Right?.Left, null, null);
+		ChildAsserts.AssertData<object?>(_root?.Left?.Right, null, null);
 	}
 
-	[Xunit.Theory(DisplayName = "RemoveChild method tests. Should correct remove node with one left/right sub-tree")]
+	[Theory(DisplayName = "Should correct remove node with one deep left/right sub-tree")]
 	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
 		MemberType = typeof(MultiLevelTreeCase))]
-	public static void Should_CorrectlyRemove_NodeWithOneSubTree(NodeCase testCase)
+	public void Remove_NodeWithOneSubTree_ShouldCorrectRemove(NodeCase testCase)
 	{
-		_input = testCase.InputData;
-		var root = new Node<object>(_input[0]);
+		SetUp(testCase);
 
-		for (var i = 1; i < _input.Length; i++)
-			root.Insert(_input[i]);
+		var excessiveNodes = new[] {2, 10, 5, 12};
+		var testTargetNodes = new[] {1, 3};
 
-		root.Remove(_input[2]
-			.GetHashCode()); //removed 4 nodes for creating 2 node with single depth sub-tree (left and right)
+		if (_root is not null)
+		{
+			_root = RemoveListNodes(_root, excessiveNodes);
+			_root = RemoveListNodes(_root, testTargetNodes);
+			ValidateRemovedNodes(_root, excessiveNodes);
+			ValidateRemovedNodes(_root, testTargetNodes);
+		}
 
-		root.Remove(_input[10].GetHashCode());
-		root.Remove(_input[5].GetHashCode());
-		root.Remove(_input[12].GetHashCode());
-
-		root.Remove(_input[1].GetHashCode());
-		root.Remove(_input[3].GetHashCode());
-
-		root.Data.Should().Be(_input[0]);
-		root.Parent.Should().BeNull();
-		root.Right?.Data.Should().Be(_input[4]);
-		root.Right?.Right?.Data.Should().Be(_input[11]);
-		root.Right?.Right?.Right?.Should().BeNull();
-		root.Right?.Left?.Data.Should().Be(_input[6]);
-		root.Left?.Data.Should().Be(_input[7]);
-		root.Left?.Left?.Data.Should().Be(_input[8]);
-		root.Left?.Right?.Data.Should().Be(_input[9]);
-		root.Left?.Left?.Left.Should().BeNull();
-
-		root.GetNodeByKey(_input[2].GetHashCode()).Should().BeNull();
-		root.GetNodeByKey(_input[10].GetHashCode()).Should().BeNull();
-		root.GetNodeByKey(_input[5].GetHashCode()).Should().BeNull();
-		root.GetNodeByKey(_input[12].GetHashCode()).Should().BeNull();
-		root.GetNodeByKey(_input[1].GetHashCode()).Should().BeNull();
-		root.GetNodeByKey(_input[3].GetHashCode()).Should().BeNull();
+		NodeAsserts.AssertNode(_root, _input[0], null);
+		ChildAsserts.AssertData(_root, _input[7], _input[4]);
+		ChildAsserts.AssertData(_root?.Left, _input[8], _input[9]);
+		ChildAsserts.AssertData(_root?.Right, _input[6], _input[11]);
+		ChildAsserts.AssertData<object?>(_root?.Right?.Right, null, null);
+		ChildAsserts.AssertData<object?>(_root?.Left?.Right, null, null);
 	}
 
-	[Xunit.Theory(DisplayName = "RemoveChild method tests. Should correct remove node with both sub-trees")]
+	[Theory(DisplayName = "Should correct remove node with both sub-trees")]
 	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
 		MemberType = typeof(MultiLevelTreeCase))]
-	public static void Should_CorrectlyRemove_NodeWithBothSubTrees(NodeCase testCase)
+	public void Remove_NodeWithBothSubTrees_ShouldCorrectRemove(NodeCase testCase)
 	{
-		_input = testCase.InputData;
-		var root = new Node<object>(_input[0]);
+		SetUp(testCase);
 
-		for (var i = 1; i < _input.Length; i++)
-			root.Insert(_input[i]);
+		_root?.Remove(_input[3].GetHashCode());
+		_root?.GetNodeByKey(_input[3].GetHashCode()).Should().BeNull();
 
-		root.Remove(_input[3].GetHashCode());
-
-		root.Data.Should().Be(_input[0]);
-		root.Parent.Should().BeNull();
-		root.Right?.Data.Should().Be(_input[6]);
-		root.Right?.Right?.Data.Should().Be(_input[4]);
-		root.Right?.Right?.Right?.Data.Should().Be(_input[11]);
-		root.Right?.Right?.Left.Should().BeNull();
-		root.Right?.Left?.Data.Should().Be(_input[5]);
-		root.Right?.Left?.Right?.Data.Should().Be(_input[12]);
-		root.Left?.Data.Should().Be(_input[1]);
-
-		root.GetNodeByKey(_input[3].GetHashCode()).Should().BeNull();
+		NodeAsserts.AssertNode(_root, _input[0], null);
+		ChildAsserts.AssertData(_root, _input[1], _input[6]);
+		ChildAsserts.AssertData(_root?.Left, _input[7], _input[2]);
+		ChildAsserts.AssertData(_root?.Right, _input[5], _input[4]);
+		ChildAsserts.AssertData(_root?.Right?.Left, null, _input[12]);
+		ChildAsserts.AssertData(_root?.Right?.Right, null, _input[11]);
 	}
-	
+
 	[SetUp]
 	internal void SetUp(NodeCase testCase)
 	{
 		_input = testCase.InputData;
-		root=TestNodeFactory.CreateNode(_input, 0);
+		_root = TestNodeFactory.CreateNode(_input, 0);
 	}
-	/*    Visual representation of the test four-level tree (INDEXES of the test-case's input array)
-	*                     0
-	*                   /   \
-	*  		   	   /      \
-	* 				 1          3
-	* 			  /   \       /  \
-	* 			7     2      5    4
-	*		  / \	 /       \   / \
-	*		8	9	10		12	6  11
+
+	private static INode<T> RemoveListNodes<T>(INode<T> node, IEnumerable<int> keys)
+	{
+		return keys.Aggregate(node, (current, key) => current.Remove(_input[key].GetHashCode()));
+	}
+
+	private static void ValidateRemovedNodes<T>(INode<T> node, IEnumerable<int> keys)
+	{
+		foreach (var key in keys)
+			node.GetNodeByKey(_input[key].GetHashCode()).Should().BeNull();
+	}
+	/*    Visual representation of the test multi-level tree (INDEXES of the test-case's input array)
+	*                        0
+	* 		   		       /   \
+	*                    /      \
+	*  	     	       /         \
+	* 				  1           3
+	* 			   /   \        /   \
+	* 			 7     2       5     4
+	*		   /  \	  /        \    /  \
+	*		  8	  9	 10	       12  6   11
 	*/
 }

@@ -101,3 +101,13 @@ d
 4BinarySearchTreeLibrary/Interfaces/ITreeNavigator.cs,b\8\b814a428b8c7de9c46a80b727910774d0fc8d461
 _
 /BinarySearchTreeLibrary/Models/TreeNavigator.cs,0\2\02b392c8400d4b92db01bf6dd95d7acc7535b8ed
+l
+<BinarySearchTreeLibrary.Tests/NodeTests/GetNodeByKeyTests.cs,7\a\7a1df64f12064b7d78dd0c49984802c460fbc46a
+{
+KBinarySearchTreeLibrary.Tests/NodeTests/UpdatePropertiesAfterRemoveTests.cs,e\2\e266a6d35dc301ddd25a66c8b8e3991f5e0dd2b3
+z
+JBinarySearchTreeLibrary.Tests/BinarySearchTreeTests/AddAndContainsTests.cs,7\1\7102e02638e620e7abd6e3d2f1779b6d851cdc59
+r
+BBinarySearchTreeLibrary.Tests/BinarySearchTreeTests/DeleteTests.cs,3\f\3fa0adf3882fd9b0e303b5f6d6f73c117a3bc0b8
+v
+FBinarySearchTreeLibrary.Tests/BinarySearchTreeTests/TestTreeFactory.cs,8\c\8cf69050172a4504b04a5f344ac74e6fe1978ced

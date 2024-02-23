@@ -11,9 +11,9 @@ public class FakeClassFactory
 	{
 		var fakeClass = Substitute.For<IFakeClass>();
 		fakeClass.FakeInt.Returns(_faker.Random.Int());
-		fakeClass.FakeString.Returns(_faker.Random.String2(20));
-		fakeClass.FakeArray.Returns(_faker.Random.Chars('a', 'z', 10).ToArray());
+		fakeClass.FakeString.Returns(_faker.Lorem.Sentence());
+		fakeClass.FakeArray.Returns(_faker.Lorem.Word().ToArray());
 
-		return new FakeClassWrapper(fakeClass, hashCode);
+		return new FakeClassWrapper(hashCode);
 	}
 }

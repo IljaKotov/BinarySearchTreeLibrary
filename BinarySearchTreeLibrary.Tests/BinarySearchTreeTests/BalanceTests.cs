@@ -15,7 +15,7 @@ public static class BalanceTests
 	}
 
 	[Fact(DisplayName = "Should correctly balance the left degenerate tree")]
-	public static void Should_CorrectlyBalanceLeftDegenerateTree()
+	public static void Balance_DegenerateTree_BalancingTree()
 	{
 		var inputs = new[]
 		{
@@ -30,7 +30,6 @@ public static class BalanceTests
 		tree.Balance();
 
 		tree.IsBalanced().Should().BeTrue();
-
 		tree.RootData.Should().Be(30);
 	}
 }

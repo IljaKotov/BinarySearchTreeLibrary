@@ -6,16 +6,14 @@ using FluentAssertions;
 
 namespace BinarySearchTreeLibrary.Tests.BinarySearchTreeTests;
 
-public static class InsertAndContainsTests
+public static class AddAndContainsTests
 {
-	private static object[] _input = Array.Empty<object>();
-
 	[Fact(DisplayName = "Insert method should throw ArgumentNullException when inserting null data")]
 	public static void Insert_NullData_ShouldThrowArgumentNullException()
 	{
-		var root = new Node<string?>("Some data");
+		var tree = new Node<string?>("Some data");
 
-		Assert.Throws<ArgumentNullException>(() => root.Insert(null));
+		Assert.Throws<ArgumentNullException>(() => tree.Insert(null));
 	}
 
 	[Fact(DisplayName = "Contains method should throw ArgumentNullException when inserting null data")]
@@ -37,26 +35,23 @@ public static class InsertAndContainsTests
 	[Theory(DisplayName = "Should correctly insert and contains data, and set properties' values")]
 	[MemberData(nameof(MultiLevelTreeCase.GetTreeCases),
 		MemberType = typeof(MultiLevelTreeCase))]
-	public static void Should_CorrectlyInsertAndContainsAllData_AndSetPropertiesValues(NodeCase testCase)
+	public static void Add_Contains__MultiLevelTree__CorrectInsertAndContains(NodeCase testCase)
 	{
-		_input = testCase.InputData;
-		var tree = new BinarySearchTree<object>();
+		var input = testCase.InputData;
+		var tree = TestTreeFactory.CreateTree(input, true);
 
-		foreach (var data in _input)
-			tree.Add(data);
+		tree?.Size.Should().Be(input.Length);
+		tree?.Height.Should().Be(3);
+		tree?.RootBalanceFactor.Should().Be(0);
+		tree?.IsBalanced().Should().BeTrue();
+		tree?.RootData.Should().Be(input[0]);
 
-		tree.Size.Should().Be(_input.Length);
-		tree.Height.Should().Be(3);
-		tree.RootBalanceFactor.Should().Be(0);
-		tree.IsBalanced().Should().BeTrue();
-		tree.RootData.Should().Be(_input[0]);
-
-		foreach (var data in _input)
-			tree.Contains(data).Should().BeTrue();
+		foreach (var data in input)
+			tree?.Contains(data).Should().BeTrue();
 	}
 
 	[Fact(DisplayName = "Should correctly insert and contains data, and set properties' values ")]
-	public static void Should_CorrectlyInsertAndContainsSomeData_AndSetPropertiesValues()
+	public static void Add_Contains__SomeNodes__CorrectInsertAndContains()
 	{
 		var tree = new BinarySearchTree<object>();
 		tree.Add(10);
