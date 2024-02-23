@@ -2,7 +2,7 @@
 
 namespace BinarySearchTreeLibrary.Models;
 
-internal class TreeGuide<T> : ITreeGuide<T>
+internal class TreeNavigator<T> : ITreeNavigator<T>
 {
 	public INode<T> FindMinAt(INode<T> node)
 	{

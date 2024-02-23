@@ -2,15 +2,15 @@
 
 namespace BinarySearchTreeLibrary.Models;
 
-internal static class Utils<T>
+internal static class Utils
 {
-	public static void UpdateProperties(INode<T> node)
+	public static void UpdateProperties<T>(INode<T> node)
 	{
 		node.UpdateHeight();
 		node.UpdateBalancingData();
 	}
 
-	public static void UpdatePropertiesUpwards(INode<T>? node)
+	public static void UpdatePropertiesUpwards<T>(INode<T>? node)
 	{
 		while (node is not null)
 		{
@@ -19,7 +19,7 @@ internal static class Utils<T>
 		}
 	}
 
-	public static void ReplaceNodes(INode<T> nodeToReplace, INode<T>? newNode)
+	public static void ReplaceNodes<T>(INode<T> nodeToReplace, INode<T>? newNode)
 	{
 		if (nodeToReplace.Parent is null)
 			return;

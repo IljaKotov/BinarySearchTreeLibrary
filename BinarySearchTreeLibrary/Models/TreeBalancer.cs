@@ -1,4 +1,5 @@
-﻿using BinarySearchTreeLibrary.Interfaces;
+﻿using BinarySearchTreeLibrary.Exceptions;
+using BinarySearchTreeLibrary.Interfaces;
 
 namespace BinarySearchTreeLibrary.Models;
 
@@ -16,11 +17,11 @@ internal class TreeBalancer<T> : ITreeBalancer<T>
 
 	private static INode<T> BalanceRecursive(INode<T> node)
 	{
-		Utils<T>.UpdateProperties(node);
+		Utils.UpdateProperties(node);
 
 		if (node.BalanceFactor > 1)
 			node = CorrectRightHeavy(node);
-		
+
 		else if (node.BalanceFactor < -1)
 			node = CorrectLeftHeavy(node);
 
@@ -34,7 +35,9 @@ internal class TreeBalancer<T> : ITreeBalancer<T>
 	private static INode<T> CorrectRightHeavy(INode<T> node)
 	{
 		if (node.Left is not null && node.Left.BalanceFactor < 0)
+		{
 			node.Left = Rotate(node.Left, Direction.Left);
+		}
 
 		return Rotate(node, Direction.Right);
 	}
@@ -42,13 +45,17 @@ internal class TreeBalancer<T> : ITreeBalancer<T>
 	private static INode<T> CorrectLeftHeavy(INode<T> node)
 	{
 		if (node.Right is not null && node.Right.BalanceFactor > 0)
+		{
 			node.Right = Rotate(node.Right, Direction.Right);
+		}
 
 		return Rotate(node, Direction.Left);
 	}
 
 	private static INode<T> Rotate(INode<T> node, Direction direction)
 	{
+		InvalidArgumentException.ThrowIfDirectionSame(direction);
+
 		var newNode = direction is Direction.Right ? node.Left : node.Right;
 
 		ArgumentNullException.ThrowIfNull(newNode);
@@ -63,7 +70,7 @@ internal class TreeBalancer<T> : ITreeBalancer<T>
 
 	private static void RotateRight(INode<T> node, INode<T>? newNode)
 	{
-		Utils<T>.ReplaceNodes(node, newNode);
+		Utils.ReplaceNodes(node, newNode);
 
 		node.Left = newNode?.Right;
 
@@ -80,7 +87,7 @@ internal class TreeBalancer<T> : ITreeBalancer<T>
 
 	private static void RotateLeft(INode<T> node, INode<T>? newNode)
 	{
-		Utils<T>.ReplaceNodes(node, newNode);
+		Utils.ReplaceNodes(node, newNode);
 
 		node.Right = newNode?.Left;
 

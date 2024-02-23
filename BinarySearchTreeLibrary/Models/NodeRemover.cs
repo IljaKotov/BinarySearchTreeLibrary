@@ -4,7 +4,7 @@ namespace BinarySearchTreeLibrary.Models;
 
 internal class NodeRemover<T> : INodeRemover<T>
 {
-	private static readonly ITreeGuide<T> _treeGuide = new TreeGuide<T>();
+	private static readonly ITreeNavigator<T> _treeNavigator = new TreeNavigator<T>();
 
 	public void RemoveNode(INode<T> removalNode)
 	{
@@ -17,7 +17,7 @@ internal class NodeRemover<T> : INodeRemover<T>
 		else
 			RemoveDoubleChildNode(removalNode);
 
-		Utils<T>.UpdatePropertiesUpwards(removalNode);
+		Utils.UpdatePropertiesUpwards(removalNode);
 	}
 
 	private static void RemoveLeaf(INode<T> removalLeaf)
@@ -25,7 +25,7 @@ internal class NodeRemover<T> : INodeRemover<T>
 		if (removalLeaf.Parent is null)
 			removalLeaf.OnRootDeleted();
 		else
-			Utils<T>.ReplaceNodes(removalLeaf, null);
+			Utils.ReplaceNodes(removalLeaf, null);
 	}
 
 	private static void RemoveSingleChildNode(INode<T> removalNode)
@@ -44,7 +44,7 @@ internal class NodeRemover<T> : INodeRemover<T>
 		}
 		else
 		{
-			Utils<T>.ReplaceNodes(removalNode, inheritor);
+			Utils.ReplaceNodes(removalNode, inheritor);
 		}
 	}
 
@@ -52,12 +52,12 @@ internal class NodeRemover<T> : INodeRemover<T>
 	{
 		ArgumentNullException.ThrowIfNull(removalNode.Right);
 
-		var inheritor = _treeGuide.FindMinAt(removalNode.Right);
+		var inheritor = _treeNavigator.FindMinAt(removalNode.Right);
 		removalNode.Data = inheritor.Data;
 
 		RemoveNode(inheritor);
 
 		if (removalNode.Parent is not null)
-			Utils<T>.UpdatePropertiesUpwards(removalNode.Parent);
+			Utils.UpdatePropertiesUpwards(removalNode.Parent);
 	}
 }

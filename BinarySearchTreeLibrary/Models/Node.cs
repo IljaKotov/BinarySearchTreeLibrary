@@ -7,14 +7,14 @@ internal class Node<T> : INode<T>
 {
 	private static readonly ITreeBalancer<T> _treeBalancer = new TreeBalancer<T>();
 	private static readonly INodeRemover<T> _nodeRemover = new NodeRemover<T>();
-	private static readonly ITreeGuide<T> _treeGuide = new TreeGuide<T>();
+	private static readonly ITreeNavigator<T> _treeNavigator = new TreeNavigator<T>();
 
 	public T Data { get; set; }
 	public int Key => Data?.GetHashCode() ?? 0;
 	public INode<T>? Left { get; set; }
 	public INode<T>? Right { get; set; }
 	public INode<T>? Parent { get; set; }
-	public int Height { get; set; }
+	public int Height { get; private set; }
 	public bool IsBalanced { get; set; } = true;
 	public int BalanceFactor { get; set; }
 	public bool IsLeaf => Left is null && Right is null;
@@ -45,17 +45,19 @@ internal class Node<T> : INode<T>
 		else
 			CreateChild(data, comparison);
 
-		Utils<T>.UpdateProperties(this);
+		Utils.UpdateProperties(this);
 	}
 
 	public INode<T>? GetNodeByKey(int key)
 	{
-		return _treeGuide.FindByKey(this, key);
+		return _treeNavigator.FindByKey(this, key);
 	}
 
 	public INode<T> Remove(int key)
 	{
-		var removalNode = _treeGuide.FindByKey(this, key);
+		var removalNode = _treeNavigator.FindByKey(this, key);
+
+		NodeNotFoundException.ThrowIfNodeNotFound(removalNode);
 
 		if (removalNode is null)
 			return this;
